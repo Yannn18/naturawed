@@ -6,6 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="editing.css" />
   </head>
+
   <body>
     <div>
       <!-- page-- -->
@@ -16,31 +17,76 @@
       </div>
       <div>
         <!-- table signup-- -->
-
+        <form id="SignUp">
         <p>Create Account</p>
 
         <div>
           <label for="username">Username:</label>
-          <input type="text" name="username" id="username" />
+          <input type="text" name="username" id="username" required/>
         </div>
 
         <div>
           <label for="email">Email:</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" required/>
         </div>
 
         <div>
           <label for="password">Password:</label>
-          <input type="password" name="password" id="password" />
+          <input type="password" name="password" id="password" required/>
         </div>
 
         <div>
           <label for="confirmpassword">Confirm Password:</label>
-          <input type="password" name="confirmpassword" id="confirmpassword" />
+          <input type="password" name="confirmpassword" id="confirmpassword" required/>
         </div>
 
         <button type="submit">Sign Up</button>
+      </form>
       </div>
     </div>
+  
+
+    <script>
+    
+      //username validation
+      function validasiNama() {
+        let inputNama = document.getElementById("username").value;
+        let pola = /^[a-zA-Z' ]+$/;
+
+        if (!pola.test(inputNama)) {
+          alert("Nama hanya boleh mengandung huruf dan tanda petik satu (')");
+          return false;
+        }
+        return true;
+      }
+      
+
+      //password validation (masih belum)
+      function validasiPassword() {
+        const inputPassword = document.getElementById("password").value;
+        const inputConfirmPassword = document.getElementById("confirmpassword").value;
+
+        if (!inputPassword || !inputConfirmPassword) {
+          alert("Password dan Confirm Password wajib diisi");
+          return false;
+        }
+
+        if (inputPassword !== inputConfirmPassword) {
+          alert("Password dan Confirm Password tidak cocok");
+          return false;
+        }
+
+        return true;
+      }
+
+      document.getElementById("SignUp").addEventListener("submit", function (event) {
+  event.preventDefault();
+  if (!validasiNama()) return;
+  if (!validasiPassword()) return;
+  alert("Pendaftaran berhasil!")
+  document.getElementById("SignUp").reset();
+});
+    </script>
   </body>
 </html>
+
