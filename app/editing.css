@@ -73,7 +73,7 @@ body {
   color: white;
   gap: 6px;
 }
-.input-group input {
+.input-box input {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
