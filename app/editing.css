@@ -1,97 +1,191 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 /* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  color: black; /* Set text color to black */
 }
 body {
-  background-color: white;
-  height: 100vh;
-  overflow: hidden;
+  background-color: #d1e2da;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 /* layout utama */
 .container {
   display: flex;
-  width: auto;
-  height: 100vh;
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+  min-height: 600px;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 50px;
 }
+/* #hero-section {
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  
+  padding-bottom: 5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  padding-top: 5rem;
+  gap: 86px;
+} */
+
 /* KIRI */
-.left {
+#left {
   flex: 1;
-  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  text-align: center;
 }
 
 .logo {
-  width: 120px;
+  width: 200px;
+  margin-bottom: 20px;
 }
 .left h1 {
-  font-size: 32px;
-  font-weight: bold;
+  font-size: 42px;
+  font-weight: 700;
+  color: #0b452c;
+  letter-spacing: 1px;
 }
 
 /* KANAN */
 .right {
-  flex: 1.2;
-  background-color: white;
+  flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
+
 /* form box */
 .form-box {
-  background-color: rgb(24, 78, 17);
+  background-color: #ffffff;
   padding: 40px;
-  border-radius: 12px;
-  width: 400px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.form-header p {
+  font-size: 14px;
+  color: #7a7a7a;
+  margin-bottom: 30px;
+}
+
+#SignUp {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 20px;
 }
-.form-box label {
-  color: white;
-  font-weight: bold;
-}
-.form-box h2 {
-  text-align: center;
-  font-family: "Poppins", sans-serif;
-  color: white;
-  margin-bottom: 10px;
+#SignIn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* input */
 .input-box {
-  display: flex;
-  flex-direction: column;
-  font-family: "Poppins", sans-serif;
-  color: white;
-  gap: 6px;
+  width: 100%;
 }
 .input-box input {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f5f5f5;
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border 0.3s ease;
 }
 
+.input-box input:placeholder {
+  color: #a0a0a0;
+  font-weight: 500;
+}
+.input-box input:focus {
+  border-color: #0b452c;
+}
+
+.password-box {
+  position: relative;
+}
+.eye-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #a0a0a0;
+  font-size: 18px;
+}
 /* button */
-button {
-  padding: 12px;
+.btn-submit {
+  width: 100%;
+  padding: 16px;
   margin-top: 10px;
   border: none;
-  border-radius: 6px;
-  background-color: rgb(119, 167, 122);
-  color: white;
-  font-weight: bold;
+  border-radius: 12px;
+  background-color: #06402b; /* Hijau gelap seperti di contoh */
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.25s;
+  transition: background-color 0.3s ease;
 }
-button:hover {
-  background-color: rgb(24, 78, 17);
+.btn-submit:hover {
+  background-color: #042e1f;
+}
+
+.login-link {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.login-link p {
+  font-size: 14px;
+  color: #7a7a7a;
+}
+
+.login-link a {
+  color: #0b452c;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .left-side {
+    margin-bottom: 20px;
+  }
+  .left-side h1 {
+    font-size: 32px;
+  }
 }
