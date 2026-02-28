@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In NaturaWed</title>
+    <link rel="stylesheet" href="editing.css" />
+  </head>
+
+  <body>
+    <div>
+      <!-- page-- -->
+      <div>
+        <!-- Logo Image -- -->
+        <img
+          src="/naturawed/image/logo.svg"
+          alt="image/logo.svg"
+          class="logo"
+        />
+        <h1>Naturawed</h1>
+        <p>Sign In</p>
+      </div>
+
+      <div>
+        <p>Welcome Back!</p>
+        <p>Your journey to a beautiful, green wedding starts here.</p>
+      </div>
+
+      <form id="SignIn">
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" required />
+        </div>
+
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" required />
+        </div>
+
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+    <script>
+      document
+        .getElementById("SignIn")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+
+          //buat cek tidak boleh kosong
+          if (email === "" || password === "") {
+            alert("Email dan Password wajib diisi!");
+            return;
+          }
+
+          //validasi format email
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(email)) {
+            alert("Format email tidak valid.");
+            return;
+          }
+
+          //buat cek password minimal 6 karakter
+          if (password.length < 6) {
+            alert("Password minimal 6 karakter.");
+            return;
+          }
+
+          // Simulate successful sign-in
+          alert("Login berhasil!");
+          this.reset();
+        });
+    </script>
+  </body>
+
+  <footer>
+    <p>
+      Don't have an account?
+      <a href="/naturawed/app/signup.html">Sign Up here</a>
+    </p>
+  </footer>
+</html>
