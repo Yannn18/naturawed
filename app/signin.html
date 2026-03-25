@@ -4,11 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In NaturaWed</title>
+
     <link rel="stylesheet" href="editing.css" />
   </head>
 
   <body>
     <main class="container">
+    
       <!-- LEFT SIDE -->
       <div class="left">
         <!-- Logo Image -- -->
@@ -22,8 +24,10 @@
             <h2>Create Account</h2>
             <p>Let's get started with a new account.</p>
           </div>
-
+          <div id="message" style="display:none; padding: 10px; margin-bottom: 10px; border-radius: 5px; text-align: center;"></div>
+          <div id="loading" style="display:none; text-align: center;">Mohon tunggu...</div>
           <form id="SignIn">
+            
             <div class="input-box">
               <input
                 type="email"
@@ -45,6 +49,11 @@
               <span class="eye-icon">👁️</span>
             </div>
 
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 5px;">
+            <input type="checkbox" id="remember" name="remember">
+            <label for="remember" style="font-size: 14px; color: #666;">Remember Me</label>
+            </div>
+
             <button type="submit" class="btn-submit">Sign In</button>
           </form>
           <div class="login-link">
@@ -53,37 +62,61 @@
         </div>
       </div>
     </main>
+
+
     <script>
-      document
-        .getElementById("SignIn")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          const email = document.getElementById("email").value.trim();
-          const password = document.getElementById("password").value.trim();
+document.addEventListener("DOMContentLoaded", function () {
+    const signinForm = document.getElementById("SignIn");
 
-          //buat cek tidak boleh kosong
-          if (email === "" || password === "") {
-            alert("Email dan Password wajib diisi!");
-            return;
-          }
+    if (signinForm) {
+        signinForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
 
-          //validasi format email
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailPattern.test(email)) {
-            alert("Format email tidak valid.");
-            return;
-          }
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const remember = document.getElementById("remember").checked ? "true" : "false";
 
-          //buat cek password minimal 6 karakter
-          if (password.length < 6) {
-            alert("Password minimal 6 karakter.");
-            return;
-          }
+            // Tombol loading
+            const btn = document.querySelector(".btn-submit");
+            btn.disabled = true;
+            btn.innerText = "Processing...";
 
-          // Simulate successful sign-in
-          alert("Login berhasil!");
-          this.reset();
+            try {
+                const response = await fetch("signin.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        email: email,
+                        password: password,
+                        remember: remember
+                    })
+                });
+
+                // AMBIL HASIL SEBAGAI TEXT DULU (Untuk jaga-jaga jika PHP error)
+                const hasilMentah = await response.text();
+                
+                // COBA UBAH KE JSON
+                const hasilJson = JSON.parse(hasilMentah);
+
+                if (hasilJson.status === "success") {
+                    alert("Login Berhasil! Selamat datang " + hasilJson.username);
+                    window.location.href = "dashboard.php";
+                } else {
+                    alert("Gagal: " + hasilJson.message);
+                    btn.disabled = false;
+                    btn.innerText = "Sign In";
+                }
+            } catch (error) {
+                console.error("Detail Error:", error);
+                alert("Terjadi kesalahan sistem. Cek Console (F12) untuk detail.");
+                btn.disabled = false;
+                btn.innerText = "Sign In";
+            }
         });
-    </script>
+    }
+});
+</script>
   </body>
 </html>
