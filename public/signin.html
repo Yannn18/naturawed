@@ -4,46 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In NaturaWed</title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="./css/output.css" />
+
+    <link rel="stylesheet" href="./css/editinglama.css" />
   </head>
 
-  <body
-    class="bg-[#d1e2da] flex justify-center items-center min-h-screen overflow-x-hidden"
-  >
-    <main
-      class="flex flex-col md:flex-row w-full max-w-[1100px] h-auto min-h-[600px] items-center justify-center p-8 gap-12 md:gap-[50px]"
-    >
+  <body>
+    <main class="container">
+    
       <!-- LEFT SIDE -->
-      <div
-        class="flex-1 flex flex-col items-center justify-center text-center mb-5 md:mb-0"
-      >
+      <div class="left">
         <!-- Logo Image -- -->
-        <img src="./image/logo.svg" alt="logo" class="w-[200px] mb-5" />
-        <h1
-          class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]"
-        >
-          Naturawed
-        </h1>
+        <img src="./image/logo.svg" alt="logo" class="logo" />
+        <h1>Naturawed</h1>
       </div>
       <!-- RIGHT SIDE -->
-      <div class="flex-1 flex justify-center w-full">
-        <div
-          class="bg-white p-10 rounded-[24px] w-full max-w-[450px] shadow-[0_10px_30px_rgba(0,0,0,0.05)]"
-        >
-          <div class="text-center mb-[30px]">
-            <h2 class="text-[28px] font-semibold text-[#1a1a1a]">
-              Create Account
-            </h2>
-            <p class="text-sm text-[#7a7a7a] mb-[30px]">
-              Let's get started with a new account.
-            </p>
+      <div class="right">
+        <div class="form-box">
+          <div class="form-header">
+            <h2>Create Account</h2>
+            <p>Let's get started with a new account.</p>
           </div>
-
-          <form class="flex flex-col gap-5" id="SignIn">
-            <div class="w-full relative">
+          <div id="message" style="display:none; padding: 10px; margin-bottom: 10px; border-radius: 5px; text-align: center;"></div>
+          <div id="loading" style="display:none; text-align: center;">Mohon tunggu...</div>
+          <form id="SignIn">
+            
+            <div class="input-box">
               <input
-                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
                 type="email"
                 name="email"
                 id="email"
@@ -52,55 +38,43 @@
               />
             </div>
 
-            <div class="w-full relative">
+            <div class="input-box password-box">
               <input
-                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
                 type="password"
                 name="password"
                 id="password"
                 placeholder="Password"
                 required
               />
-              <span
-                class="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer text-[#a0a0a0] text-[18px]"
-                >👁️</span
-              >
+              <span class="eye-icon">👁️</span>
             </div>
 
-            <button
-              type="submit"
-              class="w-full p-4 mt-2.5 border-none rounded-xl bg-[#06402b] text-white text-base font-semibold cursor-pointer transition-colors duration-300 hover:bg-[#042e1f]"
-            >
-              Sign In
-            </button>
+            <div style="margin: 10px 0; display: flex; align-items: center; gap: 5px;">
+            <input type="checkbox" id="remember" name="remember">
+            <label for="remember" style="font-size: 14px; color: #666;">Remember Me</label>
+            </div>
+
+            <button type="submit" class="btn-submit">Sign In</button>
           </form>
-          <div class="mt-[30px] text-center text-sm text-[#7a7a7a]">
-            <p>
-              Don't have an account?
-              <a
-                class="text-[#0b452c] font-semibold no-underline hover:underline"
-                href="signup.html"
-                >Sign Up</a
-              >
-            </p>
+          <div class="login-link">
+            <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
           </div>
         </div>
       </div>
     </main>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const signinForm = document.getElementById("SignIn");
 
-        if (signinForm) {
-          signinForm.addEventListener("submit", async function (event) {
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const signinForm = document.getElementById("SignIn");
+
+    if (signinForm) {
+        signinForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
-            const remember = document.getElementById("remember").checked
-              ? "true"
-              : "false";
+            const remember = document.getElementById("remember").checked ? "true" : "false";
 
             // Tombol loading
             const btn = document.querySelector(".btn-submit");
@@ -108,43 +82,41 @@
             btn.innerText = "Processing...";
 
             try {
-              const response = await fetch("signin.php", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams({
-                  email: email,
-                  password: password,
-                  remember: remember,
-                }),
-              });
+                const response = await fetch("signin.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        email: email,
+                        password: password,
+                        remember: remember
+                    })
+                });
 
-              // AMBIL HASIL SEBAGAI TEXT DULU (Untuk jaga-jaga jika PHP error)
-              const hasilMentah = await response.text();
+                // AMBIL HASIL SEBAGAI TEXT DULU (Untuk jaga-jaga jika PHP error)
+                const hasilMentah = await response.text();
+                
+                // COBA UBAH KE JSON
+                const hasilJson = JSON.parse(hasilMentah);
 
-              // COBA UBAH KE JSON
-              const hasilJson = JSON.parse(hasilMentah);
-
-              if (hasilJson.status === "success") {
-                alert("Login Berhasil! Selamat datang " + hasilJson.username);
-                window.location.href = "dashboard.php";
-              } else {
-                alert("Gagal: " + hasilJson.message);
+                if (hasilJson.status === "success") {
+                    alert("Login Berhasil! Selamat datang " + hasilJson.username);
+                    window.location.href = "dashboard.php";
+                } else {
+                    alert("Gagal: " + hasilJson.message);
+                    btn.disabled = false;
+                    btn.innerText = "Sign In";
+                }
+            } catch (error) {
+                console.error("Detail Error:", error);
+                alert("Terjadi kesalahan sistem. Cek Console (F12) untuk detail.");
                 btn.disabled = false;
                 btn.innerText = "Sign In";
-              }
-            } catch (error) {
-              console.error("Detail Error:", error);
-              alert(
-                "Terjadi kesalahan sistem. Cek Console (F12) untuk detail.",
-              );
-              btn.disabled = false;
-              btn.innerText = "Sign In";
             }
-          });
-        }
-      });
-    </script>
+        });
+    }
+});
+</script>
   </body>
 </html>

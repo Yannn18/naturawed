@@ -1,5 +1,5 @@
 <?php
-$host = "localhost"; // Pastikan portnya benar
+$host = "localhost:3307"; // Pastikan portnya benar
 $user = "root";
 $pass = "";
 $db   = "naturawed";
