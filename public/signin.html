@@ -10,7 +10,6 @@
 
   <body>
     <main class="container">
-    
       <!-- LEFT SIDE -->
       <div class="left">
         <!-- Logo Image -- -->
@@ -21,13 +20,23 @@
       <div class="right">
         <div class="form-box">
           <div class="form-header">
-            <h2>Create Account</h2>
-            <p>Let's get started with a new account.</p>
+            <h2>Sign In Account</h2>
+            <p>Let's get started with your account.</p>
           </div>
-          <div id="message" style="display:none; padding: 10px; margin-bottom: 10px; border-radius: 5px; text-align: center;"></div>
-          <div id="loading" style="display:none; text-align: center;">Mohon tunggu...</div>
+          <div
+            id="message"
+            style="
+              display: none;
+              padding: 10px;
+              margin-bottom: 10px;
+              border-radius: 5px;
+              text-align: center;
+            "
+          ></div>
+          <div id="loading" style="display: none; text-align: center">
+            Mohon tunggu...
+          </div>
           <form id="SignIn">
-            
             <div class="input-box">
               <input
                 type="email"
@@ -49,9 +58,18 @@
               <span class="eye-icon">👁️</span>
             </div>
 
-            <div style="margin: 10px 0; display: flex; align-items: center; gap: 5px;">
-            <input type="checkbox" id="remember" name="remember">
-            <label for="remember" style="font-size: 14px; color: #666;">Remember Me</label>
+            <div
+              style="
+                margin: 10px 0;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+              "
+            >
+              <input type="checkbox" id="remember" name="remember" />
+              <label for="remember" style="font-size: 14px; color: #666"
+                >Remember Me</label
+              >
             </div>
 
             <button type="submit" class="btn-submit">Sign In</button>
@@ -63,18 +81,19 @@
       </div>
     </main>
 
-
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const signinForm = document.getElementById("SignIn");
+      document.addEventListener("DOMContentLoaded", function () {
+        const signinForm = document.getElementById("SignIn");
 
-    if (signinForm) {
-        signinForm.addEventListener("submit", async function (event) {
+        if (signinForm) {
+          signinForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
-            const remember = document.getElementById("remember").checked ? "true" : "false";
+            const remember = document.getElementById("remember").checked
+              ? "true"
+              : "false";
 
             // Tombol loading
             const btn = document.querySelector(".btn-submit");
@@ -82,41 +101,43 @@ document.addEventListener("DOMContentLoaded", function () {
             btn.innerText = "Processing...";
 
             try {
-                const response = await fetch("signin.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: new URLSearchParams({
-                        email: email,
-                        password: password,
-                        remember: remember
-                    })
-                });
+              const response = await fetch("signin.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  email: email,
+                  password: password,
+                  remember: remember,
+                }),
+              });
 
-                // AMBIL HASIL SEBAGAI TEXT DULU (Untuk jaga-jaga jika PHP error)
-                const hasilMentah = await response.text();
-                
-                // COBA UBAH KE JSON
-                const hasilJson = JSON.parse(hasilMentah);
+              // AMBIL HASIL SEBAGAI TEXT DULU (Untuk jaga-jaga jika PHP error)
+              const hasilMentah = await response.text();
 
-                if (hasilJson.status === "success") {
-                    alert("Login Berhasil! Selamat datang " + hasilJson.username);
-                    window.location.href = "dashboard.php";
-                } else {
-                    alert("Gagal: " + hasilJson.message);
-                    btn.disabled = false;
-                    btn.innerText = "Sign In";
-                }
-            } catch (error) {
-                console.error("Detail Error:", error);
-                alert("Terjadi kesalahan sistem. Cek Console (F12) untuk detail.");
+              // COBA UBAH KE JSON
+              const hasilJson = JSON.parse(hasilMentah);
+
+              if (hasilJson.status === "success") {
+                alert("Login Berhasil! Selamat datang " + hasilJson.username);
+                window.location.href = "dashboard.php";
+              } else {
+                alert("Gagal: " + hasilJson.message);
                 btn.disabled = false;
                 btn.innerText = "Sign In";
+              }
+            } catch (error) {
+              console.error("Detail Error:", error);
+              alert(
+                "Terjadi kesalahan sistem. Cek Console (F12) untuk detail.",
+              );
+              btn.disabled = false;
+              btn.innerText = "Sign In";
             }
-        });
-    }
-});
-</script>
+          });
+        }
+      });
+    </script>
   </body>
 </html>
