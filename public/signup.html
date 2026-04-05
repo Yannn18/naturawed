@@ -14,9 +14,11 @@
     <main
       class="flex flex-col md:flex-row w-full max-w-[1100px] h-auto min-h-[600px] items-center justify-center p-8 gap-12 md:gap-[50px]"
     >
+      <!-- LEFT SIDE -->
       <div
         class="flex-1 flex flex-col items-center justify-center text-center mb-5 md:mb-0"
       >
+        <!-- Logo Image -- -->
         <img src="./image/logo.svg" alt="logo" class="w-[200px] mb-5" />
         <h1
           class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]"
@@ -24,7 +26,7 @@
           Naturawed
         </h1>
       </div>
-
+      <!-- RIGHT SIDE -->
       <div class="flex-1 flex justify-center w-full">
         <div
           class="bg-white p-10 rounded-[24px] w-full max-w-[450px] shadow-[0_10px_30px_rgba(0,0,0,0.05)]"
@@ -93,20 +95,18 @@
 
             <button
               type="submit"
-              id="btn-signup"
               class="w-full p-4 mt-2.5 border-none rounded-xl bg-[#06402b] text-white text-base font-semibold cursor-pointer transition-colors duration-300 hover:bg-[#042e1f]"
             >
               Sign Up
             </button>
           </form>
-
           <div class="mt-[30px] text-center text-sm text-[#7a7a7a]">
             <p>
               Already have an account?
               <a
                 class="text-[#0b452c] font-semibold no-underline hover:underline"
                 href="signin.html"
-                >Sign In</a
+                >Log in</a
               >
             </p>
           </div>
@@ -142,16 +142,23 @@
       }
 
       // 3. Proses Submit ke PHP (Otomatis Session & Cookie)
-      document
-        .getElementById("SignUp")
-        .addEventListener("submit", async function (event) {
+      document.addEventListener("DOMContentLoaded", function () {
+        const signUpForm = document.getElementById("SignUp");
+        if (!signUpForm) {
+          console.error("SignUp form not found on signup.html");
+          return;
+        }
+
+        signUpForm.addEventListener("submit", async function (event) {
           event.preventDefault();
 
           if (!validasiNama() || !validasiPassword()) return;
 
-          const btn = document.getElementById("btn-signup");
-          btn.disabled = true;
-          btn.innerText = "Registering...";
+          const btn = signUpForm.querySelector('button[type="submit"]');
+          if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Registering...";
+          }
 
           // Ambil data dari input
           const username = document.getElementById("username").value.trim();
@@ -187,6 +194,7 @@
             btn.innerText = "Sign Up";
           }
         });
+      });
     </script>
   </body>
 </html>

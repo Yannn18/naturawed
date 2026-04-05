@@ -1,12 +1,39 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
 session_start();
 include 'koneksi.php';
 
-$email = $_POST['email'];
-$pass = $_POST['password'];
-$remember = $_POST['remember'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Request method not allowed."
+    ]);
+    exit;
+}
 
-$result = mysqli_query($conn, "SELECT * FROM users WHERE email='$email' AND password='$pass'");
+$email = isset($_POST['email']) ? trim($_POST['email']) : '';
+$pass = isset($_POST['password']) ? trim($_POST['password']) : '';
+$remember = isset($_POST['remember']) ? $_POST['remember'] : 'false';
+
+if ($email === '' || $pass === '') {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Email dan password harus diisi."
+    ]);
+    exit;
+}
+
+$emailEscaped = mysqli_real_escape_string($conn, $email);
+$passEscaped = mysqli_real_escape_string($conn, $pass);
+$result = mysqli_query($conn, "SELECT * FROM users WHERE email='$emailEscaped' AND password='$passEscaped'");
+
+if ($result === false) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Database error: " . mysqli_error($conn)
+    ]);
+    exit;
+}
 
 if (mysqli_num_rows($result) === 1) {
     $row = mysqli_fetch_assoc($result);
@@ -18,16 +45,14 @@ if (mysqli_num_rows($result) === 1) {
         setcookie('user_email', $row['usn'], time() + 86400, "/");
     }
 
-    // Kirim status sukses DAN username-nya ke JavaScript
     echo json_encode([
         "status" => "success",
         "username" => $row['usn']
     ]);
 } else {
-    // Jika tidak ada di database
     echo json_encode([
         "status" => "error",
         "message" => "Email atau Password salah!"
     ]);
 }
-?>
+?> 
