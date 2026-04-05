@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up Naturawed</title>
     <link rel="stylesheet" href="./css/output.css" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   </head>
 
   <body
@@ -18,7 +19,7 @@
         class="flex-1 flex flex-col items-center justify-center text-center mb-5 md:mb-0"
       >
         <!-- Logo Image -- -->
-        <img src="/image/logo.svg" alt="logo" class="w-[200px] mb-5" />
+        <img src="./image/logo.svg" alt="logo" class="w-[200px] mb-5" />
         <h1
           class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]"
         >
@@ -39,7 +40,7 @@
             </p>
           </div>
 
-          <form class="flex flex-col gap-5" id="SignIn" id="SignUp">
+          <form class="flex flex-col gap-5" id="SignUp">
             <div class="w-full relative">
               <input
                 class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
@@ -114,7 +115,7 @@
     </main>
 
     <script>
-      //username validation
+      // 1. Validasi Nama
       function validasiNama() {
         let inputNama = document.getElementById("username").value;
         let pola = /^[a-zA-Z' ]+$/;
@@ -126,16 +127,11 @@
         return true;
       }
 
-      //password validation (masih belum)
+      // 2. Validasi Password
       function validasiPassword() {
         const inputPassword = document.getElementById("password").value;
         const inputConfirmPassword =
           document.getElementById("confirmpassword").value;
-
-        if (!inputPassword || !inputConfirmPassword) {
-          alert("Password dan Confirm Password wajib diisi");
-          return false;
-        }
 
         if (inputPassword !== inputConfirmPassword) {
           alert("Password dan Confirm Password tidak cocok");
@@ -144,17 +140,61 @@
 
         return true;
       }
-      //submit form
-      document
-        .getElementById("SignUp")
-        .addEventListener("submit", function (event) {
+
+      // 3. Proses Submit ke PHP (Otomatis Session & Cookie)
+      document.addEventListener("DOMContentLoaded", function () {
+        const signUpForm = document.getElementById("SignUp");
+        if (!signUpForm) {
+          console.error("SignUp form not found on signup.html");
+          return;
+        }
+
+        signUpForm.addEventListener("submit", async function (event) {
           event.preventDefault();
-          if (!validasiNama()) return;
-          if (!validasiPassword()) return;
-          alert("Pendaftaran berhasil!");
-          document.getElementById("SignUp").reset();
-          window.location.href = "signin.html";
+
+          if (!validasiNama() || !validasiPassword()) return;
+
+          const btn = signUpForm.querySelector('button[type="submit"]');
+          if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Registering...";
+          }
+
+          // Ambil data dari input
+          const username = document.getElementById("username").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+
+          try {
+            const response = await fetch("signup.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: new URLSearchParams({
+                username: username,
+                email: email,
+                password: password,
+              }),
+            });
+
+            const hasil = await response.json();
+
+            if (hasil.status === "success") {
+              alert("Pendaftaran Berhasil! Selamat datang, " + hasil.username);
+              // Langsung pindah ke Dashboard (Session sudah diset di PHP)
+              window.location.href = "signin.html";
+            } else {
+              alert("Gagal: " + hasil.message);
+              btn.disabled = false;
+              btn.innerText = "Sign Up";
+            }
+          } catch (error) {
+            console.error("Error detail:", error);
+            alert("Gagal menghubungi server. Pastikan Apache jalan!");
+            btn.disabled = false;
+            btn.innerText = "Sign Up";
+          }
         });
+      });
     </script>
   </body>
 </html>

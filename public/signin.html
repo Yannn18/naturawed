@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In NaturaWed</title>
+
     <link rel="stylesheet" href="./css/output.css" />
   </head>
 
@@ -18,7 +19,7 @@
         class="flex-1 flex flex-col items-center justify-center text-center mb-5 md:mb-0"
       >
         <!-- Logo Image -- -->
-        <img src="/image/logo.svg" alt="logo" class="w-[200px] mb-5" />
+        <img src="./image/logo.svg" alt="logo" class="w-[200px] mb-5" />
         <h1
           class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]"
         >
@@ -32,14 +33,26 @@
         >
           <div class="text-center mb-[30px]">
             <h2 class="text-[28px] font-semibold text-[#1a1a1a]">
-              Create Account
+              Sign In to Your Account
             </h2>
             <p class="text-sm text-[#7a7a7a] mb-[30px]">
-              Let's get started with a new account.
+              Sign in to access your account.
             </p>
           </div>
-
-          <form class="flex flex-col gap-5" id="SignIn">
+          <div
+            id="message"
+            style="
+              display: none;
+              padding: 10px;
+              margin-bottom: 10px;
+              border-radius: 5px;
+              text-align: center;
+            "
+          ></div>
+          <div id="loading" style="display: none; text-align: center">
+            Mohon tunggu...
+          </div>
+          <form id="SignIn" class="flex flex-col gap-5">
             <div class="w-full relative">
               <input
                 class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
@@ -65,7 +78,19 @@
                 >👁️</span
               >
             </div>
-
+            <div
+              style="
+                margin: 10px 0;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+              "
+            >
+              <input type="checkbox" id="remember" name="remember" />
+              <label for="remember" style="font-size: 14px; color: #666"
+                >Remember Me</label
+              >
+            </div>
             <button
               type="submit"
               class="w-full p-4 mt-2.5 border-none rounded-xl bg-[#06402b] text-white text-base font-semibold cursor-pointer transition-colors duration-300 hover:bg-[#042e1f]"
@@ -86,37 +111,78 @@
         </div>
       </div>
     </main>
+
     <script>
-      document
-        .getElementById("SignIn")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          const email = document.getElementById("email").value.trim();
-          const password = document.getElementById("password").value.trim();
+      document.addEventListener("DOMContentLoaded", function () {
+        const signinForm = document.getElementById("SignIn");
 
-          //buat cek tidak boleh kosong
-          if (email === "" || password === "") {
-            alert("Email dan Password wajib diisi!");
-            return;
-          }
+        if (signinForm) {
+          signinForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
 
-          //validasi format email
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailPattern.test(email)) {
-            alert("Format email tidak valid.");
-            return;
-          }
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const remember = document.getElementById("remember").checked
+              ? "true"
+              : "false";
 
-          //buat cek password minimal 6 karakter
-          if (password.length < 6) {
-            alert("Password minimal 6 karakter.");
-            return;
-          }
+            // Tombol loading
+            const btn = signinForm.querySelector('button[type="submit"]');
+            if (btn) {
+              btn.disabled = true;
+              btn.innerText = "Processing...";
+            }
 
-          // Simulate successful sign-in
-          alert("Login berhasil!");
-          this.reset();
-        });
+            try {
+              const response = await fetch("signin.php", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  email: email,
+                  password: password,
+                  remember: remember,
+                }),
+              });
+
+              const hasilMentah = await response.text();
+              console.log("Raw server response:", hasilMentah);
+
+              let hasilJson;
+              try {
+                hasilJson = JSON.parse(hasilMentah);
+              } catch (parseError) {
+                console.error("JSON parse failed:", parseError, hasilMentah);
+                alert(
+                  "Respons server tidak valid. Buka console untuk melihat detail.",
+                );
+                if (btn) {
+                  btn.disabled = false;
+                  btn.innerText = "Sign In";
+                }
+                return;
+              }
+
+              if (hasilJson.status === "success") {
+                alert("Login Berhasil! Selamat datang " + hasilJson.username);
+                window.location.href = "dashboard.php";
+              } else {
+                alert("Gagal: " + hasilJson.message);
+                btn.disabled = false;
+                btn.innerText = "Sign In";
+              }
+            } catch (error) {
+              console.error("Detail Error:", error);
+              alert(
+                "Terjadi kesalahan sistem. Cek Console (F12) untuk detail.",
+              );
+              btn.disabled = false;
+              btn.innerText = "Sign In";
+            }
+          });
+        }
+      });
     </script>
   </body>
 </html>
