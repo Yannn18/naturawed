@@ -16,7 +16,7 @@
       
       <nav class="hidden items-center space-x-10 md:flex">
         <a href="/index.php?action=home" class="relative font-semibold text-[#2d4a22] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-[#2d4a22]">Home</a>
-        <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Vendors</a>
+        <a href="/index.php?action=vendors" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Vendors</a>
         <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Inspiration</a>
         <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Deals</a>
       </nav>
