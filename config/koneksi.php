@@ -1,7 +1,7 @@
 <?php
-$host = "localhost:3306"; // Pastikan portnya benar
+$host = "localhost:3307"; // Pastikan portnya benar
 $user = "root";
-$pass = "1234";
+$pass = "";
 $db   = "naturawed";
 
 $conn = mysqli_connect($host, $user, $pass, $db);

@@ -95,20 +95,20 @@ $videos = [
     <section class="relative h-[600px] w-full overflow-hidden">
         <img 
             src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop" 
-            alt="Wedding couple in forest" 
+            alt="Wedding couple in forest"
             class="h-full w-full object-cover brightness-95"
             referrerpolicy="no-referrer"
         />
         <div class="absolute inset-0 flex items-center justify-center">
             <form action="/index.php" method="GET" class="relative flex w-full max-w-3xl items-center px-6">
                 <input type="hidden" name="action" value="search">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     name="q"
-                    placeholder="Find your eco-friendly wedding vendors" 
+                    placeholder="Find your eco-friendly wedding vendors"
                     class="h-16 w-full rounded-full bg-white pl-10 pr-40 text-lg shadow-2xl focus:outline-none"
                 />
-                <button 
+                <button
                     type="submit"
                     class="absolute right-8 rounded-full bg-[#2d4a22] px-10 py-3 text-lg font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-95"
                 >
@@ -194,7 +194,7 @@ $videos = [
                     <div class="p-10">
                         <div class="flex items-center justify-between">
                             <h3 class="text-3xl font-bold text-gray-900"><?= htmlspecialchars($item['title']) ?></h3>
-                            <span 
+                            <span
                                 onclick="event.stopPropagation(); window.location.href='/index.php?action=vendor&id=1'"
                                 class="text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#2d4a22]"
                             >
