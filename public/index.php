@@ -4,7 +4,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
-// PERHATIKAN BARIS INI: Gunakan /../ untuk naik keluar dari folder public
+require_once __DIR__ . '/../config/koneksi.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -18,6 +18,10 @@ switch ($action) {
         break;
     case 'show_register':
         require_once __DIR__ . '/../views/auth/signup.html';
+        break;
+        
+    case 'dashboard':
+        require_once __DIR__ . '/../views/dashboard/customer.html';
         break;
         
     case 'login':
