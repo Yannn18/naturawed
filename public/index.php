@@ -20,8 +20,8 @@ switch ($action) {
         require_once __DIR__ . '/../views/auth/signup.html';
         break;
         
-    case 'dashboard':
-        require_once __DIR__ . '/../views/dashboard/customer.html';
+    case 'home':
+        require_once __DIR__ . '/../views/home.php';
         break;
         
     case 'login':
