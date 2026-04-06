@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hasilJson.status === "success") {
           alert("Login Berhasil! Selamat datang " + hasilJson.username);
           // PERHATIKAN: Redirect menggunakan router
-          window.location.href = "index.php?action=dashboard";
+          window.location.href = "index.php?action=home";
         } else {
           alert("Gagal: " + hasilJson.message);
           btn.disabled = false;
