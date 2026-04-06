@@ -6,55 +6,57 @@ class AuthController {
     private $conn;
 
     public function __construct() {
-        // Asumsi struktur folder Anda: controllers sejajar dengan config
-        require_once __DIR__ . '/../config/koneksi.php';
-        global $conn; // Mengambil variabel $conn dari file koneksi.php
+      
+      
+        global $conn; 
         $this->conn = $conn;
     }
 
     // 1. FUNGSI SIGN IN (Menggantikan signin.php)
-    public function login() {
-        header('Content-Type: application/json; charset=utf-8');
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        public function login() {
+            header('Content-Type: application/json; charset=utf-8');
+            if (session_status() === PHP_SESSION_NONE) session_start();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(["status" => "error", "message" => "Request method not allowed."]);
-            return;
-        }
-
-        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-        $pass = isset($_POST['password']) ? trim($_POST['password']) : '';
-        $remember = isset($_POST['remember']) ? $_POST['remember'] : 'false';
-
-        if ($email === '' || $pass === '') {
-            echo json_encode(["status" => "error", "message" => "Email dan password harus diisi."]);
-            return;
-        }
-
-        $emailEscaped = mysqli_real_escape_string($this->conn, $email);
-        $passEscaped = mysqli_real_escape_string($this->conn, $pass);
-        
-        $query = "SELECT * FROM users WHERE email='$emailEscaped' AND password='$passEscaped'";
-        $result = mysqli_query($this->conn, $query);
-
-        if ($result === false) {
-            echo json_encode(["status" => "error", "message" => "Database error: " . mysqli_error($this->conn)]);
-            return;
-        }
-
-        if (mysqli_num_rows($result) === 1) {
-            $row = mysqli_fetch_assoc($result);
-            $_SESSION['login'] = true;
-            $_SESSION['user'] = $row['usn'];
-
-            if ($remember === 'true') {
-                setcookie('user_email', $row['usn'], time() + 86400, "/");
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                echo json_encode(["status" => "error", "message" => "Request method not allowed."]);
+                return;
             }
-            echo json_encode(["status" => "success", "username" => $row['usn']]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "Email atau Password salah!"]);
+
+            $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+            $pass = isset($_POST['password']) ? trim($_POST['password']) : '';
+            $remember = isset($_POST['remember']) ? $_POST['remember'] : 'false';
+
+            if ($email === '' || $pass === '') {
+                echo json_encode(["status" => "error", "message" => "Email dan password harus diisi."]);
+                return;
+            }
+
+            $emailEscaped = mysqli_real_escape_string($this->conn, $email);
+            $passEscaped = mysqli_real_escape_string($this->conn, $pass);
+            
+            $query = "SELECT * FROM users WHERE email='$emailEscaped' AND password='$passEscaped'";
+            $result = mysqli_query($this->conn, $query);
+
+            if ($result === false) {
+                echo json_encode(["status" => "error", "message" => "Database error: " . mysqli_error($this->conn)]);
+                return;
+            }
+
+            if (mysqli_num_rows($result) === 1) {
+                $row = mysqli_fetch_assoc($result);
+                $_SESSION['login'] = true;
+                $_SESSION['user'] = $row['usn'];
+
+                if ($remember === 'true') {
+                    setcookie('user_email', $row['usn'], time() + 86400, "/");
+                }
+                echo json_encode(["status" => "success", "username" => $row['usn']]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "Email atau Password salah!"
+               
+                ]);
+            }
         }
-    }
 
     // 2. FUNGSI SIGN UP (Menggantikan signup.php)
     public function register() {
@@ -73,9 +75,7 @@ class AuthController {
         $query = "INSERT INTO users (email, usn, password) VALUES ('$email', '$usn', '$pass')";
 
         if (mysqli_query($this->conn, $query)) {
-            $_SESSION['login'] = true;
-            $_SESSION['user'] = $usn;
-            setcookie('user_email', $usn, time() + 86400, "/");
+           
             
             echo json_encode(["status" => "success", "username" => $usn]);
         } else {
