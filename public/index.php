@@ -33,6 +33,10 @@ switch ($action) {
     case 'vendors':
         require_once __DIR__ . '/../views/vendors.php';
         break;
+
+    case 'inspiration':
+        require_once __DIR__ . '/../views/inspiration.php';
+        break;
         
     case 'package_detail':
         require_once __DIR__ . '/../views/package_detail.php';

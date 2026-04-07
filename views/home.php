@@ -124,18 +124,12 @@ $videos = [
         <h2 class="mb-12 text-4xl font-bold text-[#2d4a22]">Eco Elegance for Your Perfect Day</h2>
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
             <?php foreach ($ecoPackages as $item): ?>
-                 <a href="index.php?action=package_detail" class="group cursor-pointer block">
-                    <div
-                        class="overflow-hidden rounded-3xl bg-white shadow-xl cursor-pointer transition-transform duration-300 hover:-translate-y-2"
-                    >
-                        <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
+                <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-transform duration-300 hover:-translate-y-2">
+                    <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
                     <div class="p-6">
                         <div class="flex items-center justify-between">
                             <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['title']) ?></h3>
-                            <span
-                                onclick="event.stopPropagation(); window.location.href='/index.php?action=vendor&id=1'"
-                                class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]"
-                            >
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]">
                                 by <?= htmlspecialchars($item['author']) ?>
                             </span>
                         </div>
@@ -144,20 +138,17 @@ $videos = [
                         </p>
                         <div class="mt-6 text-lg font-bold text-gray-900"><?= htmlspecialchars($item['price']) ?></div>
                     </div>
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
     </section>
 
-    <section class="bg-white px-12 py-16">
+   <section class="bg-white px-12 py-16">
         <h2 class="mb-12 text-4xl font-bold text-gray-900">Most Recommended Vendors</h2>
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
             <?php foreach ($recommendedVendors as $item): ?>
-                 <a href="index.php?action=package_detail" class="group cursor-pointer block">
-                    <div
-                        class="overflow-hidden rounded-3xl shadow-2xl cursor-pointer transition-transform duration-300 hover:scale-105"
-                    >
-                        <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="h-64 w-full object-cover" referrerpolicy="no-referrer" />
+                <a href="/index.php?action=vendor&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl shadow-2xl transition-transform duration-300 hover:scale-105">
+                    <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="h-64 w-full object-cover" referrerpolicy="no-referrer" />
                     <div class="bg-[#800000] p-8 text-white">
                         <h3 class="text-2xl font-bold"><?= htmlspecialchars($item['name']) ?></h3>
                         <div class="mt-2 flex items-center space-x-1">
@@ -176,7 +167,7 @@ $videos = [
                         </p>
                         <div class="mt-4 text-xs font-bold uppercase tracking-widest opacity-70">by <?= htmlspecialchars($item['author']) ?></div>
                     </div>
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
     </section>
@@ -185,11 +176,7 @@ $videos = [
         <h2 class="mb-12 text-4xl font-bold text-gray-900">Unforgettable Wedding Deals</h2>
         <div class="grid grid-cols-1 gap-10 md:grid-cols-2">
             <?php foreach ($weddingDeals as $item): ?>
-                <a href="index.php?action=package_detail" class="group cursor-pointer block"></a>
-                <div 
-                    onclick="window.location.href='/index.php?action=package&id=<?= $item['id'] ?>'"
-                    class="overflow-hidden rounded-[2.5rem] bg-white shadow-2xl cursor-pointer transition-transform duration-300 hover:-translate-y-2"
-                >
+                <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-[2.5rem] bg-white shadow-2xl transition-transform duration-300 hover:-translate-y-2">
                     <div class="relative h-80">
                         <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="h-full w-full object-cover" referrerpolicy="no-referrer" />
                         <div class="absolute top-6 right-6 rounded-lg bg-[#ff3b3b] px-5 py-2 text-sm font-bold text-white shadow-md">Recommend</div>
@@ -197,10 +184,7 @@ $videos = [
                     <div class="p-10">
                         <div class="flex items-center justify-between">
                             <h3 class="text-3xl font-bold text-gray-900"><?= htmlspecialchars($item['title']) ?></h3>
-                            <span
-                                onclick="event.stopPropagation(); window.location.href='/index.php?action=vendor&id=1'"
-                                class="text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#2d4a22]"
-                            >
+                            <span class="text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-[#2d4a22]">
                                 by <?= htmlspecialchars($item['author']) ?>
                             </span>
                         </div>
@@ -214,7 +198,7 @@ $videos = [
                             <?php endif; ?>
                         </div>
                     </div>
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
     </section>
