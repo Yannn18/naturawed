@@ -1,14 +1,19 @@
 <?php
 // Cek apakah modal harus ditampilkan berdasarkan parameter URL
-// Kita tambahkan pengecekan agar modal TIDAK muncul jika user sudah login
 $show_modal = isset($_GET['auth']) && $_GET['auth'] === 'show' && !isset($_SESSION['user']);
-if (!$show_modal) return;
+
+if (isset($_SESSION['user'])) return;
+
+
+$is_open = (isset($_GET['auth']) && $_GET['auth'] === 'show');
+$display_class = $is_open ? '' : 'hidden'; 
 ?>
 
-<div id="authmodal" class="fixed inset-0 z- flex items-center justify-center p-6">
+<div id="authmodal" class="<?= $display_class ?> fixed inset-0 z-[9999] flex items-center justify-center">
+    
     <div onclick="closeModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"></div>
     
-    <div class="relative w-full max-w-md overflow-hidden rounded-[40px] bg-white p-12 shadow-2xl transform transition-all duration-300 scale-100 opacity-100">
+    <div class="relative w-full max-w-md overflow-hidden rounded-[40px] bg-white p-12 shadow-2xl transform transition-all duration-300 scale-100 opacity-100 mx-4">
         
         <button onclick="closeModal()" class="absolute right-8 top-8 p-2 text-zinc-400 hover:text-[#2d4a22] transition-colors">
             <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,12 +51,3 @@ if (!$show_modal) return;
         </div>
     </div>
 </div>
-
-<script>
-function closeModal() {
-    const url = new URL(window.location);
-    url.searchParams.delete('auth');
-    // Jika url bersih hanya menyisakan ?, arahkan ke home sederhana
-    window.location.href = url.pathname + url.search;
-}
-</script>
