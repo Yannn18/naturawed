@@ -1,6 +1,8 @@
 <?php
+
 // Set judul halaman
 $pageTitle = "Home - NaturaWed";
+
 
 // Memanggil komponen Header
 require_once __DIR__ . '/includes/header.php';

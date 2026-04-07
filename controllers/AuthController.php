@@ -6,9 +6,8 @@ class AuthController {
     private $conn;
 
     public function __construct() {
-      
-      
-        global $conn; 
+
+        global $conn;
         $this->conn = $conn;
     }
 
@@ -53,7 +52,7 @@ class AuthController {
                 echo json_encode(["status" => "success", "username" => $row['usn']]);
             } else {
                 echo json_encode(["status" => "error", "message" => "Email atau Password salah!"
-               
+        
                 ]);
             }
         }
