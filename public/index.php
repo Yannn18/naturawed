@@ -25,6 +25,10 @@ switch ($action) {
     case 'show_register':
         require_once __DIR__ . '/../views/auth/signup.html';
         break;
+
+    case 'show_registervendor':
+        require_once __DIR__ . '/../views/auth/signupvendor.html';
+        break;
         
     case 'home':
         require_once __DIR__ . '/../views/home.php';
@@ -53,11 +57,17 @@ switch ($action) {
         $authController->login();
         break;
     case 'register':
-        $authController->register();
+        $authController->registerCustomer();
         break;
+
     case 'logout':
         $authController->logout();
         break;
+
+    case 'register_vendor':
+        $authController->registerVendor();
+        break;
+
     default:
         header('Content-Type: application/json; charset=utf-8');
         http_response_code(404);
