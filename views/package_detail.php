@@ -89,7 +89,10 @@ $package = [
                     </div>
 
                     <div class="space-y-6">
-                        <button class="w-full rounded-2xl bg-[#3a4d32] py-5 text-lg font-bold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-95">
+                        
+                        <button
+                        onclick="window.location.href='index.php?action=checkout'"
+                        class="w-full rounded-2xl bg-[#3a4d32] py-5 text-lg font-bold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-95">
                             Checkout
                         </button>
                         <p class="text-center text-[10px] font-medium text-gray-400">Response time: Usually under 24 hours</p>
