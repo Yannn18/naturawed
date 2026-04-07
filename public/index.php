@@ -1,5 +1,5 @@
 <?php
-// Posisi file ini sekarang di: public/index.php
+
 session_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -19,7 +19,7 @@ $authController = new AuthController();
 
 switch ($action) {
     case 'show_login':
-        // Karena index.php ada di public/, kita naik satu level (../) ke folder views
+        
         require_once __DIR__ . '/../views/auth/signin.html';
         break;
     case 'show_register':
@@ -31,29 +31,29 @@ switch ($action) {
         break;
         
     case 'home':
-        require_once __DIR__ . '/../views/home.php';
+        require_once __DIR__ . '/../views/public/home.php';
         break;
         
     case 'vendors':
-        require_once __DIR__ . '/../views/vendors.php';
+        require_once __DIR__ . '/../views/public/vendors.php';
         break;
 
     case 'inspiration':
-        require_once __DIR__ . '/../views/inspiration.php';
+        require_once __DIR__ . '/../views/public/inspiration.php';
         break;
         
     case 'package_detail':
-        require_once __DIR__ . '/../views/package_detail.php';
+        require_once __DIR__ . '/../views/public/package_detail.php';
         break;
 
     case 'checkout':
-        require_once __DIR__ . '/../views/checkout.php';
+        require_once __DIR__ . '/../views/customer/checkout.php';
         break;
 
     case 'payment':
-        require_once __DIR__ . '/../views/payment.php';
+        require_once __DIR__ . '/../views/customer/payment.php';
         break;
-    case 'dashboard':
+    case 'dashboard-vendor':
         require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
         break;
     case 'login':
