@@ -47,7 +47,7 @@ $all_vendors = [
             <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
                 <div class="relative w-full md:w-96">
                     <input type="text" placeholder="Search vendor name..." 
-                           class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#2d4a22] focus:outline-none transition-all">
+                        class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#2d4a22] focus:outline-none transition-all">
                     <span class="absolute left-3 top-3.5 text-gray-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                     </span>
@@ -75,7 +75,7 @@ $all_vendors = [
     <?php foreach($all_vendors as $v): ?>
     <a href="index.php?action=package_detail" class="group cursor-pointer block">
         <div class="relative aspect-[4/5] rounded-3xl overflow-hidden mb-5">
-            <img src="<?= $v['image'] ?>" alt="<?= $v['name'] ?>" 
+            <img src="<?= $v['image'] ?>" alt="<?= $v['name'] ?>"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
             
             <div class="absolute top-4 left-4">
