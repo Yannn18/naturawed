@@ -49,6 +49,9 @@ switch ($action) {
     case 'payment':
         require_once __DIR__ . '/../views/payment.php';
         break;
+    case 'dashboard':
+        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
+        break;
     case 'login':
         $authController->login();
         break;
