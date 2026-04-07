@@ -41,7 +41,14 @@ switch ($action) {
     case 'package_detail':
         require_once __DIR__ . '/../views/package_detail.php';
         break;
-        
+
+    case 'checkout':
+        require_once __DIR__ . '/../views/checkout.php';
+        break;
+
+    case 'payment':
+        require_once __DIR__ . '/../views/payment.php';
+        break;
     case 'login':
         $authController->login();
         break;
