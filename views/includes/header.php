@@ -86,7 +86,7 @@ include 'authmodal.php'; // Modal Login/Signup
                     </svg>
                 </a>
             <?php else: ?>
-                <a href="javascript:openAuthModal()" class="flex items-center gap-2 text-zinc-400 hover:text-[#2d4a22] transition-colors">
+                <a href="index.php?action=show_login" class="flex items-center gap-2 text-zinc-400 hover:text-[#2d4a22] transition-colors">
                     <span class="text-[10px] font-bold tracking-widest uppercase">Login</span>
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
                         <path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
