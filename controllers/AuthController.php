@@ -95,7 +95,7 @@ class AuthController {
         }
 
         // Redirect ke tampilan signin (karena ini bukan JSON respon)
-        header("Location: /views/auth/signin.html"); 
+        header("Location: /index.php?action=show_login"); 
         exit;
     }
 }
