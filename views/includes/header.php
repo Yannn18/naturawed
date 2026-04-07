@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="/assets/css/output.css" />
   </head>
   <body class="bg-[#d1e2da] overflow-x-hidden">
+    <?php
+    $currentAction = $_GET['action'] ?? 'home';
+    $activeClass = 'relative font-semibold text-[#2d4a22] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-[#2d4a22]';
+    $inactiveClass = 'font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors';
+    ?>
 
     <header class="sticky top-0 z-50 flex items-center justify-between bg-[#e8e8d8] px-12 py-4 shadow-sm">
       
@@ -15,8 +20,8 @@
       </div>
       
       <nav class="hidden items-center space-x-10 md:flex">
-        <a href="/index.php?action=home" class="relative font-semibold text-[#2d4a22] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-[#2d4a22]">Home</a>
-        <a href="/index.php?action=vendors" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Vendors</a>
+        <a href="/index.php?action=home" class="<?php echo ($currentAction == 'home') ? $activeClass : $inactiveClass; ?>">Home</a>
+        <a href="/index.php?action=vendors" class="<?php echo ($currentAction == 'vendors') ? $activeClass : $inactiveClass; ?>">Vendors</a>
         <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Inspiration</a>
         <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Deals</a>
       </nav>
@@ -41,5 +46,23 @@
 
       </div>
     </header>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                // Remove active class from all nav links
+                navLinks.forEach(l => {
+                    l.classList.remove('relative', 'text-[#2d4a22]', 'after:absolute', 'after:-bottom-1', 'after:left-0', 'after:h-0.5', 'after:w-full', 'after:bg-[#2d4a22]');
+                    l.classList.add('text-gray-600', 'hover:text-[#2d4a22]', 'transition-colors');
+                });
+                // Add active class to clicked link
+                this.classList.remove('text-gray-600', 'hover:text-[#2d4a22]', 'transition-colors');
+                this.classList.add('relative', 'text-[#2d4a22]', 'after:absolute', 'after:-bottom-1', 'after:left-0', 'after:h-0.5', 'after:w-full', 'after:bg-[#2d4a22]');
+            });
+        });
+    });
+    </script>
   </body>
 </html>
