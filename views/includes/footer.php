@@ -7,5 +7,6 @@
         <a href="#" class="hover:opacity-100 transition-opacity">Contact Us</a>
       </div>
     </footer>
+    <script src="/assets/js/global.js"></script>
     </body>
 </html>
