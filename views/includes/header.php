@@ -22,7 +22,7 @@
       <nav class="hidden items-center space-x-10 md:flex">
         <a href="/index.php?action=home" class="<?php echo ($currentAction == 'home') ? $activeClass : $inactiveClass; ?>">Home</a>
         <a href="/index.php?action=vendors" class="<?php echo ($currentAction == 'vendors') ? $activeClass : $inactiveClass; ?>">Vendors</a>
-        <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Inspiration</a>
+        <a href="/index.php?action=inspiration" class="<?php echo ($currentAction == 'inspiration') ? $activeClass : $inactiveClass; ?>">Inspiration</a>
         <a href="#" class="font-semibold text-gray-600 hover:text-[#2d4a22] transition-colors">Deals</a>
       </nav>
       
