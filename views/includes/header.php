@@ -6,8 +6,10 @@
     <title><?= isset($pageTitle) ? $pageTitle : 'NaturaWed' ?></title>
     <link rel="stylesheet" href="/assets/css/output.css" />
   </head>
+  <body class="bg-white font-sans text-gray-900 overflow-x-hidden">
+    
 <?php
-include 'authmodal.php'; // Modal Login/Signup
+
 // Ambil status dari session dan URL
 $isAuthenticated = isset($_SESSION['user']);
 $currentAction = $_GET['action'] ?? 'home';
@@ -19,35 +21,15 @@ $inactiveClass = 'font-semibold text-zinc-400 hover:text-[#2d4a22] transition-co
 // Helper untuk proteksi (handleProtectedAction)
 function getProtectedRoute($path, $isAuth) {
     if (!$isAuth) {
-        $current = $_GET['action'] ?? 'home';
-        return "index.php?action=$current&auth=show";
+       
+       return "javascript:openAuthModal()";
     }
     return "index.php?action=$path";
 }
+include 'authmodal.php'; // Modal Login/Signup
 ?>
 
 
-
-<script>
-// 2. Fungsi untuk membuka modal (sesuaikan dengan ID modal Anda)
-function openAuthModal() {
-    const modal = document.getElementById('authmodal'); // Ganti dengan ID modal asli
-    if(modal) {
-        modal.classList.remove('hidden'); // Jika pakai Tailwind
-        // atau modal.style.display = 'block';
-    } else {
-        alert("Silakan login terlebih dahulu.");
-    }
-}
-
-// 3. AUTO-CHECK: Jika URL mengandung auth=show, buka modalnya langsung
-window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('auth') === 'show') {
-        openAuthModal();
-    }
-}
-</script>
 
 <header class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100 h-20">
     <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
@@ -68,7 +50,7 @@ window.onload = function() {
             <nav class="hidden md:flex items-center space-x-8">
                 <a href="index.php?action=home" class="text-[11px] tracking-[0.15em] uppercase <?= ($currentAction == 'home') ? $activeClass : $inactiveClass ?>">Home</a>
                 <a href="index.php?action=vendors" class="text-[11px] tracking-[0.15em] uppercase <?= ($currentAction == 'vendors' || $currentAction == 'package_detail') ? $activeClass : $inactiveClass ?>">Vendors</a>
-                <a href="#" class="text-[11px] tracking-[0.15em] uppercase <?= $inactiveClass ?>">Inspiration</a>
+                <a href="index.php?action=inspiration" class="text-[11px] tracking-[0.15em] uppercase <?= ($currentAction == 'inspiration') ? $activeClass : $inactiveClass ?>">Inspiration</a>
                 <a href="#" class="text-[11px] tracking-[0.15em] uppercase <?= $inactiveClass ?>">About</a>
             </nav>
         </div>
@@ -104,7 +86,7 @@ window.onload = function() {
                     </svg>
                 </a>
             <?php else: ?>
-                <a href="index.php?action=<?= $currentAction ?>&auth=show" class="flex items-center gap-2 text-zinc-400 hover:text-[#2d4a22] transition-colors">
+                <a href="javascript:openAuthModal()" class="flex items-center gap-2 text-zinc-400 hover:text-[#2d4a22] transition-colors">
                     <span class="text-[10px] font-bold tracking-widest uppercase">Login</span>
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
                         <path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -115,3 +97,6 @@ window.onload = function() {
         </div>
     </div>
 </header>
+
+  
+</body>
