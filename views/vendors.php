@@ -114,3 +114,7 @@ $all_vendors = [
         </div>
     </main>
 </div>
+<?php
+// Memanggil komponen Footer
+require_once __DIR__ . '/includes/footer.php';
+?>
