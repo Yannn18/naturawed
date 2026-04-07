@@ -1,6 +1,8 @@
 <?php
+
 // Set judul halaman
 $pageTitle = "Home - NaturaWed";
+
 
 // Memanggil komponen Header
 require_once __DIR__ . '/includes/header.php';
@@ -152,7 +154,7 @@ $videos = [
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
             <?php foreach ($recommendedVendors as $item): ?>
                  <a href="index.php?action=package_detail" class="group cursor-pointer block">
-                    <div 
+                    <div
                         class="overflow-hidden rounded-3xl shadow-2xl cursor-pointer transition-transform duration-300 hover:scale-105"
                     >
                         <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="h-64 w-full object-cover" referrerpolicy="no-referrer" />
