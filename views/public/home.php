@@ -5,7 +5,7 @@ $pageTitle = "Home - NaturaWed";
 
 
 // Memanggil komponen Header
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 // =====================================================================
 // DATA MOCKUP (Idealnya data ini nantinya ditarik dari Database via Controller)
@@ -228,5 +228,5 @@ $videos = [
 
 <?php
 // Memanggil komponen Footer
-require_once __DIR__ . '/includes/footer.php';
+require_once __DIR__ . '/../includes/footer.php';
 ?>

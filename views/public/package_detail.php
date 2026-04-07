@@ -1,7 +1,7 @@
 <?php
 
 $pageTitle = "Package Detail - NaturaWed";
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 // Mock Data (Bisa diganti dengan query database nantinya)
 $package = [
@@ -114,3 +114,8 @@ $package = [
         </div>
     </footer>
 </div>
+
+<?php
+// Memanggil komponen Footer
+require_once __DIR__ . '/../includes/footer.php';
+?>

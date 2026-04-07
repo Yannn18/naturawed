@@ -3,7 +3,7 @@
 $pageTitle = "Inspiration - NaturaWed";
 
 // Memanggil komponen Header
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 // =====================================================================
 // DATA MOCKUP INSPIRATION
@@ -170,5 +170,5 @@ $articles = [
 
 <?php
 // Memanggil komponen Footer
-require_once __DIR__ . '/includes/footer.php';
+require_once __DIR__ . '/../includes/footer.php';
 ?>

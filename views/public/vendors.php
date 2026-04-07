@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Vendors - NaturaWed";
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 // Dummy Data untuk Vendor
 $all_vendors = [
@@ -116,5 +116,5 @@ $all_vendors = [
 </div>
 <?php
 // Memanggil komponen Footer
-require_once __DIR__ . '/includes/footer.php';
+require_once __DIR__ . '/../includes/footer.php';
 ?>
