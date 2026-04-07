@@ -1,13 +1,19 @@
 <?php
 // Posisi file ini sekarang di: public/index.php
-
+session_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 require_once __DIR__ . '/../config/koneksi.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = isset($_GET['action']) ? $_GET['action'] : 'home';
+
+// Logic Auth sederhana (Pengganti isAuthenticated)
+$isAuthenticated = isset($_SESSION['user_id']);
+
+// Logic Modal (Pengganti showAuthModal)
+$showAuthModal = isset($_GET['auth']) && $_GET['auth'] === 'show';
 
 $authController = new AuthController();
 
@@ -47,3 +53,4 @@ switch ($action) {
         echo json_encode(["status" => "error", "message" => "Endpoint tidak valid."]);
         break;
 }
+
