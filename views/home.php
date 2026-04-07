@@ -122,15 +122,15 @@ $videos = [
         <h2 class="mb-12 text-4xl font-bold text-[#2d4a22]">Eco Elegance for Your Perfect Day</h2>
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
             <?php foreach ($ecoPackages as $item): ?>
-                <div 
-                    onclick="window.location.href='/index.php?action=package&id=<?= $item['id'] ?>'"
-                    class="overflow-hidden rounded-3xl bg-white shadow-xl cursor-pointer transition-transform duration-300 hover:-translate-y-2"
-                >
-                    <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
+                 <a href="index.php?action=package_detail" class="group cursor-pointer block">
+                    <div
+                        class="overflow-hidden rounded-3xl bg-white shadow-xl cursor-pointer transition-transform duration-300 hover:-translate-y-2"
+                    >
+                        <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
                     <div class="p-6">
                         <div class="flex items-center justify-between">
                             <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['title']) ?></h3>
-                            <span 
+                            <span
                                 onclick="event.stopPropagation(); window.location.href='/index.php?action=vendor&id=1'"
                                 class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]"
                             >
@@ -151,11 +151,11 @@ $videos = [
         <h2 class="mb-12 text-4xl font-bold text-gray-900">Most Recommended Vendors</h2>
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
             <?php foreach ($recommendedVendors as $item): ?>
-                <div 
-                    onclick="window.location.href='/index.php?action=vendor&id=<?= $item['id'] ?>'"
-                    class="overflow-hidden rounded-3xl shadow-2xl cursor-pointer transition-transform duration-300 hover:scale-105"
-                >
-                    <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="h-64 w-full object-cover" referrerpolicy="no-referrer" />
+                 <a href="index.php?action=package_detail" class="group cursor-pointer block">
+                    <div 
+                        class="overflow-hidden rounded-3xl shadow-2xl cursor-pointer transition-transform duration-300 hover:scale-105"
+                    >
+                        <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="h-64 w-full object-cover" referrerpolicy="no-referrer" />
                     <div class="bg-[#800000] p-8 text-white">
                         <h3 class="text-2xl font-bold"><?= htmlspecialchars($item['name']) ?></h3>
                         <div class="mt-2 flex items-center space-x-1">
@@ -183,6 +183,7 @@ $videos = [
         <h2 class="mb-12 text-4xl font-bold text-gray-900">Unforgettable Wedding Deals</h2>
         <div class="grid grid-cols-1 gap-10 md:grid-cols-2">
             <?php foreach ($weddingDeals as $item): ?>
+                <a href="index.php?action=package_detail" class="group cursor-pointer block"></a>
                 <div 
                     onclick="window.location.href='/index.php?action=package&id=<?= $item['id'] ?>'"
                     class="overflow-hidden rounded-[2.5rem] bg-white shadow-2xl cursor-pointer transition-transform duration-300 hover:-translate-y-2"
