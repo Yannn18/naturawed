@@ -26,6 +26,7 @@ class PackageController {
             $categoryId = $_POST['category_id'] ?? '';
             $price = $_POST['price'] ?? 0;
             $description = $_POST['description'] ?? '';
+            $features = $_POST['features'] ?? '';
 
             // Cari Vendor Profile ID
             $userId = $_SESSION['user_id'];
@@ -71,7 +72,7 @@ class PackageController {
             }
 
             // 3. SIMPAN KE DATABASE
-            $isSaved = $this->packageModel->createPackage($vendorProfileId, $categoryId, $name, $price, $description, $imagePathDb);
+           $isSaved = $this->packageModel->createPackage($vendorProfileId, $categoryId, $name, $price, $description, $features, $imagePathDb);
 
             if ($isSaved) {
                 // Jika sukses, kembalikan ke dashboard vendor
