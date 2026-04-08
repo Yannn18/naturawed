@@ -29,6 +29,11 @@ switch ($action) {
     case 'show_registervendor':
         require_once __DIR__ . '/../views/auth/signupvendor.html';
         break;
+
+    case 'dashboard_vendor':
+        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
+        break;
+
         
     case 'home':
         require_once __DIR__ . '/../views/public/home.php';
@@ -62,6 +67,11 @@ switch ($action) {
     case 'payment':
         require_once __DIR__ . '/../views/customer/payment.php';
         break;
+        
+    case 'history':
+        require_once __DIR__ . '/../views/customer/history.php';
+        break;
+        
     case 'dashboard-vendor':
         require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
         break;
