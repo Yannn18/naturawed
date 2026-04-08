@@ -30,15 +30,18 @@ class PackageModel {
 
     // 2. FUNGSI UNTUK VENDOR DASHBOARD 
     public function getPackagesByVendor($userId) {
-        // Cari ID vendor_profile berdasarkan user_id dari session
-        $queryVendor = "SELECT id FROM vendor_profiles WHERE user_id = '$userId'";
+      $queryVendor = "SELECT id FROM vendor_profiles WHERE user_id = '$userId'";
         $resVendor = mysqli_query($this->conn, $queryVendor);
         $vendorData = mysqli_fetch_assoc($resVendor);
         $vendorProfileId = $vendorData['id'] ?? 0;
 
-
-
-        $query = "SELECT * FROM packages WHERE vendor_id = '$vendorProfileId' ORDER BY created_at DESC";
+        // PERBAIKAN: Tambahkan JOIN ke tabel categories
+        $query = "SELECT p.*, c.name as category_name 
+                  FROM packages p 
+                  LEFT JOIN categories c ON p.category_id = c.id 
+                  WHERE p.vendor_id = '$vendorProfileId' 
+                  ORDER BY p.created_at DESC";
+                  
         $result = mysqli_query($this->conn, $query);
 
         $packages = [];
@@ -48,7 +51,7 @@ class PackageModel {
             }
         }
         return $packages;
-    }
+        }
 
 
 
