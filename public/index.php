@@ -45,6 +45,15 @@ switch ($action) {
     case 'package_detail':
         require_once __DIR__ . '/../views/public/package_detail.php';
         break;
+    case 'package_add':
+        require_once __DIR__ . '/../views/vendor/package_add.php';
+        break;
+    case 'portfolio':
+        require_once __DIR__ . '/../views/vendor/portfolio.php';
+        break;
+    case 'profile_edit':
+        require_once __DIR__ . '/../views/vendor/profile_edit.php';
+        break;
 
     case 'checkout':
         require_once __DIR__ . '/../views/customer/checkout.php';
