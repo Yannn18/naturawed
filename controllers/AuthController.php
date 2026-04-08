@@ -12,7 +12,7 @@ class AuthController {
         global $conn;
         $this->conn = $conn;
         // Inisialisasi Model saat Controller dipanggil
-        $this->userModel = new UserModel($this->conn); 
+        $this->userModel = new UserModel($this->conn);
     }
 
     public function login() {
@@ -37,8 +37,9 @@ class AuthController {
                 $_SESSION['user_id'] = $userData['id'];
                 $_SESSION['role'] = $userData['role'];
                 $_SESSION['user_email'] = $userData['email'];
+                
 
-                echo json_encode(["status" => "success", "username" => $userData['email'], "role" => $userData['role']]);
+                echo json_encode(["status" => "success", "email" => $userData['email'], "role" => $userData['role']]);
             } else {
                 echo json_encode(["status" => "error", "message" => "Password salah!"]);
             }
