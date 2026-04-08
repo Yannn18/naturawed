@@ -62,7 +62,7 @@ $historyItems = [
                                 <p class="text-[10px] uppercase text-zinc-400 mb-1">Total Investment</p>
                                 <p class="text-2xl font-semibold">IDR 120.500.000</p>
                             </div>
-                            <a href="index.php?action=payment" class="bg-[#2d4a22] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#1e3317] transition-colors">Pay Now →</a>
+                            <a href="index.php?action=payment-instruction&booking_id=<?= $item['id'] ?>" class="bg-[#2d4a22] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#1e3317] transition-colors">Pay Now →</a>
                         </div>
                     </div>
                 </div>
