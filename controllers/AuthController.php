@@ -38,7 +38,7 @@ class AuthController {
                 $_SESSION['role'] = $userData['role'];
                 $_SESSION['user_email'] = $userData['email'];
                 
-
+        
                 echo json_encode(["status" => "success", "email" => $userData['email'], "role" => $userData['role']]);
             } else {
                 echo json_encode(["status" => "error", "message" => "Password salah!"]);
@@ -65,6 +65,8 @@ class AuthController {
         try {
             // Delegasikan proses penyimpanan ke Model
             $this->userModel->registerVendor($email, $password, $username, $address);
+
+        
             echo json_encode(["status" => "success", "username" => $username]);
         } catch (Exception $e) {
             echo json_encode(["status" => "error", "message" => $e->getMessage()]);
