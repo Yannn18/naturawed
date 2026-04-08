@@ -1,19 +1,14 @@
 <?php
-// 1. Pengaturan Halaman & Header
+
 $pageTitle = "Home - NaturaWed";
 require_once __DIR__ . '/../includes/header.php';
 
-// 2. Panggil Koneksi & Model
+
 global $conn; 
 require_once __DIR__ . '/../../models/PackageModel.php';
 
-// 3. Tarik data ASLI dari Database
 $packageModel = new PackageModel($conn);
-$ecoPackages = $packageModel->getActivePackages(3); 
-
-// =====================================================================
-// DATA MOCKUP (Idealnya data ini nantinya ditarik dari Database via Controller)
-// =====================================================================
+$ecoPackages = $packageModel->getActivePackages(6); 
 
 $recommendedVendors = [
     [
@@ -68,7 +63,16 @@ $videos = [
     ["user" => "@honeywood", "views" => "971", "img" => "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1974&auto=format&fit=crop"]
 ];
 ?>
+<style>
+   
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
 
+    .hide-scrollbar {
+        -ms-overflow-style: none; 
+        scrollbar-width: none;  
+</style>
 <main class="min-h-screen bg-white font-sans text-gray-900">
     
     <section class="relative h-[600px] w-full overflow-hidden">
@@ -99,34 +103,71 @@ $videos = [
 
     <section class="bg-[#d9e4c3] px-12 py-16">
         <h2 class="mb-12 text-4xl font-bold text-[#2d4a22]">Eco Elegance for Your Perfect Day</h2>
-        <di<?php if (!empty($ecoPackages)): ?>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <?php foreach ($ecoPackages as $item): ?>
-            <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-transform duration-300 hover:-translate-y-2">
-                <img src="<?= htmlspecialchars($item['main_image'] ?: 'https://picsum.photos/400/300') ?>" alt="<?= htmlspecialchars($item['package_name']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
-                
-                <div class="p-6">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['package_name']) ?></h3>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]">
-                            by <?= htmlspecialchars($item['business_name']) ?>
+        <?php if (!empty($ecoPackages)): ?>
+    
+    <div class="relative w-full overflow-hidden">
+        
+        <div id="ecoCarousel" class="flex overflow-x-auto gap-6 pb-12 pt-4 px-4 hide-scrollbar">
+            
+            <?php foreach ($ecoPackages as $item): ?>
+                <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" 
+                   class="group relative flex-none w-[340px] overflow-hidden rounded-[2rem] bg-white shadow-xl shadow-gray-200/50 transition-transform duration-300 hover:-translate-y-2 snap-start border border-gray-50">
+                    
+                    <img src="<?= htmlspecialchars($item['main_image'] ?: 'https://picsum.photos/400/300') ?>" 
+                         alt="<?= htmlspecialchars($item['package_name']) ?>" 
+                         class="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                         referrerpolicy="no-referrer" />
+                    
+                    <div class="p-6">
+                        <div class="flex items-start justify-between gap-4">
+                            <h3 class="text-xl font-bold text-gray-900 leading-tight line-clamp-2">
+                                <?= htmlspecialchars($item['package_name']) ?>
+                            </h3>
+                        </div>
+                        
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mt-3">
+                            By <span class="text-[#2d4a22]"><?= htmlspecialchars($item['business_name']) ?></span>
                         </span>
+                        
+                        <p class="mt-4 text-sm leading-relaxed text-gray-500 line-clamp-2">
+                            <?= htmlspecialchars($item['description']) ?>
+                        </p>
+                        
+                        <div class="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
+                            <div>
+                                <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Starting at</p>
+                                <div class="text-lg font-bold text-gray-900">
+                                    IDR <?= number_format((float)$item['price'], 0, ',', '.') ?>
+                                </div>
+                            </div>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#f0f2f0] text-[#2d4a22] group-hover:bg-[#2d4a22] group-hover:text-white transition-colors">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <p class="mt-3 text-sm leading-relaxed text-gray-600 line-clamp-3">
-                        <?= htmlspecialchars($item['description']) ?>
-                    </p>
-                    
-                    <div class="mt-6 text-lg font-bold text-gray-900">
-                        IDR <?= number_format((float)$item['price'], 0, ',', '.') ?>
+                </a>
+            <?php endforeach; ?>
+            
+            <a href="/index.php?action=vendors" class="group relative flex-none w-[340px] overflow-hidden rounded-[2rem] bg-[#f8f9fa] border-2 border-dashed border-gray-200 transition-all duration-300 hover:border-[#2d4a22] snap-start flex items-center justify-center min-h-[400px]">
+                <div class="text-center p-8">
+                    <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#e1f5e1] text-[#2d4a22] group-hover:scale-110 transition-transform">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </div>
+                    <h3 class="text-lg font-serif font-bold text-[#2d3e2d] mb-2">Explore More</h3>
+                    <p class="text-xs text-gray-500">Discover all eco-friendly packages</p>
                 </div>
             </a>
-        <?php endforeach; ?>
+            
+        </div>
     </div>
+
 <?php else: ?>
-    <div class="col-span-3 text-center py-12 bg-white rounded-3xl">
-        <p class="text-gray-500">Belum ada paket yang tersedia saat ini.</p>
+    <div class="w-full text-center py-16 bg-[#f8f9fa] rounded-[2rem] border border-gray-100">
+        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm text-gray-400">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 12H4M12 4v16"/></svg>
+        </div>
+        <h3 class="text-xl font-serif font-bold text-gray-400 mb-2">No Packages Yet</h3>
+        <p class="text-sm text-gray-400">Vendors are currently preparing their best eco-friendly options.</p>
     </div>
 <?php endif; ?>
         </div>
@@ -213,6 +254,52 @@ $videos = [
         </div>
     </section>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('ecoCarousel');
+            
+            if (carousel) {
+                let isDown = false;
+                let scrollInterval;
+                const scrollSpeed = 1; // Kecepatan geser (makin besar makin cepat)
+
+                // Fungsi untuk menjalankan scroll
+                const startScroll = () => {
+                    scrollInterval = setInterval(() => {
+                        // Tambah posisi scroll
+                        carousel.scrollLeft += scrollSpeed;
+
+                        // Jika sudah mentok di kanan, kembalikan ke awal (kiri)
+                        // Logika: Jika posisi scroll saat ini >= (lebar total konten - lebar yang terlihat di layar)
+                        if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth) - 1) {
+                            // Beri sedikit jeda sebelum reset agar terasa natural
+                            setTimeout(() => {
+                                carousel.scrollLeft = 0;
+                            }, 500); 
+                        }
+                    }, 20); // Jalankan setiap 20 milidetik (sekitar 50fps untuk kehalusan)
+                };
+
+                // Fungsi untuk menghentikan scroll
+                const stopScroll = () => {
+                    clearInterval(scrollInterval);
+                };
+
+                // Mulai scroll otomatis saat halaman dimuat
+                startScroll();
+
+                // Hentikan scroll saat mouse masuk (hover) agar user bisa membaca
+                carousel.addEventListener('mouseenter', stopScroll);
+                
+                // Lanjutkan scroll saat mouse keluar
+                carousel.addEventListener('mouseleave', startScroll);
+
+                // Hentikan scroll saat user menyentuh layar (untuk HP)
+                carousel.addEventListener('touchstart', stopScroll);
+                carousel.addEventListener('touchend', startScroll);
+            }
+        });
+    </script>
 </main>
 
 <?php
