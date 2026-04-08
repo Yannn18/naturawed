@@ -6,6 +6,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 require_once __DIR__ . '/../config/koneksi.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
+require_once __DIR__ . '/../controllers/PackageController.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
 
@@ -22,6 +23,7 @@ switch ($action) {
         
         require_once __DIR__ . '/../views/auth/signin.html';
         break;
+
     case 'show_register':
         require_once __DIR__ . '/../views/auth/signup.html';
         break;
@@ -34,7 +36,6 @@ switch ($action) {
         require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
         break;
 
-        
     case 'home':
         require_once __DIR__ . '/../views/public/home.php';
         break;
@@ -50,12 +51,18 @@ switch ($action) {
     case 'package_detail':
         require_once __DIR__ . '/../views/public/package_detail.php';
         break;
-    case 'package_add':
+
+   case 'vendor_add_package':
+        if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
+            header("Location: /index.php?action=home"); exit;
+        }
         require_once __DIR__ . '/../views/vendor/package_add.php';
         break;
+
     case 'portfolio':
         require_once __DIR__ . '/../views/vendor/portfolio.php';
         break;
+
     case 'profile_edit':
         require_once __DIR__ . '/../views/vendor/profile_edit.php';
         break;
@@ -88,6 +95,10 @@ switch ($action) {
 
     case 'register_vendor':
         $authController->registerVendor();
+        break;
+        case 'store_package':
+        $packageCtrl = new PackageController();
+        $packageCtrl->store();
         break;
 
     default:
