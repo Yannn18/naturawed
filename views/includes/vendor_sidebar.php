@@ -32,18 +32,18 @@ function getMenuClass($actionName, $currentAction) {
             <?php endif; ?>
         </a>
 
-        <a href="index.php?action=vendor_profile" class="<?= getMenuClass('vendor_profile', $currentAction) ?>">
+        <a href="index.php?action=portfolio" class="<?= getMenuClass('portfolio', $currentAction) ?>">
             <i data-lucide="briefcase" class="w-[18px] h-[18px]"></i>
             Studio Profile
-            <?php if($currentAction === 'vendor_profile'): ?>
+            <?php if($currentAction === 'portfolio'): ?>
                 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
             <?php endif; ?>
         </a>
 
-        <a href="index.php?action=vendor_add_package" class="<?= getMenuClass('vendor_packages', $currentAction) ?> <?= getMenuClass('vendor_add_package', $currentAction) ?>">
+        <a href="index.php?action=vendor_packages" class="<?= getMenuClass('vendor_packages', $currentAction) ?> <?= getMenuClass('vendor_add_package', $currentAction) ?>">
             <i data-lucide="package" class="w-[18px] h-[18px]"></i>
             Packages
-            <?php if($currentAction === 'vendor_packages' || $currentAction === 'vendor_add_package'): ?>
+            <?php if($currentAction === 'vendor_packages' || $currentAction === 'vendor_packages'): ?>
                 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
             <?php endif; ?>
         </a>
