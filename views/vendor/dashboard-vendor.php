@@ -1,12 +1,10 @@
 <?php
- 
-        // require_once __DIR__ . '/../views/public/package_add.php';
-      
-        // require_once __DIR__ . '/../views/public/portfolio.php';
-       
-        // require_once __DIR__ . '/../views/public/profile_edit.php';
-        
-// Data Dummy Pesanan
+// Pastikan user sudah login dan role-nya vendor
+if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
+    header("Location: /index.php?action=show_login");
+    exit;
+}
+$pageTitle = "Vendor Dashboard - NaturaWed";
 $recentOrders = [
     [
         "client" => "Eleanor Vance",
@@ -37,8 +35,8 @@ $recentOrders = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vendor Dashboard - NaturaWed</title>
-    
+  
+    <title><?= $pageTitle ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -49,64 +47,9 @@ $recentOrders = [
     </style>
 </head>
 <body>
-
     <div class="min-h-screen flex bg-white font-sans text-[#1a1a1a]">
-        <aside class="w-64 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen">
-            <div class="p-8">
-                <h1 class="text-xl font-serif font-semibold text-[#2d3e2d]">NaturaWed</h1>
-                <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mt-1">Vendor Portal</p>
-            </div>
-
-            <nav class="flex-1 px-4 space-y-1 mt-4">
-                <a href="dashboard.php" class="flex items-center gap-3 px-4 py-3 bg-[#f0f2f0] text-[#2d3e2d] rounded-xl font-semibold text-sm relative">
-                    <i data-lucide="layout-dashboard" class="w-[18px] h-[18px]"></i>
-                    Dashboard
-                    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
-                </a>
-                <a href="index.php?action=portfolio" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
-                    <i data-lucide="briefcase" class="w-[18px] h-[18px]"></i>
-                    Portfolio
-                </a>
-                <a href="index.php?action=vendor_add_package" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
-                    <i data-lucide="package" class="w-[18px] h-[18px]"></i>
-                    Packages
-                </a>
-                <a href="chat.php" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
-                    <i data-lucide="message-square" class="w-[18px] h-[18px]"></i>
-                    Messages
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
-                    <i data-lucide="star" class="w-[18px] h-[18px]"></i>
-                    Reviews
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
-                    <i data-lucide="shopping-bag" class="w-[18px] h-[18px]"></i>
-                    Orders
-                </a>
-                
-                <div class="pt-4 mt-4 border-t border-gray-100">
-                    <a href="logout.php" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors text-sm font-medium">
-                        <i data-lucide="log-out" class="w-[18px] h-[18px]"></i>
-                        Logout
-                    </a>
-                </div>
-            </nav>
-
-            <div class="p-4">
-                <div class="bg-[#f0f2f0] p-3 rounded-2xl flex items-center gap-3">
-                    <img 
-                        src="https://picsum.photos/seed/vendor/100/100" 
-                        alt="Profile" 
-                        class="w-10 h-10 rounded-full object-cover"
-                        referrerpolicy="no-referrer"
-                    />
-                    <div class="min-w-0">
-                        <h4 class="text-xs font-bold truncate"><?= htmlspecialchars($_SESSION['user'] ?? 'Vendor'); ?></h4>
-                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">Active User</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
+        <?php require_once __DIR__ . '/../includes/vendor_sidebar.php'; ?>
+       
 
         <main class="flex-1 flex flex-col overflow-y-auto">
             <header class="h-20 px-12 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10">

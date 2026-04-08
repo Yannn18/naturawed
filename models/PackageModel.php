@@ -47,15 +47,18 @@ class PackageModel {
 
     // 2. FUNGSI UNTUK VENDOR DASHBOARD 
     public function getPackagesByVendor($userId) {
-        // Cari ID vendor_profile berdasarkan user_id dari session
-        $queryVendor = "SELECT id FROM vendor_profiles WHERE user_id = '$userId'";
+      $queryVendor = "SELECT id FROM vendor_profiles WHERE user_id = '$userId'";
         $resVendor = mysqli_query($this->conn, $queryVendor);
         $vendorData = mysqli_fetch_assoc($resVendor);
         $vendorProfileId = $vendorData['id'] ?? 0;
 
-
-
-        $query = "SELECT * FROM packages WHERE vendor_id = '$vendorProfileId' ORDER BY created_at DESC";
+        // PERBAIKAN: Tambahkan JOIN ke tabel categories
+        $query = "SELECT p.*, c.name as category_name 
+                  FROM packages p 
+                  LEFT JOIN categories c ON p.category_id = c.id 
+                  WHERE p.vendor_id = '$vendorProfileId' 
+                  ORDER BY p.created_at DESC";
+                  
         $result = mysqli_query($this->conn, $query);
 
         $packages = [];
@@ -65,7 +68,7 @@ class PackageModel {
             }
         }
         return $packages;
-    }
+        }
 
 
 
@@ -97,6 +100,24 @@ class PackageModel {
                   VALUES ('$vendor_profile_id', '$category_id', '$nameEscaped', '$price', '$descEscaped', '$featEscaped', '$imagePathEscaped', 'active')";
         
         return mysqli_query($this->conn, $query);
+    }
+
+    // TAMBAHAN BARU: Mengambil detail 1 paket berdasarkan ID
+    public function getPackageById($id) {
+        $idEscaped = intval($id);
+        // Kita JOIN lagi biar dapet nama kategori dan nama bisnis vendornya
+        $query = "SELECT p.*, vp.business_name as vendor_name, c.name as category_name 
+                  FROM packages p 
+                  JOIN vendor_profiles vp ON p.vendor_id = vp.id 
+                  JOIN categories c ON p.category_id = c.id 
+                  WHERE p.id = $idEscaped";
+                  
+        $result = mysqli_query($this->conn, $query);
+
+        if ($result && mysqli_num_rows($result) === 1) {
+            return mysqli_fetch_assoc($result);
+        }
+        return null; // Kalau paket gak ketemu
     }
 }
 ?>

@@ -23,27 +23,8 @@ $pageTitle = "Create New Package - NaturaWed";
 </head>
 <body class="flex min-h-screen bg-white font-sans text-[#1a1a1a]">
 
-    <aside class="w-64 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen">
-        <div class="p-8">
-            <h1 class="text-xl font-serif font-semibold text-[#2d3e2d]">NaturaWed</h1>
-            <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mt-1">Vendor Portal</p>
-        </div>
-        <nav class="flex-1 px-4 space-y-1 mt-4">
-            <a href="index.php?action=vendor_dashboard" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
-                <i data-lucide="layout-dashboard" class="w-[18px] h-[18px]"></i> Dashboard
-            </a>
-            <a href="index.php?action=vendor_add_package" class="flex items-center gap-3 px-4 py-3 bg-[#f0f2f0] text-[#2d3e2d] rounded-xl font-semibold text-sm relative">
-                <i data-lucide="package" class="w-[18px] h-[18px]"></i> Packages
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
-            </a>
-            <div class="pt-4 mt-4 border-t border-gray-100">
-                <a href="index.php?action=logout" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors text-sm font-medium">
-                    <i data-lucide="log-out" class="w-[18px] h-[18px]"></i> Logout
-                </a>
-            </div>
-        </nav>
-    </aside>
 
+    <?php require_once __DIR__ . '/../includes/vendor_sidebar.php'; ?>
     <main class="flex-1 p-12 overflow-y-auto bg-[#f8f9fa]">
         
         <form action="/index.php?action=store_package" method="POST" enctype="multipart/form-data">

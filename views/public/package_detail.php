@@ -5,6 +5,14 @@ require_once __DIR__ . '/../includes/header.php';
 
 // Konversi teks fitur dari database (asumsi dipisahkan baris baru atau koma) menjadi array
 $featuresList = !empty($package['features']) ? explode("\n", $package['features']) : [];
+// Cek apakah data paket berhasil dikirim dari Controller
+if (!isset($packageData)) {
+    echo "<h1>Error: Data paket tidak dimuat.</h1>";
+    exit;
+}
+
+// Format harga jadi Rupiah (misal: 25000000 jadi 25.000.000)
+$formattedPrice = number_format($packageData['price'], 0, ',', '.');
 ?>
 
 <div class="min-h-screen bg-white font-sans text-[#333]">
