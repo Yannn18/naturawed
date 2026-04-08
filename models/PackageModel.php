@@ -84,5 +84,23 @@ class PackageModel {
         
         return mysqli_query($this->conn, $query);
     }
+
+    // TAMBAHAN BARU: Mengambil detail 1 paket berdasarkan ID
+    public function getPackageById($id) {
+        $idEscaped = intval($id);
+        // Kita JOIN lagi biar dapet nama kategori dan nama bisnis vendornya
+        $query = "SELECT p.*, vp.business_name as vendor_name, c.name as category_name 
+                  FROM packages p 
+                  JOIN vendor_profiles vp ON p.vendor_id = vp.id 
+                  JOIN categories c ON p.category_id = c.id 
+                  WHERE p.id = $idEscaped";
+                  
+        $result = mysqli_query($this->conn, $query);
+
+        if ($result && mysqli_num_rows($result) === 1) {
+            return mysqli_fetch_assoc($result);
+        }
+        return null; // Kalau paket gak ketemu
+    }
 }
 ?>
