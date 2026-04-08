@@ -90,7 +90,7 @@ class PaymentController {
             }
 
             // 2. UPDATE KE DATABASE MELALUI MODEL
-            $status = 'pending'; // Status awal setelah upload
+          $status = 'pending_verification';
             
             $isSaved = $this->paymentModel->updatePaymentStatus(
                 $bookingId,

@@ -120,24 +120,25 @@ $totalAmount = number_format($payment['amount'], 0, ',', '.');
 
     <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-    <script>
-    // Perbaikan: Ambil elemen ke-0 dari array files
-   // Menampilkan nama file saat dipilih
+  <script>
+    // 1. PERBAIKAN: Menampilkan nama file dengan benar
     document.getElementById('fileInput').onchange = function() {
-        // Tambahkan setelah files
-        if (this.files && this.files) { 
-            document.getElementById('fileName').innerHTML = `Selected: <strong>${this.files.name}</strong>`;
+        // Gunakan [0] karena files adalah bentuk Array (FileList)
+        if (this.files && this.files[0]) { 
+            document.getElementById('fileName').innerHTML = `Selected: <strong class="text-[#2d4a22]">${this.files[0].name}</strong>`;
         } else {
             document.getElementById('fileName').innerHTML = `📸 Click to select transfer receipt`;
         }
     };
 
+    // Fungsi Salin Rekening
     function copyToClipboard() {
         const accNum = document.getElementById('account-number').innerText;
         navigator.clipboard.writeText(accNum);
         alert("Account Number Copied!");
     }
 
+    // 2. PERBAIKAN: Melacak Error Server (PHP)
     document.getElementById('paymentForm').onsubmit = async function(e) {
         e.preventDefault();
         
@@ -156,8 +157,12 @@ $totalAmount = number_format($payment['amount'], 0, ',', '.');
                 body: formData
             });
 
-            // Penting: Cek apakah respon benar-benar JSON
-            const hasil = await response.json();
+            // TRIK DEBUGGING: Ambil sebagai teks dulu, jangan langsung di-JSON-kan
+            const textRespon = await response.text();
+            console.log("Respon Mentah Server:", textRespon); // Cek Console Browser jika gagal!
+
+            // Coba terjemahkan teks menjadi JSON
+            const hasil = JSON.parse(textRespon);
 
             if (hasil.status === 'success') {
                 setTimeout(() => {
@@ -171,7 +176,8 @@ $totalAmount = number_format($payment['amount'], 0, ',', '.');
             }
         } catch (error) {
             console.error("Error detail:", error);
-            alert("Terjadi kesalahan koneksi atau format file salah.");
+            // Pesan ini muncul jika Server membalas dengan HTML/Error PHP, bukan JSON
+            alert("Gagal memproses data. Silakan tekan F12, buka tab 'Console' untuk melihat error PHP aslinya.");
             resetButton();
         }
     };

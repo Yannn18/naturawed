@@ -6,13 +6,13 @@ require_once __DIR__ . '/../includes/header.php';
 // Konversi teks fitur dari database (asumsi dipisahkan baris baru atau koma) menjadi array
 $featuresList = !empty($package['features']) ? explode("\n", $package['features']) : [];
 // Cek apakah data paket berhasil dikirim dari Controller
-if (!isset($packageData)) {
+if (!isset($package)) {
     echo "<h1>Error: Data paket tidak dimuat.</h1>";
     exit;
 }
 
 // Format harga jadi Rupiah (misal: 25000000 jadi 25.000.000)
-$formattedPrice = number_format($packageData['price'], 0, ',', '.');
+$formattedPrice = number_format($package['price'], 0, ',', '.');
 ?>
 
 <div class="min-h-screen bg-white font-sans text-[#333]">
@@ -41,18 +41,18 @@ $formattedPrice = number_format($packageData['price'], 0, ',', '.');
         <div class="flex flex-col gap-12 lg:flex-row">
             <div class="flex-1">
                 <div class="mb-12 flex items-center justify-between rounded-3xl bg-[#f8f9f5] p-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="relative h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-sm">
-                            <img src="<?= htmlspecialchars($package['designer_img'] ?: 'assets/image/default-vendor.jpg') ?>" alt="Designer">
-                            <div class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500"></div>
-                        </div>
-                        <div>
-                            <p class="text-xs font-medium text-gray-400">Designed by</p>
-                            <h3 class="text-xl font-bold text-[#2d4a22]">
-                                <?= htmlspecialchars($package['business_name'] ?? $package['designer']) ?>
-                            </h3>
-                        </div>
-                    </div>
+                   <div class="flex items-center space-x-4">
+    <div class="relative h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-sm bg-gray-200">
+        <img src="<?= htmlspecialchars($package['designer_img'] ?? 'https://picsum.photos/seed/vendor/100/100') ?>" alt="Designer" class="w-full h-full object-cover">
+        <div class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500"></div>
+    </div>
+    <div>
+        <p class="text-xs font-medium text-gray-400">Designed by</p>
+        <h3 class="text-xl font-bold text-[#2d4a22]">
+            <?= htmlspecialchars($package['business_name'] ?? 'NaturaWed Vendor') ?>
+        </h3>
+    </div>
+</div>
                 </div>
 
                 <section class="mb-16">
