@@ -75,7 +75,7 @@ class PackageController {
 
             if ($isSaved) {
                 // Jika sukses, kembalikan ke dashboard vendor
-                header("Location: /index.php?action=vendor_dashboard&msg=success");
+                header("Location: /index.php?action=dashboard-vendor&msg=success");
                 exit;
             } else {
                 echo "Gagal menyimpan ke database: " . mysqli_error($this->conn);
