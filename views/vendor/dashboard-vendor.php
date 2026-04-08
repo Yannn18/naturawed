@@ -1,5 +1,12 @@
 <?php
 
+ 
+        // require_once __DIR__ . '/../views/public/package_add.php';
+      
+        // require_once __DIR__ . '/../views/public/portfolio.php';
+       
+        // require_once __DIR__ . '/../views/public/profile_edit.php';
+        
 // Data Dummy Pesanan
 $recentOrders = [
     [
@@ -57,11 +64,11 @@ $recentOrders = [
                     Dashboard
                     <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                <a href="index.php?action=portfolio" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
                     <i data-lucide="briefcase" class="w-[18px] h-[18px]"></i>
                     Portfolio
                 </a>
-                <a href="packages.php" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                <a href="index.php?action=package_add" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
                     <i data-lucide="package" class="w-[18px] h-[18px]"></i>
                     Packages
                 </a>
@@ -260,7 +267,7 @@ $recentOrders = [
                                 <div class="w-12 h-12 rounded-xl bg-[#e1f5e1] flex items-center justify-center text-[#2d3e2d] group-hover:scale-110 transition-transform">
                                     <i data-lucide="edit-3" class="w-5 h-5"></i>
                                 </div>
-                                <div>
+                                <div href="index.php?action=profile_edit">
                                     <h6 class="font-bold text-sm">Edit Profile</h6>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Studio Details & Branding</p>
                                 </div>
@@ -269,7 +276,7 @@ $recentOrders = [
                                 <div class="w-12 h-12 rounded-xl bg-[#f8f9fa] flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform">
                                     <i data-lucide="image" class="w-5 h-5"></i>
                                 </div>
-                                <div>
+                                <div href="index.php?action=portfolio">
                                     <h6 class="font-bold text-sm">Update Portfolio</h6>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Manage your visual gallery</p>
                                 </div>
@@ -278,7 +285,7 @@ $recentOrders = [
                                 <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
                                     <i data-lucide="plus-square" class="w-5 h-5"></i>
                                 </div>
-                                <div>
+                                <div href="index.php?action=package_add">
                                     <h6 class="font-bold text-sm text-white">Add New Package</h6>
                                     <p class="text-[10px] text-white/50 uppercase tracking-widest mt-0.5">Expand your service list</p>
                                 </div>
