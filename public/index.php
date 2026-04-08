@@ -52,6 +52,12 @@ switch ($action) {
         require_once __DIR__ . '/../views/public/package_detail.php';
         break;
 
+        case 'vendor_packages':
+        if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
+            header("Location: /index.php?action=home"); exit;
+        }
+        require_once __DIR__ . '/../views/vendor/packages.php';
+        break;
    case 'vendor_add_package':
         if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
             header("Location: /index.php?action=home"); exit;
