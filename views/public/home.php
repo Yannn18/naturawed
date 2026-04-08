@@ -1,46 +1,19 @@
 <?php
-
-// Set judul halaman
+// 1. Pengaturan Halaman & Header
 $pageTitle = "Home - NaturaWed";
-
-
-// Memanggil komponen Header
 require_once __DIR__ . '/../includes/header.php';
 
-global $conn;
+// 2. Panggil Koneksi & Model
+global $conn; 
 require_once __DIR__ . '/../../models/PackageModel.php';
+
+// 3. Tarik data ASLI dari Database
 $packageModel = new PackageModel($conn);
-$ecoPackages = $packageModel->getActivePackages(3);
+$ecoPackages = $packageModel->getActivePackages(3); 
+
 // =====================================================================
 // DATA MOCKUP (Idealnya data ini nantinya ditarik dari Database via Controller)
 // =====================================================================
-
-$ecoPackages = [
-    [
-        "id" => 1,
-        "title" => "Seashell Bomb",
-        "author" => "Ocean Wed n Co.",
-        "price" => "IDR 120.000.000,00",
-        "img" => "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop",
-        "desc" => "A romantic beachside session capturing the tenderness of your perfect day, framed with calm waves and natural elegance."
-    ],
-    [
-        "id" => 2,
-        "title" => "Highland Whisper",
-        "author" => "Ocean Wed...",
-        "price" => "IDR 97.500.000,00",
-        "img" => "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop",
-        "desc" => "A modern mountain wedding, highlighting effortlessly new wedding chemistry and stability."
-    ],
-    [
-        "id" => 3,
-        "title" => "Forest Grove",
-        "author" => "Ocean Wed n C...",
-        "price" => "IDR 97.500.000,00",
-        "img" => "https://images.unsplash.com/photo-1465495910483-0d6745756038?q=80&w=2070&auto=format&fit=crop",
-        "desc" => "A romantic beachside section capturing the tenderness of your perfect day, framed with calm waves and natural elegance."
-    ]
-];
 
 $recommendedVendors = [
     [
@@ -126,24 +99,36 @@ $videos = [
 
     <section class="bg-[#d9e4c3] px-12 py-16">
         <h2 class="mb-12 text-4xl font-bold text-[#2d4a22]">Eco Elegance for Your Perfect Day</h2>
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-           <?php foreach ($ecoPackages as $item): ?>
-    <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-transform duration-300 hover:-translate-y-2">
-        <img src="<?= htmlspecialchars($item['main_image'] ?? 'https://picsum.photos/400/300') ?>" alt="<?= htmlspecialchars($item['package_name']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
-        <div class="p-6">
-            <div class="flex items-center justify-between">
-                <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['package_name']) ?></h3>
-                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]">
-                    by <?= htmlspecialchars($item['business_name']) ?>
-                </span>
-            </div>
-            <p class="mt-3 text-sm leading-relaxed text-gray-600 line-clamp-3">
-                <?= htmlspecialchars($item['description']) ?>
-            </p>
-            <div class="mt-6 text-lg font-bold text-gray-900">IDR <?= number_format($item['price'], 0, ',', '.') ?></div>
-        </div>
-    </a>
-<?php endforeach; ?>
+        <di<?php if (!empty($ecoPackages)): ?>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <?php foreach ($ecoPackages as $item): ?>
+            <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-transform duration-300 hover:-translate-y-2">
+                <img src="<?= htmlspecialchars($item['main_image'] ?: 'https://picsum.photos/400/300') ?>" alt="<?= htmlspecialchars($item['package_name']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
+                
+                <div class="p-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['package_name']) ?></h3>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]">
+                            by <?= htmlspecialchars($item['business_name']) ?>
+                        </span>
+                    </div>
+                    
+                    <p class="mt-3 text-sm leading-relaxed text-gray-600 line-clamp-3">
+                        <?= htmlspecialchars($item['description']) ?>
+                    </p>
+                    
+                    <div class="mt-6 text-lg font-bold text-gray-900">
+                        IDR <?= number_format((float)$item['price'], 0, ',', '.') ?>
+                    </div>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <div class="col-span-3 text-center py-12 bg-white rounded-3xl">
+        <p class="text-gray-500">Belum ada paket yang tersedia saat ini.</p>
+    </div>
+<?php endif; ?>
         </div>
     </section>
 

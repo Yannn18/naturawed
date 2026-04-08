@@ -4,6 +4,21 @@ $pageTitle = "Add New Package - NaturaWed";
 require_once __DIR__ . '/../includes/components.php'; // Wajib panggil file komponen tombol
 ?>
 
+<script>
+    // Menampilkan nama file gambar yang dipilih user
+    const coverUpload = document.getElementById('coverUpload');
+    const labelSpan = coverUpload.nextElementSibling.querySelector('span.text-sm');
+
+    coverUpload.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            const fileName = e.target.files[0].name;
+            // Potong teks jika nama file terlalu panjang
+            labelSpan.textContent = fileName.length > 25 ? fileName.substring(0, 25) + '...' : fileName;
+            labelSpan.classList.add('text-[#2d4a22]'); // Ubah warna jadi hijau
+        }
+    });
+</script>
+
 <main class="flex-1 flex flex-col overflow-y-auto bg-[#f8f9fa]">
     <header class="h-20 px-12 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10 border-b border-gray-100">
         <h2 class="text-xl font-serif italic text-[#2d3e2d]">Add New Package</h2>

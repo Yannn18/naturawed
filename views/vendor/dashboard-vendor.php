@@ -68,7 +68,7 @@ $recentOrders = [
                     <i data-lucide="briefcase" class="w-[18px] h-[18px]"></i>
                     Portfolio
                 </a>
-                <a href="index.php?action=package_add" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                <a href="index.php?action=vendor_add_package" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
                     <i data-lucide="package" class="w-[18px] h-[18px]"></i>
                     Packages
                 </a>
