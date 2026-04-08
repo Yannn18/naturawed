@@ -71,7 +71,8 @@ $videos = [
 
     .hide-scrollbar {
         -ms-overflow-style: none; 
-        scrollbar-width: none;  
+        scrollbar-width: none; 
+} 
 </style>
 <main class="min-h-screen bg-white font-sans text-gray-900">
     
