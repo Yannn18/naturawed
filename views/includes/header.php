@@ -19,12 +19,14 @@ $activeClass = 'relative font-bold text-[#2d4a22] after:absolute after:-bottom-1
 $inactiveClass = 'font-semibold text-zinc-400 hover:text-[#2d4a22] transition-colors';
 
 // Helper untuk proteksi (handleProtectedAction)
+if (!function_exists('getProtectedRoute')) {
 function getProtectedRoute($path, $isAuth) {
     if (!$isAuth) {
        
        return "javascript:openAuthModal()";
     }
     return "index.php?action=$path";
+}
 }
 include 'authmodal.php'; // Modal Login/Signup
 ?>
