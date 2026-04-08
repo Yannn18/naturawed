@@ -83,5 +83,24 @@ class PackageController {
             }
         }
     }
+    // TAMBAHAN BARU: Fungsi untuk menampilkan detail paket
+    public function detail() {
+        // Ambil ID dari URL (misal: id=1)
+        $id = $_GET['id'] ?? 0;
+        
+        if (!$id) {
+            die("ID Paket tidak ditemukan."); // Bisa diganti redirect ke home
+        }
+
+        // Minta data ke Model
+        $packageData = $this->packageModel->getPackageById($id);
+
+        if (!$packageData) {
+            die("Paket tidak ditemukan di database.");
+        }
+
+        // Kalau datanya ada, panggil halaman View dan data $packageData otomatis bisa dipakai di sana!
+        require_once __DIR__ . '/../views/public/package_detail.php';
+    }
 }
 ?>
