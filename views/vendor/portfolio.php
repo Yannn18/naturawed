@@ -1,44 +1,190 @@
 <?php 
-$pageTitle = "Portfolio - NaturaWed";
-require_once __DIR__ . '/../includes/components.php'; 
+// session_start(); // Di-comment biar gak tabrakan sama index.php
 
-// DUMMY DATA GALERI (Nantinya tarik dari database)
-$galleries = [
-    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&w=600&q=80"
+// Cek apakah user sudah login (sesuaikan dengan logika MVC kamu)
+if (!isset($_SESSION['login'])) {
+    // header("Location: signin.php");
+    // exit;
+}
+
+// 1. DATA DUMMY PROFIL VENDOR
+$vendorProfile = [
+    "name" => $_SESSION['user'] ?? "Glamorous Studio",
+    "logo" => "https://picsum.photos/seed/vendorlogo/200/200",
+    "crew_photo" => "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2000&auto=format&fit=crop", // Foto tim/crew
+    "description" => "We are a passionate team of wedding decorators and organizers dedicated to turning your dream day into reality. With over 5 years of experience in crafting bespoke, eco-friendly, and luxurious wedding experiences, we ensure every petal, drapery, and light reflects your unique love story."
+];
+
+// 2. DATA DUMMY PAKET MILIK VENDOR INI
+$vendorPackages = [
+    [
+        "name" => "The Ethereal Conservatory",
+        "category" => "Full Floral Scape",
+        "price" => "Rp 25,000,000",
+        "image" => "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop"
+    ],
+    [
+        "name" => "Minimalist Grandeur",
+        "category" => "Modern Minimalist",
+        "price" => "Rp 18,500,000",
+        "image" => "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=600&auto=format&fit=crop"
+    ],
+    [
+        "name" => "Golden Hour Curation",
+        "category" => "Sunset Rustic",
+        "price" => "Rp 22,000,000",
+        "image" => "https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=600&auto=format&fit=crop"
+    ]
 ];
 ?>
 
-<main class="flex-1 flex flex-col overflow-y-auto bg-[#f8f9fa]">
-    <header class="h-20 px-12 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10 border-b border-gray-100">
-        <h2 class="text-xl font-serif italic text-[#2d3e2d]">Portfolio Studio</h2>
-    </header>
-
-    <div class="px-12 py-10 w-full">
-        <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-50 mb-10 flex items-center justify-between">
-            <div>
-                <h3 class="text-2xl font-serif text-[#2d3e2d] mb-1">Visual Gallery</h3>
-                <p class="text-gray-500 text-sm">Upload high-quality images to inspire your future clients.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Portfolio - NaturaWed</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex bg-[#f8f9fa] font-sans text-[#1a1a1a]">
+        <aside class="w-64 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen z-20">
+            <div class="p-8">
+                <h1 class="text-xl font-serif font-semibold text-[#2d3e2d]">NaturaWed</h1>
+                <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mt-1">Vendor Portal</p>
             </div>
-            <form action="/index.php?action=upload_portfolio" method="POST" enctype="multipart/form-data" class="flex gap-4 items-center">
-                <input type="file" name="portfolio_image" required class="text-sm file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e1f5e1] file:text-[#2d3e2d] hover:file:bg-[#c8e6c9] cursor-pointer">
-                <?= ButtonPrimary('Upload Image', 'submit') ?>
-            </form>
-        </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <?php foreach ($galleries as $img): ?>
-                <div class="group relative aspect-[4/5] rounded-3xl overflow-hidden shadow-sm bg-gray-200">
-                    <img src="<?= $img ?>" alt="Portfolio Item" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button onclick="confirm('Hapus foto ini?')" class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-red-500 transition-colors">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        </button>
+            <nav class="flex-1 px-4 space-y-1 mt-4">
+                <a href="index.php?action=dashboard-vendor" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                    <i data-lucide="layout-dashboard" class="w-[18px] h-[18px]"></i> Dashboard
+                </a>
+                <a href="index.php?action=portfolio" class="flex items-center gap-3 px-4 py-3 bg-[#f0f2f0] text-[#2d3e2d] rounded-xl font-semibold text-sm relative">
+                    <i data-lucide="briefcase" class="w-[18px] h-[18px]"></i> Portfolio
+                    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
+                </a>
+                <a href="index.php?action=package_add" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                    <i data-lucide="package" class="w-[18px] h-[18px]"></i> Packages
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                    <i data-lucide="message-square" class="w-[18px] h-[18px]"></i> Messages
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                    <i data-lucide="star" class="w-[18px] h-[18px]"></i> Reviews
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-colors text-sm font-medium">
+                    <i data-lucide="shopping-bag" class="w-[18px] h-[18px]"></i> Orders
+                </a>
+                
+                <div class="pt-4 mt-4 border-t border-gray-100">
+                    <a href="logout.php" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors text-sm font-medium">
+                        <i data-lucide="log-out" class="w-[18px] h-[18px]"></i> Logout
+                    </a>
+                </div>
+            </nav>
+
+            <div class="p-4">
+                <div class="bg-[#f0f2f0] p-3 rounded-2xl flex items-center gap-3">
+                    <img src="https://picsum.photos/seed/vendor/100/100" alt="Profile" class="w-10 h-10 rounded-full object-cover" referrerpolicy="no-referrer" />
+                    <div class="min-w-0">
+                        <h4 class="text-xs font-bold truncate"><?= htmlspecialchars($_SESSION['user'] ?? 'Vendor'); ?></h4>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">Active User</p>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <div class="relative h-80 w-full bg-gray-200">
+                <img src="<?= htmlspecialchars($vendorProfile['crew_photo']) ?>" alt="Crew Photo" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+                
+                <button class="absolute top-6 right-12 px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-[#2d3e2d] transition-all flex items-center gap-2">
+                    <i data-lucide="camera" class="w-4 h-4"></i> Change Cover
+                </button>
+            </div>
+
+            <div class="max-w-6xl mx-auto px-12 -mt-16 relative z-10">
+                <div class="bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-50 mb-12 flex flex-col md:flex-row gap-8 items-start">
+                    
+                    <div class="relative -mt-20 group cursor-pointer">
+                        <div class="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-gray-100 shadow-lg">
+                            <img src="<?= htmlspecialchars($vendorProfile['logo']) ?>" alt="Vendor Logo" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+                        </div>
+                        <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i data-lucide="edit-2" class="text-white w-6 h-6"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h2 class="text-4xl font-serif text-[#2d3e2d] mb-2"><?= htmlspecialchars($vendorProfile['name']) ?></h2>
+                                <div class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i> Surabaya, Indonesia</span>
+                                    <span class="flex items-center gap-1 text-yellow-500"><i data-lucide="star" class="w-4 h-4 fill-current"></i> 4.9/5 (120 Reviews)</span>
+                                </div>
+                            </div>
+                            <button class="px-6 py-2 border border-gray-200 text-gray-600 rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-gray-50 transition-colors flex items-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i> Edit Profile
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">About Us</h4>
+                            <p class="text-gray-600 leading-relaxed">
+                                <?= htmlspecialchars($vendorProfile['description']) ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-3xl font-serif text-[#2d3e2d]">Our Packages</h3>
+                        <a href="index.php?action=package_add" class="text-[10px] font-bold tracking-widest text-[#2d3e2d] uppercase hover:opacity-70 transition-opacity flex items-center gap-1">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Create New
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <?php foreach ($vendorPackages as $pkg): ?>
+                            <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:-translate-y-1 transition-transform group cursor-pointer">
+                                <div class="aspect-[4/3] overflow-hidden relative">
+                                    <img src="<?= htmlspecialchars($pkg['image']) ?>" alt="Package Image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                                        <button class="w-full py-3 bg-white/20 backdrop-blur-md text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-[#2d3e2d] transition-colors">
+                                            Edit Package
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-2"><?= htmlspecialchars($pkg['category']) ?></p>
+                                    <h4 class="text-xl font-serif text-[#2d3e2d] mb-4 truncate"><?= htmlspecialchars($pkg['name']) ?></h4>
+                                    <div class="flex justify-between items-center border-t border-gray-50 pt-4">
+                                        <p class="text-sm font-bold text-[#2d3e2d]"><?= htmlspecialchars($pkg['price']) ?></p>
+                                        <button class="text-gray-400 hover:text-red-500 transition-colors">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-</main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>
