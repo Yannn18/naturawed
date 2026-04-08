@@ -34,10 +34,18 @@ document.addEventListener("DOMContentLoaded", function () {
         let hasilJson = JSON.parse(hasilMentah);
 
         if (hasilJson.status === "success") {
-          alert("Login Berhasil! Selamat datang " + hasilJson.username);
+        alert("Login Berhasil! Selamat datang " + hasilJson.email);
           // PERHATIKAN: Redirect menggunakan router
-          window.location.href = "index.php?action=home";
+        // LOGIKA PEMILAHAN ROLE
+        if (hasilJson.role === "vendor") {
+            // Arahkan ke dashboard vendor melalui router
+            window.location.href = "index.php?action=dashboard_vendor";
         } else {
+            // Arahkan ke home customer seperti biasa
+            window.location.href = "index.php?action=home";
+        }
+    }
+    else {
           alert("Gagal: " + hasilJson.message);
           btn.disabled = false;
           btn.innerText = "Sign In";
