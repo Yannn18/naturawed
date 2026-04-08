@@ -66,17 +66,18 @@ class PackageModel {
     }
 
     // 2. MENYIMPAN PAKET BARU
-    public function createPackage($vendor_profile_id, $category_id, $name, $price, $description, $imagePath) {
+    public function createPackage($vendor_profile_id, $category_id, $name, $price, $description, $features, $imagePath) {
         $nameEscaped = mysqli_real_escape_string($this->conn, trim($name));
         $descEscaped = mysqli_real_escape_string($this->conn, trim($description));
+        $featEscaped = mysqli_real_escape_string($this->conn, trim($features));
         $imagePathEscaped = mysqli_real_escape_string($this->conn, $imagePath);
         
         // Memastikan tipe data benar
         $price = floatval($price);
         $category_id = intval($category_id);
 
-        $query = "INSERT INTO packages (vendor_id, category_id, package_name, price, description, main_image, status) 
-                  VALUES ('$vendor_profile_id', '$category_id', '$nameEscaped', '$price', '$descEscaped', '$imagePathEscaped', 'active')";
+        $query = "INSERT INTO packages (vendor_id, category_id, package_name, price, description, features, main_image, status) 
+                  VALUES ('$vendor_profile_id', '$category_id', '$nameEscaped', '$price', '$descEscaped', '$featEscaped', '$imagePathEscaped', 'active')";
         
         return mysqli_query($this->conn, $query);
     }
