@@ -7,6 +7,10 @@ $pageTitle = "Home - NaturaWed";
 // Memanggil komponen Header
 require_once __DIR__ . '/../includes/header.php';
 
+global $conn;
+require_once __DIR__ . '/../../models/PackageModel.php';
+$packageModel = new PackageModel($conn);
+$ecoPackages = $packageModel->getActivePackages(3);
 // =====================================================================
 // DATA MOCKUP (Idealnya data ini nantinya ditarik dari Database via Controller)
 // =====================================================================
@@ -123,23 +127,23 @@ $videos = [
     <section class="bg-[#d9e4c3] px-12 py-16">
         <h2 class="mb-12 text-4xl font-bold text-[#2d4a22]">Eco Elegance for Your Perfect Day</h2>
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <?php foreach ($ecoPackages as $item): ?>
-                <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-transform duration-300 hover:-translate-y-2">
-                    <img src="<?= $item['img'] ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['title']) ?></h3>
-                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]">
-                                by <?= htmlspecialchars($item['author']) ?>
-                            </span>
-                        </div>
-                        <p class="mt-3 text-sm leading-relaxed text-gray-600 line-clamp-3">
-                            <?= htmlspecialchars($item['desc']) ?>
-                        </p>
-                        <div class="mt-6 text-lg font-bold text-gray-900"><?= htmlspecialchars($item['price']) ?></div>
-                    </div>
-                </a>
-            <?php endforeach; ?>
+           <?php foreach ($ecoPackages as $item): ?>
+    <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" class="group block overflow-hidden rounded-3xl bg-white shadow-xl transition-transform duration-300 hover:-translate-y-2">
+        <img src="<?= htmlspecialchars($item['main_image'] ?? 'https://picsum.photos/400/300') ?>" alt="<?= htmlspecialchars($item['package_name']) ?>" class="h-56 w-full object-cover" referrerpolicy="no-referrer" />
+        <div class="p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($item['package_name']) ?></h3>
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider hover:text-[#2d4a22]">
+                    by <?= htmlspecialchars($item['business_name']) ?>
+                </span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-gray-600 line-clamp-3">
+                <?= htmlspecialchars($item['description']) ?>
+            </p>
+            <div class="mt-6 text-lg font-bold text-gray-900">IDR <?= number_format($item['price'], 0, ',', '.') ?></div>
+        </div>
+    </a>
+<?php endforeach; ?>
         </div>
     </section>
 
