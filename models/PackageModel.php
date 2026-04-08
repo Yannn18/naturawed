@@ -7,7 +7,24 @@ class PackageModel {
     public function __construct($db) {
         $this->conn = $db;
     }
+    public function getPackageById($id) {
+    // Sanitasi ID untuk keamanan
+    $id = mysqli_real_escape_string($this->conn, $id);
 
+    // Query untuk mengambil data paket beserta nama bisnis vendornya (JOIN)
+    $query = "SELECT p.*, v.business_name, p.main_image as designer_img
+              FROM packages p
+              JOIN vendor_profiles v ON p.vendor_id = v.id
+              WHERE p.id = '$id'";
+
+    $result = mysqli_query($this->conn, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    return null;
+}
      public function getActivePackages($limit = 6) {
         // Kita JOIN 3 tabel agar nama vendor dan kategori langsung terbaca
         $query = "SELECT p.*, vp.business_name, c.name as category_name 

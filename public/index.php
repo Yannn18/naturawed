@@ -7,6 +7,8 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 require_once __DIR__ . '/../config/koneksi.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/PackageController.php';
+require_once __DIR__ . '/../controllers/PaymentController.php';
+require_once __DIR__ . '/../controllers/BookingController.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
 
@@ -17,6 +19,8 @@ $isAuthenticated = isset($_SESSION['user_id']);
 $showAuthModal = isset($_GET['auth']) && $_GET['auth'] === 'show';
 
 $authController = new AuthController();
+$paymentController = new PaymentController();
+$bookingController = new BookingController();
 
 switch ($action) {
     case 'show_login':
@@ -49,7 +53,13 @@ switch ($action) {
         break;
         
     case 'package_detail':
-        require_once __DIR__ . '/../views/public/package_detail.php';
+        $packageController = new PackageController();
+        $packageController->show();
+        break;
+
+    case 'checkout':
+        $packageController = new PackageController();
+        $packageController->checkout();
         break;
 
         case 'vendor_packages':
@@ -71,10 +81,6 @@ switch ($action) {
 
     case 'profile_edit':
         require_once __DIR__ . '/../views/vendor/profile_edit.php';
-        break;
-
-    case 'checkout':
-        require_once __DIR__ . '/../views/customer/checkout.php';
         break;
 
     case 'payment':
@@ -105,6 +111,18 @@ switch ($action) {
         case 'store_package':
         $packageCtrl = new PackageController();
         $packageCtrl->store();
+        break;
+
+    case 'process_booking':
+        $bookingController->store();
+        break;
+    
+    case 'payment-instruction':
+        $paymentController->showPayment();
+        break;
+
+    case 'submit_payment':
+        $paymentController->store();
         break;
 
     default:

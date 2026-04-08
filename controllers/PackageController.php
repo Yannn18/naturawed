@@ -83,24 +83,57 @@ class PackageController {
             }
         }
     }
-    // TAMBAHAN BARU: Fungsi untuk menampilkan detail paket
-    public function detail() {
-        // Ambil ID dari URL (misal: id=1)
-        $id = $_GET['id'] ?? 0;
-        
+
+    // ==========================================
+    // 1. FUNGSI UNTUK MENAMPILKAN DETAIL PAKET
+    // ==========================================
+    public function show() {
+        // Ambil ID paket dari URL: index.php?action=package_detail&id=...
+        $id = $_GET['id'] ?? null;
+
         if (!$id) {
-            die("ID Paket tidak ditemukan."); // Bisa diganti redirect ke home
+            header("Location: index.php?action=vendors");
+            exit;
         }
 
-        // Minta data ke Model
-        $packageData = $this->packageModel->getPackageById($id);
+        // Ambil data paket dari Model
+        $package = $this->packageModel->getPackageById($id);
 
-        if (!$packageData) {
-            die("Paket tidak ditemukan di database.");
+        if (!$package) {
+            die("Maaf, paket pernikahan tidak ditemukan.");
         }
 
-        // Kalau datanya ada, panggil halaman View dan data $packageData otomatis bisa dipakai di sana!
+        // Tampilkan halaman detail
         require_once __DIR__ . '/../views/public/package_detail.php';
+    }
+
+    // ==========================================
+    // 2. FUNGSI UNTUK MENAMPILKAN HALAMAN CHECKOUT
+    // ==========================================
+    public function checkout() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        // Keamanan: Hanya Customer yang bisa checkout
+        if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'customer') {
+            echo "<script>alert('Silahkan login sebagai Customer untuk melakukan pemesanan.'); window.location.href='index.php?action=show_login';</script>";
+            exit;
+        }
+
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header("Location: index.php?action=vendors");
+            exit;
+        }
+
+        // Ambil data paket agar harga dan nama paket muncul di form checkout
+        $package = $this->packageModel->getPackageById($id);
+
+        if (!$package) {
+            die("Paket tidak ditemukan.");
+        }
+
+        // Tampilkan halaman checkout
+        require_once __DIR__ . '/../views/customer/checkout.php';
     }
 }
 ?>

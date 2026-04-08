@@ -1,3 +1,9 @@
+<?php
+// Pastikan variabel $payment dan $booking_detail sudah ada dari Controller
+$packageName = $payment['package_name'] ?? 'Your Wedding Package';
+$totalAmount = number_format($payment['amount'], 0, ',', '.');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +21,10 @@
 
     <?php include __DIR__ . '/../includes/header.php'; ?>
 
-
     <main id="main-content" class="max-w-4xl mx-auto px-6 py-16">
         <div id="payment-instructions">
             <div class="flex items-center gap-4 mb-12">
-                <a href="javascript:history.back()" class="p-2 hover:bg-white rounded-full transition-colors">
+                <a href="index.php?action=history" class="p-2 hover:bg-white rounded-full transition-colors">
                     ←
                 </a>
                 <h1 class="text-4xl serif text-[#2d4a22]">Payment Instructions</h1>
@@ -30,13 +35,13 @@
                     <div class="flex items-center gap-4">
                         <span class="text-3xl opacity-70">🕒</span>
                         <div>
-                            <p class="text-xs uppercase tracking-widest opacity-70 mb-1">Complete payment within</p>
+                            <p class="text-xs uppercase tracking-widest opacity-70 mb-1">Package: <?= htmlspecialchars($packageName) ?></p>
                             <p class="text-3xl font-bold font-mono">23:59:59</p>
                         </div>
                     </div>
                     <div class="text-right">
                         <p class="text-xs uppercase tracking-widest opacity-70 mb-1">Total Amount</p>
-                        <p class="text-3xl font-bold">IDR 120.500.000</p>
+                        <p class="text-3xl font-bold">IDR <?= $totalAmount ?></p>
                     </div>
                 </section>
 
@@ -69,18 +74,30 @@
 
                 <section class="bg-white rounded-[32px] p-10 border border-zinc-100 shadow-sm text-center">
                     <h3 class="text-xl font-bold mb-4">Already transferred?</h3>
-                    <p class="text-zinc-500 mb-10 max-w-md mx-auto leading-relaxed">
-                        Please click the button below after you have completed the bank transfer. 
+                    <p class="text-zinc-500 mb-8 max-w-md mx-auto leading-relaxed">
+                        Please upload your transfer receipt below.
                     </p>
 
-                    <button 
-                        id="confirm-btn"
-                        onclick="handleConfirmPayment()"
-                        class="w-full py-6 bg-[#2d4a22] text-white rounded-2xl font-bold text-xl shadow-xl hover:bg-[#1e3317] transition-all flex items-center justify-center gap-3"
-                    >
-                        <span id="btn-text">I Have Completed Payment</span>
-                        <div id="loader" class="hidden w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    </button>
+                    <form id="paymentForm" enctype="multipart/form-data" class="max-w-md mx-auto">
+                        <input type="hidden" name="booking_id" value="<?= $payment['booking_id'] ?>">
+                        <input type="hidden" name="amount" value="<?= $payment['amount'] ?>">
+                        
+                        <div class="mb-8">
+                            <input type="file" name="payment_proof" id="fileInput" class="hidden" accept="image/*" required>
+                            <label for="fileInput" class="cursor-pointer group">
+                                <div class="border-2 border-dashed border-zinc-200 rounded-2xl p-8 transition-all group-hover:border-[#2d4a22] group-hover:bg-zinc-50">
+                                    <span id="fileName" class="text-sm text-zinc-400 font-medium group-hover:text-[#2d4a22]">
+                                        📸 Click to select transfer receipt
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <button type="submit" id="confirm-btn" class="w-full py-6 bg-[#2d4a22] text-white rounded-2xl font-bold text-xl shadow-xl hover:bg-[#1e3317] transition-all flex items-center justify-center gap-3">
+                            <span id="btn-text">Submit Confirmation</span>
+                            <div id="loader" class="hidden w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        </button>
+                    </form>
                 </section>
             </div>
         </div>
@@ -92,7 +109,7 @@
                 </div>
                 <h1 class="text-5xl serif text-[#2d4a22] mb-6">Payment Confirmed</h1>
                 <p class="text-zinc-500 text-lg mb-12">
-                    Your booking for <span class="text-zinc-900 font-bold">Seashell Bomb</span> has been processed.
+                    Your booking for <span class="text-zinc-900 font-bold"><?= htmlspecialchars($packageName) ?></span> has been processed.
                 </p>
                 <a href="index.php?action=history" class="w-full inline-block py-6 bg-[#2d4a22] text-white rounded-2xl font-bold text-xl hover:bg-[#1e3317] transition-all">
                     Go to Booking History →
@@ -104,31 +121,67 @@
     <?php include __DIR__ . '/../includes/footer.php'; ?>
 
     <script>
-        function copyToClipboard() {
-            const accNum = document.getElementById('account-number').innerText;
-            navigator.clipboard.writeText(accNum);
-            alert("Account Number Copied!");
+    // Perbaikan: Ambil elemen ke-0 dari array files
+   // Menampilkan nama file saat dipilih
+    document.getElementById('fileInput').onchange = function() {
+        // Tambahkan setelah files
+        if (this.files && this.files) { 
+            document.getElementById('fileName').innerHTML = `Selected: <strong>${this.files.name}</strong>`;
+        } else {
+            document.getElementById('fileName').innerHTML = `📸 Click to select transfer receipt`;
         }
+    };
 
-        function handleConfirmPayment() {
-            const btn = document.getElementById('confirm-btn');
-            const btnText = document.getElementById('btn-text');
-            const loader = document.getElementById('loader');
-            const instructions = document.getElementById('payment-instructions');
-            const success = document.getElementById('success-message');
+    function copyToClipboard() {
+        const accNum = document.getElementById('account-number').innerText;
+        navigator.clipboard.writeText(accNum);
+        alert("Account Number Copied!");
+    }
 
-            // Start "Confirming" state
-            btn.disabled = true;
-            btnText.innerText = "Verifying Payment...";
-            loader.classList.remove('hidden');
+    document.getElementById('paymentForm').onsubmit = async function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('confirm-btn');
+        const btnText = document.getElementById('btn-text');
+        const loader = document.getElementById('loader');
 
-            // Simulate Verification (2 seconds)
-            setTimeout(() => {
-                instructions.classList.add('hidden');
-                success.classList.remove('hidden');
-                window.scrollTo(0, 0);
-            }, 2000);
+        btn.disabled = true;
+        btnText.innerText = "Uploading Receipt...";
+        loader.classList.remove('hidden');
+
+        try {
+            const formData = new FormData(this);
+            const response = await fetch('index.php?action=submit_payment', {
+                method: 'POST',
+                body: formData
+            });
+
+            // Penting: Cek apakah respon benar-benar JSON
+            const hasil = await response.json();
+
+            if (hasil.status === 'success') {
+                setTimeout(() => {
+                    document.getElementById('payment-instructions').classList.add('hidden');
+                    document.getElementById('success-message').classList.remove('hidden');
+                    window.scrollTo(0, 0);
+                }, 1500);
+            } else {
+                alert("Error: " + hasil.message);
+                resetButton();
+            }
+        } catch (error) {
+            console.error("Error detail:", error);
+            alert("Terjadi kesalahan koneksi atau format file salah.");
+            resetButton();
         }
+    };
+
+    function resetButton() {
+        const btn = document.getElementById('confirm-btn');
+        btn.disabled = false;
+        document.getElementById('btn-text').innerText = "Submit Confirmation";
+        document.getElementById('loader').classList.add('hidden');
+    }
     </script>
 </body>
 </html>
