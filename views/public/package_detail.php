@@ -3,15 +3,14 @@
 $pageTitle = "Package Detail - NaturaWed";
 require_once __DIR__ . '/../includes/header.php';
 
-// Mock Data (Bisa diganti dengan query database nantinya)
-$package = [
-    "title" => "Emerald Luxe",
-    "subtitle" => "PREMIER WEDDING DECOR EXPERIENCE",
-    "price" => "4,500",
-    "designer" => "Glam Decor",
-    "designer_img" => "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop",
-    "hero_img" => "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop"
-];
+// Cek apakah data paket berhasil dikirim dari Controller
+if (!isset($packageData)) {
+    echo "<h1>Error: Data paket tidak dimuat.</h1>";
+    exit;
+}
+
+// Format harga jadi Rupiah (misal: 25000000 jadi 25.000.000)
+$formattedPrice = number_format($packageData['price'], 0, ',', '.');
 ?>
 
 <div class="min-h-screen bg-white font-sans text-[#333]">
@@ -24,10 +23,10 @@ $package = [
     <main class="mx-auto max-w-7xl px-6 py-10 lg:px-12">
         <section class="relative mb-16 overflow-hidden rounded-[40px] bg-[#3a4d32]">
             <div class="relative h-[600px] w-full">
-                <img src="<?= $package['hero_img'] ?>" class="h-full w-full object-cover opacity-60">
+                <img src="<?= htmlspecialchars($packageData['main_image'] ?? 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069') ?>" class="h-full w-full object-cover opacity-60">
                 <div class="absolute inset-0 flex flex-col justify-end p-12 text-white">
-                    <h1 class="text-7xl font-serif font-light tracking-tight"><?= $package['title'] ?></h1>
-                    <p class="mt-4 text-sm font-semibold tracking-[0.3em] opacity-80"><?= $package['subtitle'] ?></p>
+                    <h1 class="text-7xl font-serif font-light tracking-tight"><?= htmlspecialchars($packageData['package_name']) ?></h1>
+                    <p class="mt-4 text-sm font-semibold tracking-[0.3em] uppercase opacity-80"><?= htmlspecialchars($packageData['category_name']) ?> EXPERIENCE</p>
                 </div>
             </div>
         </section>
@@ -36,13 +35,13 @@ $package = [
             <div class="flex-1">
                 <div class="mb-12 flex items-center justify-between rounded-3xl bg-[#f8f9f5] p-6">
                     <div class="flex items-center space-x-4">
-                        <div class="relative h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-sm">
-                            <img src="<?= $package['designer_img'] ?>" alt="Designer">
+                        <div class="relative h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-sm bg-gray-200">
+                            <img src="https://picsum.photos/seed/vendor<?= $packageData['vendor_id'] ?>/100/100" alt="Designer">
                             <div class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500"></div>
                         </div>
                         <div>
                             <p class="text-xs font-medium text-gray-400">Designed by</p>
-                            <h3 class="text-xl font-bold text-[#2d4a22]"><?= $package['designer'] ?></h3>
+                            <h3 class="text-xl font-bold text-[#2d4a22]"><?= htmlspecialchars($packageData['vendor_name']) ?></h3>
                         </div>
                     </div>
                 </div>
@@ -50,8 +49,7 @@ $package = [
                 <section class="mb-16">
                     <h2 class="mb-6 text-3xl font-bold text-gray-900">Description</h2>
                     <div class="space-y-6 text-lg leading-relaxed text-gray-600">
-                        <p>The Emerald Luxe Package delivers a timeless and glamorous eco-friendly décor style...</p>
-                        <p>Every element is hand-selected to create an immersive forest-inspired atmosphere...</p>
+                        <p><?= nl2br(htmlspecialchars($packageData['description'])) ?></p>
                     </div>
                 </section>
 
@@ -59,18 +57,24 @@ $package = [
                     <h2 class="mb-8 text-3xl font-bold text-gray-900">Package Features</h2>
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <?php 
-                        $features = [
-                            ["title" => "Floral Decorations", "desc" => "Locally sourced seasonal blooms."],
-                            ["title" => "Crystal Chandelier", "desc" => "Statement lighting focal point."],
-                            ["title" => "Stage Styling", "desc" => "Custom-built layered textures."],
-                            ["title" => "Centerpieces", "desc" => "Reusable silk and vintage glass."]
-                        ];
-                        foreach($features as $f): ?>
+                        // Karena features disimpan sebagai teks biasa, kita pecah berdasarkan koma (atau tampilkan langsung)
+                        $featuresText = htmlspecialchars($packageData['features'] ?? '');
+                        if (!empty($featuresText)): 
+                            // Misal fitur dipisah koma saat input
+                            $featuresList = explode(',', $featuresText);
+                            foreach($featuresList as $f): 
+                                $f = trim($f);
+                                if(empty($f)) continue;
+                        ?>
                         <div class="rounded-3xl bg-[#f3f4f0] p-8 transition-transform hover:-translate-y-1">
-                            <h4 class="mb-2 text-xl font-bold text-gray-900"><?= $f['title'] ?></h4>
-                            <p class="text-sm text-gray-500"><?= $f['desc'] ?></p>
+                            <h4 class="mb-2 text-xl font-bold text-gray-900">Included Feature</h4>
+                            <p class="text-sm text-gray-500"><?= $f ?></p>
                         </div>
-                        <?php endforeach; ?>
+                        <?php 
+                            endforeach; 
+                        else: ?>
+                             <p class="text-sm text-gray-500">Fitur belum ditambahkan oleh vendor.</p>
+                        <?php endif; ?>
                     </div>
                 </section>
             </div>
@@ -81,8 +85,7 @@ $package = [
                         <div>
                             <p class="text-[10px] font-bold tracking-widest text-gray-400">STARTING FROM</p>
                             <div class="flex items-baseline space-x-1">
-                                <span class="text-4xl font-bold text-gray-900">$<?= $package['price'] ?></span>
-                                <span class="text-sm text-gray-400">/ event</span>
+                                <span class="text-4xl font-bold text-gray-900">Rp <?= $formattedPrice ?></span>
                             </div>
                         </div>
                         <div class="rounded-full bg-[#e8f0e5] px-4 py-1.5 text-[10px] font-bold tracking-widest text-[#2d4a22]">TOP RATED</div>
@@ -91,9 +94,9 @@ $package = [
                     <div class="space-y-6">
                         
                         <button
-                        onclick="window.location.href='index.php?action=checkout'"
+                        onclick="window.location.href='index.php?action=checkout&package_id=<?= $packageData['id'] ?>'"
                         class="w-full rounded-2xl bg-[#3a4d32] py-5 text-lg font-bold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-95">
-                            Checkout
+                            Book this Package
                         </button>
                         <p class="text-center text-[10px] font-medium text-gray-400">Response time: Usually under 24 hours</p>
                     </div>
