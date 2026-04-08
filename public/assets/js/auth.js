@@ -34,10 +34,18 @@ document.addEventListener("DOMContentLoaded", function () {
         let hasilJson = JSON.parse(hasilMentah);
 
         if (hasilJson.status === "success") {
-          alert("Login Berhasil! Selamat datang " + hasilJson.username);
+        alert("Login Berhasil! Selamat datang " + hasilJson.email);
           // PERHATIKAN: Redirect menggunakan router
-          window.location.href = "index.php?action=home";
+        // LOGIKA PEMILAHAN ROLE
+        if (hasilJson.role === "vendor") {
+            // Arahkan ke dashboard vendor melalui router
+            window.location.href = "index.php?action=dashboard_vendor";
         } else {
+            // Arahkan ke home customer seperti biasa
+            window.location.href = "index.php?action=home";
+        }
+    }
+    else {
           alert("Gagal: " + hasilJson.message);
           btn.disabled = false;
           btn.innerText = "Sign In";
@@ -50,74 +58,107 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  
   // ==========================================
-  // 2. LOGIKA SIGN UP
-  // ==========================================
-  const signUpForm = document.getElementById("SignUp");
-  if (signUpForm) {
-    // Fungsi validasi diletakkan di dalam scope ini agar rapi
+// 2. LOGIKA SIGN UP (MODIFIED FOR MULTI-ROLE)
+// ==========================================
+// Menggunakan querySelector agar bisa menangkap salah satu form yang ada
+const signUpForm = document.getElementById("SignUp") || document.getElementById("SignUpVendor");
+if (signUpForm) {
     function validasiNama() {
-      let inputNama = document.getElementById("username").value;
-      if (!/^[a-zA-Z' ]+$/.test(inputNama)) {
-        alert("Nama hanya boleh mengandung huruf dan tanda petik satu (')");
-        return false;
-      }
-      return true;
+        let inputNama = document.getElementById("username").value;
+        if (!/^[a-zA-Z' ]+$/.test(inputNama)) {
+            alert("Nama hanya boleh mengandung huruf dan tanda petik satu (')");
+            return false;
+        }
+        return true;
     }
 
     function validasiPassword() {
-      const pass = document.getElementById("password").value;
-      const confPass = document.getElementById("confirmpassword").value;
-      if (pass !== confPass) {
-        alert("Password dan Confirm Password tidak cocok");
-        return false;
-      }
-      return true;
+        const pass = document.getElementById("password").value;
+        const confPass = document.getElementById("confirmpassword").value;
+        if (pass !== confPass) {
+            alert("Password dan Confirm Password tidak cocok");
+            return false;
+        }
+        return true;
     }
 
     signUpForm.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      if (!validasiNama() || !validasiPassword()) return;
+        event.preventDefault();
+        if (!validasiNama() || !validasiPassword()) return;
 
-      const btn = signUpForm.querySelector('button[type="submit"]');
-      if (btn) {
-        btn.disabled = true;
-        btn.innerText = "Registering...";
-      }
-
-      const username = document.getElementById("username").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      try {
-        // PERHATIKAN: URL Tembakan diubah ke router index.php
-        const response = await fetch("index.php?action=register", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            username: username,
-            email: email,
-            password: password,
-          }),
-        });
-
-        const hasil = await response.json();
-
-        if (hasil.status === "success") {
-          alert("Pendaftaran Berhasil! Selamat datang, " + hasil.username);
-          // PERBAIKAN LOGIKA: Karena AuthController->register() sudah mengeset $_SESSION['login'] = true,
-          // pengguna tidak perlu disuruh login ulang. Langsung tembak ke dashboard!
-          window.location.href = "index.php?action=show_login";
-        } else {
-          alert("Gagal: " + hasil.message);
-          btn.disabled = false;
-          btn.innerText = "Sign Up";
+        const btn = signUpForm.querySelector('button[type="submit"]');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Registering...";
         }
-      } catch (error) {
-        console.error("Error detail:", error);
-        btn.disabled = false;
-        btn.innerText = "Sign Up";
-      }
+
+        // Ambil data dasar
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        
+        // Deteksi Role dari Input Hidden
+        const roleInput = document.getElementById("role");
+        const role = roleInput ? roleInput.value : "customer";
+
+        // TENTUKAN TARGET ACTION (Sesuai fungsi terpisah di PHP)
+        let actionTarget; // Gunakan 'let' karena nilainya akan diisi di dalam blok if
+
+        if (role === 'vendor') {
+            actionTarget = "register_vendor";
+        } else {
+            actionTarget = "register";
+        }
+
+        // Susun Params secara dinamis
+        const params = new URLSearchParams();
+        params.append("username", username);
+        params.append("email", email);
+        params.append("password", password);
+
+        // Hanya tambahkan address jika dia Vendor
+        if (role === 'vendor') {
+            const addressField = document.getElementById("address");
+            if (addressField) {
+                params.append("address", addressField.value.trim());
+            }
+        }
+
+try {
+            // PERBAIKAN 1: Menggunakan Backtick ( ` ) agar variabel terbaca
+            // PERBAIKAN 2: Menghapus properti duplikat (username, email, dll) di luar body
+            const response = await fetch(`index.php?action=${actionTarget}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: params
+            });
+
+            // Tambahkan pengecekan apakah responnya benar-benar JSON
+            const textRespon = await response.text();
+            console.log("Respon Mentah Server:", textRespon); // Untuk debug jika gagal lagi
+            
+            const hasil = JSON.parse(textRespon);
+
+            if (hasil.status === "success") {
+                alert("Pendaftaran Berhasil sebagai " + role + "!");
+                window.location.href = "index.php?action=show_login";
+            } else {
+                alert("Gagal: " + hasil.message);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Sign Up";
+                }
+            }
+        } catch (error) {
+            console.error("Error detail:", error);
+            alert("Terjadi kesalahan sistem. Cek konsol browser.");
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = "Sign Up";
+            }
+        }
     });
-  }
+}
 });

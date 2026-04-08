@@ -11,7 +11,7 @@
 <?php
 
 // Ambil status dari session dan URL
-$isAuthenticated = isset($_SESSION['user']);
+$isAuthenticated = isset($_SESSION['login']) && $_SESSION['login'] === true;
 $currentAction = $_GET['action'] ?? 'home';
 
 // CSS Classes

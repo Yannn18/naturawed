@@ -1,5 +1,5 @@
 <?php
-// Posisi file ini sekarang di: public/index.php
+
 session_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -19,45 +19,77 @@ $authController = new AuthController();
 
 switch ($action) {
     case 'show_login':
-        // Karena index.php ada di public/, kita naik satu level (../) ke folder views
+        
         require_once __DIR__ . '/../views/auth/signin.html';
         break;
     case 'show_register':
         require_once __DIR__ . '/../views/auth/signup.html';
         break;
+
+    case 'show_registervendor':
+        require_once __DIR__ . '/../views/auth/signupvendor.html';
+        break;
+
+    case 'dashboard_vendor':
+        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
+        break;
+
         
     case 'home':
-        require_once __DIR__ . '/../views/home.php';
+        require_once __DIR__ . '/../views/public/home.php';
         break;
         
     case 'vendors':
-        require_once __DIR__ . '/../views/vendors.php';
+        require_once __DIR__ . '/../views/public/vendors.php';
         break;
 
     case 'inspiration':
-        require_once __DIR__ . '/../views/inspiration.php';
+        require_once __DIR__ . '/../views/public/inspiration.php';
         break;
         
     case 'package_detail':
-        require_once __DIR__ . '/../views/package_detail.php';
+        require_once __DIR__ . '/../views/public/package_detail.php';
+        break;
+    case 'package_add':
+        require_once __DIR__ . '/../views/vendor/package_add.php';
+        break;
+    case 'portfolio':
+        require_once __DIR__ . '/../views/vendor/portfolio.php';
+        break;
+    case 'profile_edit':
+        require_once __DIR__ . '/../views/vendor/profile_edit.php';
         break;
 
     case 'checkout':
-        require_once __DIR__ . '/../views/checkout.php';
+        require_once __DIR__ . '/../views/customer/checkout.php';
         break;
 
     case 'payment':
-        require_once __DIR__ . '/../views/payment.php';
+        require_once __DIR__ . '/../views/customer/payment.php';
+        break;
+        
+    case 'history':
+        require_once __DIR__ . '/../views/customer/history.php';
+        break;
+        
+    case 'dashboard-vendor':
+        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
         break;
     case 'login':
         $authController->login();
         break;
     case 'register':
-        $authController->register();
+        $authController->registerCustomer();
         break;
+
     case 'logout':
         $authController->logout();
         break;
+
+    case 'register_vendor':
+        $authController->registerVendor();
+        break;
+
     default:
         header('Content-Type: application/json; charset=utf-8');
         http_response_code(404);

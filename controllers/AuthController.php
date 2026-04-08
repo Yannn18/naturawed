@@ -1,101 +1,103 @@
 <?php
-// Letakkan file ini di folder: controllers/AuthController.php
+// File: controllers/AuthController.php
+
+// Panggil Model di bagian atas
+require_once __DIR__ . '/../models/UserModel.php';
 
 class AuthController {
-    
     private $conn;
+    private $userModel;
 
     public function __construct() {
-
         global $conn;
         $this->conn = $conn;
+        // Inisialisasi Model saat Controller dipanggil
+        $this->userModel = new UserModel($this->conn);
     }
 
-    // 1. FUNGSI SIGN IN (Menggantikan signin.php)
-        public function login() {
-            header('Content-Type: application/json; charset=utf-8');
-            if (session_status() === PHP_SESSION_NONE) session_start();
-
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                echo json_encode(["status" => "error", "message" => "Request method not allowed."]);
-                return;
-            }
-
-            $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-            $pass = isset($_POST['password']) ? trim($_POST['password']) : '';
-            $remember = isset($_POST['remember']) ? $_POST['remember'] : 'false';
-
-            if ($email === '' || $pass === '') {
-                echo json_encode(["status" => "error", "message" => "Email dan password harus diisi."]);
-                return;
-            }
-
-            $emailEscaped = mysqli_real_escape_string($this->conn, $email);
-            $passEscaped = mysqli_real_escape_string($this->conn, $pass);
-            
-            $query = "SELECT * FROM users WHERE email='$emailEscaped' AND password='$passEscaped'";
-            $result = mysqli_query($this->conn, $query);
-
-            if ($result === false) {
-                echo json_encode(["status" => "error", "message" => "Database error: " . mysqli_error($this->conn)]);
-                return;
-            }
-
-            if (mysqli_num_rows($result) === 1) {
-                $row = mysqli_fetch_assoc($result);
-                $_SESSION['login'] = true;
-                $_SESSION['user'] = $row['usn'];
-
-                if ($remember === 'true') {
-                    setcookie('user_email', $row['usn'], time() + 86400, "/");
-                }
-                echo json_encode(["status" => "success", "username" => $row['usn']]);
-            } else {
-                echo json_encode(["status" => "error", "message" => "Email atau Password salah!"
-        
-                ]);
-            }
-        }
-
-    // 2. FUNGSI SIGN UP (Menggantikan signup.php)
-    public function register() {
+    public function login() {
         header('Content-Type: application/json; charset=utf-8');
         if (session_status() === PHP_SESSION_NONE) session_start();
 
-        if (!isset($_POST['email'])) {
-            echo json_encode(["status" => "error", "message" => "Data tidak diterima oleh server."]);
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(["status" => "error", "message" => "Method not allowed."]);
             return;
         }
 
-        $email = mysqli_real_escape_string($this->conn, $_POST['email']);
-        $usn = mysqli_real_escape_string($this->conn, $_POST['username']);
-        $pass = mysqli_real_escape_string($this->conn, $_POST['password']);
+        $email = $_POST['email'] ?? '';
+        $pass = trim($_POST['password'] ?? '');
 
-        $query = "INSERT INTO users (email, usn, password) VALUES ('$email', '$usn', '$pass')";
+        // Minta Model untuk mencari User
+        $userData = $this->userModel->getUserByEmail($email);
 
-        if (mysqli_query($this->conn, $query)) {
-           
-            
-            echo json_encode(["status" => "success", "username" => $usn]);
+        if ($userData) {
+            // Cek Password (Ubah ke password_verify jika nanti pakai Hash)
+            if ($pass === $userData['password']) {
+                $_SESSION['login'] = true;
+                $_SESSION['user_id'] = $userData['id'];
+                $_SESSION['role'] = $userData['role'];
+                $_SESSION['user_email'] = $userData['email'];
+                
+
+                echo json_encode(["status" => "success", "email" => $userData['email'], "role" => $userData['role']]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "Password salah!"]);
+            }
         } else {
-            echo json_encode(["status" => "error", "message" => "Gagal simpan ke database: " . mysqli_error($this->conn)]);
+            echo json_encode(["status" => "error", "message" => "Email tidak terdaftar!"]);
         }
     }
 
-    // 3. FUNGSI LOGOUT (Menggantikan logout.php)
-    public function logout() {
+    public function registerVendor() {
+        header('Content-Type: application/json; charset=utf-8');
         if (session_status() === PHP_SESSION_NONE) session_start();
         
-        $_SESSION = [];
-        session_unset();
-        session_destroy();
+        $email    = $_POST['email'] ?? '';
+        $username = $_POST['username'] ?? ''; // Ini adalah Business Name
+        $password = $_POST['password'] ?? '';
+        $address  = $_POST['address'] ?? '';
 
-        if (isset($_COOKIE['user_email'])) {
-            setcookie('user_email', '', time() - 3600, '/');
+        if(empty($email) || empty($password)) {
+            echo json_encode(["status" => "error", "message" => "Email dan Password wajib diisi."]);
+            return;
         }
 
-        // Redirect ke tampilan signin (karena ini bukan JSON respon)
-        header("Location: /index.php?action=show_login"); 
+        try {
+            // Delegasikan proses penyimpanan ke Model
+            $this->userModel->registerVendor($email, $password, $username, $address);
+            echo json_encode(["status" => "success", "username" => $username]);
+        } catch (Exception $e) {
+            echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        }
+    }
+
+    public function registerCustomer() {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $email    = $_POST['email'] ?? '';
+        $username = $_POST['username'] ?? ''; // Ini adalah Full Name
+        $password = $_POST['password'] ?? '';
+
+        if(empty($email) || empty($password)) {
+            echo json_encode(["status" => "error", "message" => "Email dan Password wajib diisi."]);
+            return;
+        }
+
+        try {
+            // Delegasikan proses penyimpanan ke Model
+            $this->userModel->registerCustomer($email, $password, $username);
+            echo json_encode(["status" => "success", "username" => $username]);
+        } catch (Exception $e) {
+            echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        }
+    }
+
+    public function logout() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        session_unset();
+        session_destroy();
+        header("Location: index.php?action=show_login");
         exit;
     }
 }
+?>
