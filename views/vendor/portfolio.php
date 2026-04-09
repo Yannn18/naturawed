@@ -9,7 +9,7 @@ if (!isset($_SESSION['login'])) {
 
 // 1. DATA DUMMY PROFIL VENDOR
 $vendorProfile = [
-    "name" => $_SESSION['user'] ?? "Glamorous Studio",
+    "name" => $_SESSION['business_name'] ?? "Glamorous Studio",
     "logo" => "https://picsum.photos/seed/vendorlogo/200/200",
     "crew_photo" => "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2000&auto=format&fit=crop", // Foto tim/crew
     "description" => "We are a passionate team of wedding decorators and organizers dedicated to turning your dream day into reality. With over 5 years of experience in crafting bespoke, eco-friendly, and luxurious wedding experiences, we ensure every petal, drapery, and light reflects your unique love story."
@@ -86,7 +86,10 @@ $vendorPackages = [
                             <div>
                                 <h2 class="text-4xl font-serif text-[#2d3e2d] mb-2"><?= htmlspecialchars($vendorProfile['name']) ?></h2>
                                 <div class="flex items-center gap-4 text-sm font-medium text-gray-500">
-                                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i> Surabaya, Indonesia</span>
+                                   <span class="flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-4 h-4"></i> 
+                                    <?= htmlspecialchars($_SESSION['address'] ?? 'Surabaya, Indonesia') ?>
+                                    </span>
                                     <span class="flex items-center gap-1 text-yellow-500"><i data-lucide="star" class="w-4 h-4 fill-current"></i> 4.9/5 (120 Reviews)</span>
                                 </div>
                             </div>
