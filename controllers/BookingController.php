@@ -58,4 +58,24 @@ class BookingController {
             }
         }
     }
+
+    public function history() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        // Proteksi: Harus login
+        if (!isset($_SESSION['login'])) {
+            header("Location: index.php?action=show_login");
+            exit;
+        }
+
+        $activeTab = $_GET['tab'] ?? 'All';
+        $userId = $_SESSION['user_id'];
+        
+        // Ambil data dari Model
+        $historyItems = $this->bookingModel->getCustomerBookings($userId, $activeTab);
+
+        // Panggil View
+        require_once __DIR__ . '/../views/customer/history.php';
+    }
+
 }
