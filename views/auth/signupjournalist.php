@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Journalist - Naturawed</title>
+    <link rel="stylesheet" href="/assets/css/output.css" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-[#d1e2da] flex justify-center items-center min-h-screen overflow-x-hidden">
+    <main class="flex flex-col md:flex-row w-full max-w-[1100px] h-auto min-h-[600px] items-center justify-center p-8 gap-12 md:gap-[50px]">
+      
+      <div class="flex-1 flex flex-col items-center justify-center text-center mb-5 md:mb-0">
+        <img src="/assets/image/logo.svg" alt="logo" class="w-[200px] mb-5" />
+        <h1 class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]">
+          Naturawed
+        </h1>
+      </div>
+      
+      <div class="flex-1 flex justify-center w-full">
+        <div class="bg-white p-10 rounded-[24px] w-full max-w-[450px] shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
+          <div class="text-center mb-[30px]">
+            <h2 class="text-[28px] font-semibold text-[#1a1a1a]">
+              Join as Journalist
+            </h2>
+            <p class="text-sm text-[#7a7a7a] mb-[30px]">
+              Share your editorial voice and wedding inspirations.
+            </p>
+          </div>
+
+          <form class="flex flex-col gap-5" id="SignUp" method="post">
+            
+            <input type="hidden" id="role" name="role" value="journalist">
+            
+            <div class="w-full relative">
+              <input
+                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Full Name / Pen Name"
+                required
+              />
+            </div>
+
+            <div class="w-full relative">
+              <input
+                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email Address"
+                required
+              />
+            </div>
+
+            <div class="w-full relative">
+              <input
+                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                required
+              />
+              <span class="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer text-[#a0a0a0] text-[18px]">👁️</span>
+            </div>
+
+            <div class="w-full relative">
+              <input
+                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
+                type="password"
+                name="confirmpassword"
+                id="confirmpassword"
+                placeholder="Confirm Password"
+                required
+              />
+              <span class="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer text-[#a0a0a0] text-[18px]">👁️</span>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full p-4 mt-2.5 border-none rounded-xl bg-[#06402b] text-white text-base font-semibold cursor-pointer transition-colors duration-300 hover:bg-[#042e1f]"
+            >
+              Create Journalist Account
+            </button>
+
+          </form>
+          <div class="mt-[30px] text-center text-sm text-[#7a7a7a]">
+            <p>
+              Already have an account?
+              <a class="text-[#0b452c] font-semibold no-underline hover:underline" href="index.php?action=show_login">Log in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/auth.js" defer></script>
+  </body>
+</html>

@@ -98,6 +98,29 @@ class AuthController {
         }
     }
 
+
+    public function registerJournalist() {
+        header('Content-Type: application/json; charset=utf-8');
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        
+        $email    = $_POST['email'] ?? '';
+        $username = $_POST['username'] ?? ''; // Ini adalah Pen Name / Full Name
+        $password = $_POST['password'] ?? '';
+
+        if(empty($email) || empty($password)) {
+            echo json_encode(["status" => "error", "message" => "Email dan Password wajib diisi."]);
+            return;
+        }
+
+        try {
+            // Panggil fungsi di Model
+            $this->userModel->registerJournalist($email, $password, $username);
+            echo json_encode(["status" => "success", "username" => $username]);
+        } catch (Exception $e) {
+            echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        }
+    }
+
     public function logout() {
         if (session_status() === PHP_SESSION_NONE) session_start();
         

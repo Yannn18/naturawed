@@ -82,5 +82,38 @@ class UserModel {
             throw $e;
         }
     }
+
+    // REGISTRASI JURNALIS (TRANSAKSI)
+    public function registerJournalist($email, $password, $fullName) {
+        $emailEscaped = mysqli_real_escape_string($this->conn, trim($email));
+        $passEscaped = mysqli_real_escape_string($this->conn, trim($password)); 
+        $fNameEscaped = mysqli_real_escape_string($this->conn, trim($fullName));
+        $role = 'journalist';
+
+        mysqli_begin_transaction($this->conn);
+        try {
+            // 1. Insert ke tabel users
+            $queryUser = "INSERT INTO users (email, password, role) VALUES ('$emailEscaped', '$passEscaped', '$role')";
+            if (!mysqli_query($this->conn, $queryUser)) {
+                throw new Exception("Gagal simpan akun: " . mysqli_error($this->conn));
+            }
+
+            $userId = mysqli_insert_id($this->conn);
+
+            // 2. Insert ke tabel journalist_profiles
+            $queryProfile = "INSERT INTO journalist_profiles (user_id, full_name) VALUES ('$userId', '$fNameEscaped')";
+            if (!mysqli_query($this->conn, $queryProfile)) {
+                throw new Exception("Gagal simpan profil jurnalis: " . mysqli_error($this->conn));
+            }
+
+            mysqli_commit($this->conn);
+            return true;
+        } catch (Exception $e) {
+            mysqli_rollback($this->conn);
+            throw $e; // Lempar error kembali ke Controller
+        }
+    }
+    
+
 }
 ?>
