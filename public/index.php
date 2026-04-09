@@ -10,6 +10,7 @@ require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/PackageController.php';
 require_once __DIR__ . '/../controllers/PaymentController.php';
 require_once __DIR__ . '/../controllers/BookingController.php';
+require_once __DIR__ . '/../controllers/ArticleController.php';
 
 // 3. LOGIKA COOKIE LOGIN (Hanya bisa jalan jika $conn sudah ada)
 if (!isset($_SESSION['login']) && isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
@@ -54,6 +55,9 @@ switch ($action) {
 
     case 'show_registervendor':
         require_once __DIR__ . '/../views/auth/signupvendor.html';
+        break;
+    case 'show_registerjournalist':
+        require_once __DIR__ . '/../views/auth/signupjournalist.php';
         break;
 
     case 'dashboard_vendor':
@@ -117,6 +121,14 @@ switch ($action) {
     case 'write_article':
         require_once __DIR__ . '/../views/journalist/write_article.php';
         break;
+    case 'journalist_dashboard':
+        if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'journalist') {
+            header("Location: /index.php?action=home"); exit;
+        }
+       $articleCtrl = new ArticleController();
+        $articleCtrl->dashboard();
+        break;
+    
     case 'login':
         $authController->login();
         break;
@@ -130,6 +142,11 @@ switch ($action) {
 
     case 'register_vendor':
         $authController->registerVendor();
+        break;
+
+        case 'register_journalist':
+        $authCtrl = new AuthController();
+        $authCtrl->registerJournalist();
         break;
         case 'store_package':
         $packageCtrl = new PackageController();
@@ -146,6 +163,11 @@ switch ($action) {
 
     case 'submit_payment':
         $paymentController->store();
+        break;
+
+    case 'store_article':
+        $articleCtrl = new ArticleController();
+        $articleCtrl->store();
         break;
 
     default:
