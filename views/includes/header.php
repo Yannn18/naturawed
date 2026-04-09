@@ -9,10 +9,15 @@
   <body class="bg-white font-sans text-gray-900 overflow-x-hidden">
     
 <?php
-
 // Ambil status dari session dan URL
-$isAuthenticated = isset($_SESSION['login']) && $_SESSION['login'] === true;
+// MODIFIKASI: Tambahkan pengecekan role 'customer'
+$isAuthenticated = isset($_SESSION['login']) && 
+                   $_SESSION['login'] === true && 
+                   isset($_SESSION['role']) && 
+                   $_SESSION['role'] === 'customer';
+
 $currentAction = $_GET['action'] ?? 'home';
+// ... sisa code CSS classes Anda
 
 // CSS Classes
 $activeClass = 'relative font-bold text-[#2d4a22] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-[#2d4a22] pb-1';
