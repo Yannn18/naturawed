@@ -1,6 +1,7 @@
 <?php
+// Di public/index.php
+if (session_status() === PHP_SESSION_NONE) session_start();
 
-session_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
@@ -9,6 +10,25 @@ require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/PackageController.php';
 require_once __DIR__ . '/../controllers/PaymentController.php';
 require_once __DIR__ . '/../controllers/BookingController.php';
+
+// 3. LOGIKA COOKIE LOGIN (Hanya bisa jalan jika $conn sudah ada)
+if (!isset($_SESSION['login']) && isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
+    $id = $_COOKIE['id'];
+    $key = $_COOKIE['key'];
+
+    // Sekarang $conn sudah tidak null karena sudah di-require di atas
+    $result = mysqli_query($conn, "SELECT * FROM users WHERE id = '$id' LIMIT 1");
+    $row = mysqli_fetch_assoc($result);
+
+    if ($row && $key === hash('sha256', $row['email'])) {
+        $_SESSION['login'] = true;
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['role'] = $row['role'];
+        $_SESSION['user_email'] = $row['email'];
+        // Jika ada kolom nama, masukkan juga
+        $_SESSION['user_name'] = $row['full_name'] ?? $row['business_name'] ?? '';
+    }
+}
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
 
