@@ -1,16 +1,7 @@
 <?php
-// Ambil tab aktif dari URL, default ke 'All'
-$activeTab = $_GET['tab'] ?? 'All';
-$tabs = ['All', 'Ongoing', 'Completed', 'Reviewed', 'Canceled'];
-
-// Mock Data (Nantinya ini diambil dari Database)
-$historyItems = [
-    ['title' => "The Heritage Garden", 'date' => "20 MAY 2024", 'cat' => "BESPOKE FLORAL CURATION", 'price' => "$1,250.00", 'desc' => "The botanical arrangements transformed the garden into a sanctuary of natural elegance."],
-    ['title' => "Atelier Workshop", 'date' => "12 APR 2024", 'cat' => "SUSTAINABILITY IN DESIGN", 'price' => "$450.00", 'desc' => "An intimate study of artisanal dried florals and organic architectural forms."],
-    // ... data lainnya
-];
+// Tab tetap statis
+$tabs = ['All', 'Ongoing', 'Completed', 'Canceled'];
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,78 +18,78 @@ $historyItems = [
 
     <?php include __DIR__ . '/../includes/header.php'; ?>
 
-
     <main class="max-w-7xl mx-auto px-6 py-16">
         <div class="mb-12">
             <h1 class="text-6xl serif mb-6">Booking History</h1>
             <p class="text-zinc-500 max-w-2xl leading-relaxed">
-                Review your curated wedding experiences and upcoming arrangements within the Atelier's seasonal calendar.
+                Review your curated wedding experiences and upcoming arrangements.
             </p>
         </div>
 
         <div class="flex items-center space-x-10 border-b border-zinc-200 mb-16">
             <?php foreach ($tabs as $tab): ?>
-                <a href="index.php?action=history&tab=<?php echo $tab; ?>" 
-                   class="pb-4 text-sm font-semibold tracking-wider transition-all relative <?php echo $activeTab === $tab ? 'text-zinc-900 border-b-2 border-[#2d4a22]' : 'text-zinc-400 hover:text-zinc-600'; ?>">
-                    <?php echo $tab; ?>
+                <a href="index.php?action=history&tab=<?= $tab; ?>" 
+                   class="pb-4 text-sm font-semibold tracking-wider transition-all relative <?= $activeTab === $tab ? 'text-zinc-900 border-b-2 border-[#2d4a22]' : 'text-zinc-400 hover:text-zinc-600'; ?>">
+                    <?= $tab; ?>
                 </a>
             <?php endforeach; ?>
         </div>
 
         <div class="space-y-12">
-            <?php if ($activeTab === 'All'): ?>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 bg-white rounded-[32px] overflow-hidden p-2 shadow-sm border border-zinc-100">
-                    <div class="lg:col-span-1 aspect-[4/3] rounded-[28px] overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552" class="w-full h-full object-cover">
-                        <div class="absolute top-6 left-6 px-3 py-1 bg-red-500 text-white text-[10px] font-bold tracking-widest uppercase rounded-full">Unpaid</div>
-                    </div>
-                    <div class="lg:col-span-2 p-8 flex flex-col justify-between">
-                        <div>
-                            <h2 class="text-3xl serif mb-4">Seashell Bomb Package</h2>
-                            <p class="text-zinc-500 mb-8">A romantic beachside session...</p>
+            <?php if (empty($historyItems)): ?>
+                <div class="text-center py-20 bg-white rounded-[32px] border border-dashed border-zinc-200">
+                    <p class="text-zinc-400 italic">No arrangements found in this category.</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($historyItems as $item): ?>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 bg-white rounded-[32px] overflow-hidden p-2 shadow-sm border border-zinc-100">
+                        <div class="lg:col-span-1 aspect-[4/3] rounded-[28px] overflow-hidden relative">
+                            <img src="<?= htmlspecialchars($item['main_image']); ?>" class="w-full h-full object-cover">
+                            
+                            <?php 
+                                $statusClass = "bg-zinc-500";
+                                $statusLabel = $item['payment_status'] ?? 'Unpaid';
+                                
+                                if($statusLabel == 'success') { $statusClass = "bg-[#2d4a22]"; $statusLabel = "Confirmed"; }
+                                elseif($statusLabel == 'pending_verification') { $statusClass = "bg-amber-500"; $statusLabel = "Pending"; }
+                                elseif($statusLabel == 'unpaid' || !$statusLabel) { $statusClass = "bg-red-500"; $statusLabel = "Unpaid"; }
+                            ?>
+                            <div class="absolute top-6 left-6 px-3 py-1 <?= $statusClass ?> text-white text-[10px] font-bold tracking-widest uppercase rounded-full">
+                                <?= $statusLabel ?>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between mt-12 pt-8 border-t border-zinc-50">
+
+                        <div class="lg:col-span-2 p-8 flex flex-col justify-between">
                             <div>
-                                <p class="text-[10px] uppercase text-zinc-400 mb-1">Total Investment</p>
-                                <p class="text-2xl font-semibold">IDR 120.500.000</p>
+                                <div class="flex justify-between items-start">
+                                    <h2 class="text-3xl serif mb-2"><?= htmlspecialchars($item['package_name']); ?></h2>
+                                    <span class="text-[10px] font-mono text-zinc-400 uppercase"><?= date('d M Y', strtotime($item['created_at'])); ?></span>
+                                </div>
+                                <p class="text-zinc-500 mb-4 italic">Event Date: <?= date('d F Y', strtotime($item['event_date'])); ?></p>
+                                <p class="text-sm text-zinc-400 line-clamp-2">Location: <?= htmlspecialchars($item['event_location']); ?></p>
                             </div>
-                            <a href="index.php?action=payment-instruction&booking_id=<?= $item['id'] ?>" class="bg-[#2d4a22] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#1e3317] transition-colors">Pay Now →</a>
+
+                            <div class="flex items-center justify-between mt-8 pt-8 border-t border-zinc-50">
+                                <div>
+                                    <p class="text-[10px] uppercase text-zinc-400 mb-1">Total Investment</p>
+                                    <p class="text-2xl font-semibold">
+                                        IDR <?= number_format($item['total_price'] ?? 0, 0, ',', '.'); ?>
+                                    </p>
+                                </div>
+
+                                <?php if($item['payment_status'] != 'success' && $item['payment_status'] != 'pending_verification'): ?>
+                                    <a href="index.php?action=payment-instruction&booking_id=<?= $item['id'] ?>" class="bg-[#2d4a22] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#1e3317] transition-colors">Pay Now →</a>
+                                <?php else: ?>
+                                    <button class="border border-zinc-200 text-zinc-900 px-8 py-4 rounded-xl font-semibold hover:bg-zinc-50 transition-colors">View Details</button>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
             <?php endif; ?>
-
-            <?php if ($activeTab !== 'All'): ?>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <?php foreach ($historyItems as $item): ?>
-                        <div class="bg-white rounded-[32px] overflow-hidden border border-zinc-100 shadow-sm group">
-                            <div class="p-8">
-                                <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-400 mb-3 block"><?php echo $item['cat']; ?></span>
-                                <h3 class="text-2xl serif mb-4"><?php echo $item['title']; ?></h3>
-                                <p class="text-sm text-zinc-500 mb-8"><?php echo $item['desc']; ?></p>
-                                <div class="flex items-center justify-between pt-6 border-t border-zinc-50">
-                                    <p class="text-sm text-zinc-400">Total: <span class="text-zinc-900 font-semibold"><?php echo $item['price']; ?></span></p>
-                                    <button class="text-[10px] font-bold uppercase text-zinc-400 hover:text-zinc-900">Details</button>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </div>
-
-        <div class="mt-32 w-full bg-[#2d4a22] rounded-[48px] overflow-hidden flex flex-col lg:flex-row">
-            <div class="flex-1 p-16 lg:p-24 text-white">
-                <h2 class="text-5xl serif mb-8 leading-tight">Need guidance?</h2>
-                <button class="bg-white text-[#2d4a22] px-8 py-4 rounded-xl font-semibold">Speak with a Concierge</button>
-            </div>
-            <div class="flex-1">
-                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622" class="w-full h-full object-cover">
-            </div>
         </div>
     </main>
 
     <?php include __DIR__ . '/../includes/footer.php'; ?>
-
 </body>
 </html>
