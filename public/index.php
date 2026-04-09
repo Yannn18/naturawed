@@ -121,6 +121,9 @@ switch ($action) {
         require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
         break;
     case 'write_article':
+         if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'journalist') {
+            header("Location: /index.php?action=home"); exit;
+        }
         require_once __DIR__ . '/../views/journalist/write_article.php';
         break;
     case 'journalist_dashboard':

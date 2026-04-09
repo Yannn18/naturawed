@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // LOGIKA PEMILAHAN ROLE
           if (hasilJson.role === "vendor") {
             // Arahkan ke dashboard vendor melalui router
-            window.location.href = "index.php?action=dashboard_vendor";
+            window.location.href = "index.php?action=dashboard-vendor";
           } else if (hasilJson.role === "journalist") {
             // Arahkan ke dashboard journalist melalui router
             window.location.href = "index.php?action=journalist_dashboard";
