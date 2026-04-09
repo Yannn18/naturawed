@@ -23,7 +23,7 @@ class AuthController {
 
         $email = $_POST['email'] ?? '';
         $pass = trim($_POST['password'] ?? '');
-        $remember = isset($_POST['remember']); // Cek apakah centang 'Remember Me' aktif
+        $remember = isset($_POST['remember']); 
 
         $userData = $this->userModel->getUserByEmail($email);
 
@@ -34,11 +34,13 @@ class AuthController {
                 $_SESSION['user_id'] = $userData['id'];
                 $_SESSION['role'] = $userData['role'];
                 $_SESSION['user_email'] = $userData['email'];
+                
+                // 👇 TAMBAHAN BARU: Simpan nama bisnis & alamat ke session 👇
+                $_SESSION['business_name'] = $userData['business_name'] ?? $userData['full_name'] ?? 'Vendor Studio';
+                $_SESSION['address'] = $userData['address'] ?? '';
 
                 // 2. LOGIKA COOKIE (REMEMBER ME)
                 if ($remember) {
-                    // Simpan ID yang di-hash untuk keamanan sederhana
-                    // Berlaku selama 30 hari (3600 * 24 * 30)
                     setcookie('id', $userData['id'], time() + (3600 * 24 * 30), "/");
                     setcookie('key', hash('sha256', $userData['email']), time() + (3600 * 24 * 30), "/");
                 }
@@ -52,7 +54,7 @@ class AuthController {
         }
     }
 
-     public function registerVendor() {
+    public function registerVendor() {
         header('Content-Type: application/json; charset=utf-8');
         if (session_status() === PHP_SESSION_NONE) session_start();
 
@@ -70,6 +72,12 @@ class AuthController {
             // Delegasikan proses penyimpanan ke Model
             $this->userModel->registerVendor($email, $password, $username, $address);
 
+            // 👇 TAMBAHAN BARU: Langsung set session saat Sign Up berhasil 👇
+            $_SESSION['login'] = true;
+            $_SESSION['role'] = 'vendor';
+            $_SESSION['user_email'] = $email;
+            $_SESSION['business_name'] = $username;
+            $_SESSION['address'] = $address;
         
             echo json_encode(["status" => "success", "username" => $username]);
         } catch (Exception $e) {
