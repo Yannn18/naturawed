@@ -10,6 +10,7 @@ require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/PackageController.php';
 require_once __DIR__ . '/../controllers/PaymentController.php';
 require_once __DIR__ . '/../controllers/BookingController.php';
+require_once __DIR__ . '/../controllers/VendorController.php';
 
 
 
@@ -39,8 +40,9 @@ switch ($action) {
         require_once __DIR__ . '/../views/auth/signupvendor.html';
         break;
 
-    case 'dashboard_vendor':
-        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
+    case 'dashboard-vendor':
+        $vendorController = new VendorController();
+        $vendorController->dashboard();
         break;
 
     case 'home':
@@ -95,9 +97,6 @@ switch ($action) {
         $bookingController->history();
         break;
         
-    case 'dashboard-vendor':
-        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
-        break;
     case 'login':
         $authController->login();
         break;

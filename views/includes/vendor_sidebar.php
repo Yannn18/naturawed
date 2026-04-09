@@ -56,14 +56,14 @@ function getMenuClass($actionName, $currentAction) {
         </div>
     </nav>
 
-    <div class="p-4 mt-auto">
+   <div class="p-4 mt-auto">
         <div class="bg-[#f0f2f0] p-3 rounded-2xl flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-[#2d3e2d] text-white flex items-center justify-center font-bold font-serif shadow-inner">
-                <?= strtoupper(substr($_SESSION['user'] ?? 'V', 0, 1)) ?>
+                <?= strtoupper(substr($_SESSION['business_name'] ?? 'V', 0, 1)) ?>
             </div>
             <div class="min-w-0">
                 <h4 class="text-xs font-bold truncate text-[#2d3e2d]">
-                    <?= htmlspecialchars($_SESSION['user'] ?? 'Vendor Studio') ?>
+                    <?= htmlspecialchars($_SESSION['business_name'] ?? 'Vendor Studio') ?>
                 </h4>
                 <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Active</p>
             </div>
