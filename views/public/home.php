@@ -111,8 +111,8 @@ $videos = [
         <div id="ecoCarousel" class="flex overflow-x-auto gap-6 pb-12 pt-4 px-4 hide-scrollbar">
             
             <?php foreach ($ecoPackages as $item): ?>
-                <a href="/index.php?action=package_detail&id=<?= $item['id'] ?>" 
-                   class="group relative flex-none w-[340px] overflow-hidden rounded-[2rem] bg-white shadow-xl shadow-gray-200/50 transition-transform duration-300 hover:-translate-y-2 snap-start border border-gray-50">
+                <a href="<?= getProtectedRoute('package_detail&id=' . $item['id'], $isAuthenticated) ?>" 
+                    class="group relative flex-none w-[340px] overflow-hidden rounded-[2rem] bg-white shadow-xl shadow-gray-200/50 transition-transform duration-300 hover:-translate-y-2 snap-start border border-gray-50">
                     
                     <img src="<?= htmlspecialchars($item['main_image'] ?: 'https://picsum.photos/400/300') ?>" 
                          alt="<?= htmlspecialchars($item['package_name']) ?>" 
