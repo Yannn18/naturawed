@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (role === "journalist") {
         actionTarget = "register_journalist";
       } else {
-        actionTarget = "register_customer";
+        actionTarget = "register";
       }
 
       // Susun Params secara dinamis
