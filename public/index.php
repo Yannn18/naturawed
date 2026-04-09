@@ -11,6 +11,7 @@ require_once __DIR__ . '/../controllers/PackageController.php';
 require_once __DIR__ . '/../controllers/PaymentController.php';
 require_once __DIR__ . '/../controllers/BookingController.php';
 require_once __DIR__ . '/../controllers/ArticleController.php';
+require_once __DIR__ . '/../controllers/VendorController.php';
 
 // 3. LOGIKA COOKIE LOGIN (Hanya bisa jalan jika $conn sudah ada)
 if (!isset($_SESSION['login']) && isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
@@ -60,8 +61,9 @@ switch ($action) {
         require_once __DIR__ . '/../views/auth/signupjournalist.php';
         break;
 
-    case 'dashboard_vendor':
-        require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
+    case 'dashboard-vendor':
+        $vendorController = new VendorController();
+        $vendorController->dashboard();
         break;
 
     case 'home':

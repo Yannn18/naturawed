@@ -111,10 +111,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (role === "vendor") {
         actionTarget = "register_vendor";
+<<<<<<< HEAD
       } else if (role === "journalist") {
         actionTarget = "register_journalist";
       } else {
         actionTarget = "register_customer";
+=======
+      } else {
+        actionTarget = "register";
+>>>>>>> 555f8f5e95100ef2fa748650fb681a3bb7e2be43
       }
 
       // Susun Params secara dinamis

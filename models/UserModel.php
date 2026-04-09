@@ -8,10 +8,17 @@ class UserModel {
         $this->conn = $db;
     }
 
-    // 1. MENGAMBIL DATA USER UNTUK LOGIN
+    // 1. MENGAMBIL DATA USER UNTUK LOGIN (DITAMBAH JOIN)
     public function getUserByEmail($email) {
         $emailEscaped = mysqli_real_escape_string($this->conn, trim($email));
-        $query = "SELECT * FROM users WHERE email='$emailEscaped'";
+        
+        // Query ini menggabungkan tabel users dengan vendor_profiles (dan customer_profiles sekalian)
+        $query = "SELECT u.*, vp.business_name, vp.address, cp.full_name 
+                  FROM users u 
+                  LEFT JOIN vendor_profiles vp ON u.id = vp.user_id 
+                  LEFT JOIN customer_profiles cp ON u.id = cp.user_id 
+                  WHERE u.email='$emailEscaped'";
+                  
         $result = mysqli_query($this->conn, $query);
 
         if ($result && mysqli_num_rows($result) === 1) {
