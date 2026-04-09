@@ -114,6 +114,9 @@ switch ($action) {
     case 'dashboard-vendor':
         require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
         break;
+    case 'write_article':
+        require_once __DIR__ . '/../views/journalist/write_article.php';
+        break;
     case 'login':
         $authController->login();
         break;
