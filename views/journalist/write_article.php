@@ -1,8 +1,8 @@
 <?php
-// // Pastikan pengecekan session dan role (jika sudah ada role journalist)
-//  if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'journalist') {   
-//     header("Location: /index.php?action=show_login");
-//     exit; }
+// Pastikan pengecekan session dan role (jika sudah ada role journalist)
+ if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'journalist') {   
+    header("Location: /index.php?action=show_login");
+    exit; }
 
 $pageTitle = "Write Article - NaturaWed Journalist";
 ?>
@@ -35,7 +35,7 @@ $pageTitle = "Write Article - NaturaWed Journalist";
         </header>
 
         <div class="px-12 py-10 max-w-4xl">
-            <form id="articleForm" action="/index.php?action=store_article" method="POST" class="bg-white rounded-[2rem] p-10 shadow-[0_0_40px_rgba(0,0,0,0.03)] border border-gray-50">
+            <form id="articleForm" enctype="multipart/form-data" action="/index.php?action=store_article" method="POST" class="bg-white rounded-[2rem] p-10 shadow-[0_0_40px_rgba(0,0,0,0.03)] border border-gray-50">
                 
                 <div class="space-y-8">
                     <div>
@@ -57,14 +57,13 @@ $pageTitle = "Write Article - NaturaWed Journalist";
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Cover Image URL</label>
-                        <div class="relative">
-                            <i data-lucide="image" class="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                            <input type="url" name="image_url" placeholder="https://images.unsplash.com/..." required
-                                   class="w-full pl-14 pr-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-1 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm placeholder-gray-400" />
-                        </div>
-                    </div>
+                <div>
+                     <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Cover Image File</label>
+                     <div class="relative">
+                     <input type="file" name="cover_image" accept="image/*" required
+                        class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-1 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#2d3e2d] file:text-white hover:file:bg-[#1e291e]" />
+                      </div>
+                 </div>
 
                     <div>
                         <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Article Content</label>
