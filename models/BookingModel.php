@@ -1,5 +1,4 @@
 <?php
-
 class BookingModel {
     private $conn;
 
@@ -7,50 +6,35 @@ class BookingModel {
         $this->conn = $db_conn;
     }
 
-    /**
-     * Mengambil ID Profil Customer berdasarkan ID User di Session
-     */
-    public function getCustomerProfileId($userId) {
+    // FUNGSI INI YANG HILANG/BELUM ADA:
+    public function getCustomerBookings($userId, $statusTab = 'All') {
         $userId = mysqli_real_escape_string($this->conn, $userId);
-        $query = "SELECT id FROM customer_profiles WHERE user_id = '$userId' LIMIT 1";
-        $result = mysqli_query($this->conn, $query);
-        $row = mysqli_fetch_assoc($result);
-        return $row ? $row['id'] : null;
+        
+        // Query untuk mengambil data booking, detail paket, dan status pembayaran
+        $sql = "SELECT b.*, b.total_price, p.package_name, p.main_image, 
+                   pay.status as payment_status, pay.amount as paid_amount
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.id
+            LEFT JOIN payments pay ON b.id = pay.booking_id
+            WHERE b.customer_id = (SELECT id FROM customer_profiles WHERE user_id = '$userId')";
+
+    if ($statusTab === 'Ongoing') {
+        $sql .= " AND (pay.status = 'pending_verification' OR pay.status IS NULL OR pay.status = 'unpaid')";
+    } elseif ($statusTab === 'Completed') {
+        $sql .= " AND pay.status = 'paid'"; // Di database kamu statusnya 'paid' (image_65a5ef.png)
+    } elseif ($statusTab === 'Canceled') {
+        $sql .= " AND b.status = 'cancelled'"; // Pastikan ejaan 'cancelled' sesuai enum database
     }
 
-    /**
-     * Menyimpan data booking baru ke database
-     */
-    public function createBooking($customerId, $packageId, $date, $location, $notes, $totalPrice) {
-        // Sanitasi input untuk keamanan
-        $customerId    = mysqli_real_escape_string($this->conn, $customerId);
-        $packageId     = mysqli_real_escape_string($this->conn, $packageId);
-        $date          = mysqli_real_escape_string($this->conn, $date);
-        $location      = mysqli_real_escape_string($this->conn, $location);
-        $notes         = mysqli_real_escape_string($this->conn, $notes);
-        $totalPrice    = mysqli_real_escape_string($this->conn, $totalPrice);
-
-        $query = "INSERT INTO bookings (customer_id, package_id, event_date, event_location, notes, total_price, status, created_at) 
-                  VALUES ('$customerId', '$packageId', '$date', '$location', '$notes', '$totalPrice', 'pending', NOW())";
-        
-        if (mysqli_query($this->conn, $query)) {
-            // Mengembalikan ID Booking yang baru saja dibuat (Primary Key)
-            return mysqli_insert_id($this->conn);
+    $sql .= " ORDER BY b.created_at DESC";
+    
+    $result = mysqli_query($this->conn, $sql);
+    $bookings = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $bookings[] = $row;
         }
-        return false;
     }
-
-    /**
-     * Otomatis membuat record di tabel payments setelah booking sukses
-     */
-    public function createInitialPayment($bookingId, $amount) {
-        $bookingId = mysqli_real_escape_string($this->conn, $bookingId);
-        $amount    = mysqli_real_escape_string($this->conn, $amount);
-
-        // Status awal adalah 'unpaid' sesuai struktur tabel payments Anda
-        $query = "INSERT INTO payments (booking_id, amount, status, created_at) 
-                  VALUES ('$bookingId', '$amount', 'unpaid', NOW())";
-        
-        return mysqli_query($this->conn, $query);
+    return $bookings;
     }
 }
