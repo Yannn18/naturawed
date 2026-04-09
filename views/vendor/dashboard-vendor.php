@@ -5,29 +5,7 @@ if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
     exit;
 }
 $pageTitle = "Vendor Dashboard - NaturaWed";
-$recentOrders = [
-    [
-        "client" => "Eleanor Vance",
-        "package" => "The Botanical Suite",
-        "status" => "CONFIRMED",
-        "amount" => "$3,200",
-        "statusColor" => "bg-[#e1f5e1] text-[#2d3e2d]"
-    ],
-    [
-        "client" => "Julian Thorne",
-        "package" => "Minimalist Grandeur",
-        "status" => "PENDING",
-        "amount" => "$1,850",
-        "statusColor" => "bg-[#fff4e5] text-[#b7791f]"
-    ],
-    [
-        "client" => "Maya Sterling",
-        "package" => "Golden Hour Curation",
-        "status" => "PROCESSING",
-        "amount" => "$4,500",
-        "statusColor" => "bg-[#e3f2fd] text-[#1976d2]"
-    ]
-];
+
 ?>
 
 <!DOCTYPE html>
@@ -89,8 +67,8 @@ $recentOrders = [
                         <div class="flex justify-between items-end mb-4">
                             <div>
                                 <h3 class="text-5xl font-serif text-[#2d3e2d] leading-tight">
-                                    Welcome back,<br />
-                                    <span class="italic"><?= htmlspecialchars($_SESSION['user'] ?? 'Vendor'); ?></span>
+                                   Welcome back,<br />
+                                    <span class="italic"><?= htmlspecialchars($_SESSION['business_name'] ?? 'Vendor Studio'); ?></span>
                                 </h3>
                                 <p class="text-gray-500 mt-4">Your studio has 4 new inquiries and 2 pending reviews this morning.</p>
                             </div>
@@ -105,23 +83,23 @@ $recentOrders = [
 
                         <div class="grid grid-cols-3 gap-6 mt-10">
                             <div class="bg-[#f8f9fa] p-8 rounded-[2rem] border border-gray-50 hover:-translate-y-1 transition-transform cursor-default">
-                                <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-6">Total Orders</p>
-                                <div class="flex items-baseline gap-3">
-                                    <span class="text-5xl font-serif text-[#2d3e2d]">128</span>
-                                    <span class="text-[10px] font-bold text-[#4caf50]">+12% this month</span>
-                                </div>
+                              <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-6">Total Orders</p>
+                            <div class="flex items-baseline gap-3">
+                                <span class="text-5xl font-serif text-[#2d3e2d]"><?= $totalOrders ?? 0 ?></span>
+                                <span class="text-[10px] font-bold text-[#4caf50]">All time</span>
+                            </div>
                             </div>
                             <div class="bg-[#e1e8e1] p-8 rounded-[2rem] border border-gray-50 hover:-translate-y-1 transition-transform cursor-default">
                                 <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-6">New Reviews</p>
                                 <div class="flex items-center gap-3">
-                                    <span class="text-5xl font-serif text-[#2d3e2d]">24</span>
+                                    <span class="text-5xl font-serif text-[#2d3e2d]">0</span>
                                     <i data-lucide="star" class="text-[#2d3e2d] fill-[#2d3e2d] w-6 h-6"></i>
                                 </div>
                             </div>
                             <div class="bg-[#f0f2f0] p-8 rounded-[2rem] border border-gray-50 hover:-translate-y-1 transition-transform cursor-default">
                                 <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-6">Active Packages</p>
                                 <div class="flex items-baseline gap-3">
-                                    <span class="text-5xl font-serif text-[#2d3e2d]">06</span>
+                                    <span class="text-5xl font-serif text-[#2d3e2d]">0</span>
                                     <span class="text-[10px] font-bold text-gray-400">Live on store</span>
                                 </div>
                             </div>
