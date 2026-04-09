@@ -13,24 +13,7 @@ require_once __DIR__ . '/../controllers/BookingController.php';
 require_once __DIR__ . '/../controllers/ArticleController.php';
 require_once __DIR__ . '/../controllers/VendorController.php';
 
-// 3. LOGIKA COOKIE LOGIN (Hanya bisa jalan jika $conn sudah ada)
-if (!isset($_SESSION['login']) && isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
-    $id = $_COOKIE['id'];
-    $key = $_COOKIE['key'];
 
-    // Sekarang $conn sudah tidak null karena sudah di-require di atas
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE id = '$id' LIMIT 1");
-    $row = mysqli_fetch_assoc($result);
-
-    if ($row && $key === hash('sha256', $row['email'])) {
-        $_SESSION['login'] = true;
-        $_SESSION['user_id'] = $row['id'];
-        $_SESSION['role'] = $row['role'];
-        $_SESSION['user_email'] = $row['email'];
-        // Jika ada kolom nama, masukkan juga
-        $_SESSION['user_name'] = $row['full_name'] ?? $row['business_name'] ?? '';
-    }
-}
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
 
@@ -94,6 +77,7 @@ switch ($action) {
         }
         require_once __DIR__ . '/../views/vendor/packages.php';
         break;
+
    case 'vendor_add_package':
         if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
             header("Location: /index.php?action=home"); exit;
@@ -114,7 +98,7 @@ switch ($action) {
         break;
         
     case 'history':
-        require_once __DIR__ . '/../views/customer/history.php';
+        $bookingController->history();
         break;
         
     case 'dashboard-vendor':
