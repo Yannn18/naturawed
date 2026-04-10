@@ -112,5 +112,19 @@ class PackageModel {
         
         return mysqli_query($this->conn, $query);
     }
+    // =======================================================
+    // 6. MENGHITUNG JUMLAH PAKET AKTIF MILIK VENDOR (Untuk Dashboard)
+    // =======================================================
+    public function getActivePackagesCountByVendor($vendorProfileId) {
+        $idEscaped = intval($vendorProfileId);
+        $query = "SELECT COUNT(id) as total_active FROM packages WHERE vendor_id = '$idEscaped' AND status = 'active'";
+        $result = mysqli_query($this->conn, $query);
+        
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            return $row['total_active'];
+        }
+        return 0;
+    }
 }
 ?>

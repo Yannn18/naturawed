@@ -1,6 +1,7 @@
 <?php
 // File: controllers/VendorController.php
 require_once __DIR__ . '/../models/BookingModel.php';
+require_once __DIR__ . '/../models/PackageModel.php'; // Panggil sekalian di atas biar rapi
 
 class VendorController {
     private $conn;
@@ -12,16 +13,17 @@ class VendorController {
         $this->bookingModel = new BookingModel($this->conn);
     }
 
+    // FUNGSI UNTUK HALAMAN DASHBOARD
     public function dashboard() {
         if (session_status() === PHP_SESSION_NONE) session_start();
 
-        // 1. Keamanan: Pastikan yang akses adalah Vendor
+
         if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
             header("Location: /index.php?action=show_login");
             exit;
         }
 
-        // 2. Cari ID Profil Vendor berdasarkan ID User yang login
+
         $userId = $_SESSION['user_id'];
         $vendorProfileId = $this->bookingModel->getVendorProfileId($userId);
 
@@ -29,14 +31,34 @@ class VendorController {
             die("Vendor profile not found. Please complete your profile first.");
         }
 
-        // 3. Tarik data pesanan (bookings) dari database
-        $recentOrders = $this->bookingModel->getRecentOrdersForVendor($vendorProfileId);
 
-       // 4. Hitung Statistik: Ambil total semua pesanan asli dari database
+        $recentOrders = $this->bookingModel->getRecentOrdersForVendor($vendorProfileId);
+        
         $totalOrders = $this->bookingModel->getTotalOrdersForVendor($vendorProfileId);
         
-        // 5. Lempar data ke halaman View
+        // Hitung Paket Aktif
+        $packageModel = new PackageModel($this->conn);
+        $activePackagesCount = $packageModel->getActivePackagesCountByVendor($vendorProfileId);
+        
         require_once __DIR__ . '/../views/vendor/dashboard-vendor.php';
+    }
+
+    // FUNGSI UNTUK HALAMAN PORTFOLIO (Ini yang bikin garis merah hilang!)
+    public function portfolio() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        if (!isset($_SESSION['login']) || $_SESSION['role'] !== 'vendor') {
+            header("Location: /index.php?action=show_login");
+            exit;
+        }
+
+        $userId = $_SESSION['user_id'];
+        
+        // Tarik data paket vendor yang asli dari database
+        $packageModel = new PackageModel($this->conn);
+        $myPackages = $packageModel->getPackagesByVendor($userId);
+
+        require_once __DIR__ . '/../views/vendor/portfolio.php';
     }
 }
 ?>

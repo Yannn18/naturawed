@@ -70,7 +70,22 @@ $pageTitle = "Vendor Dashboard - NaturaWed";
                                    Welcome back,<br />
                                     <span class="italic"><?= htmlspecialchars($_SESSION['business_name'] ?? 'Vendor Studio'); ?></span>
                                 </h3>
-                                <p class="text-gray-500 mt-4">Your studio has 4 new inquiries and 2 pending reviews this morning.</p>
+                                <?php 
+                                // Hitung otomatis pesanan yang masih 'pending'
+                                $newInquiries = 0;
+                                if (!empty($recentOrders)) {
+                                    foreach ($recentOrders as $order) {
+                                        // Cek kalau statusnya pending
+                                        if (strtolower($order['status']) === 'pending') {
+                                    $newInquiries++;
+                                    }
+                                }
+        }
+                            ?>
+                            <p class="text-gray-500 mt-4">
+                                Your studio has <strong class="text-[#2d3e2d]"><?= $newInquiries ?></strong> new inquiries and <strong class="text-[#2d3e2d]">0</strong> pending reviews this morning.
+                            </p>
+
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Current Status</p>
@@ -96,13 +111,13 @@ $pageTitle = "Vendor Dashboard - NaturaWed";
                                     <i data-lucide="star" class="text-[#2d3e2d] fill-[#2d3e2d] w-6 h-6"></i>
                                 </div>
                             </div>
-                            <div class="bg-[#f0f2f0] p-8 rounded-[2rem] border border-gray-50 hover:-translate-y-1 transition-transform cursor-default">
+                           <div class="bg-[#f0f2f0] p-8 rounded-[2rem] border border-gray-50 hover:-translate-y-1 transition-transform cursor-default">
                                 <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-6">Active Packages</p>
                                 <div class="flex items-baseline gap-3">
-                                    <span class="text-5xl font-serif text-[#2d3e2d]">0</span>
-                                    <span class="text-[10px] font-bold text-gray-400">Live on store</span>
-                                </div>
+                                <span class="text-5xl font-serif text-[#2d3e2d]"><?= $activePackagesCount ?? 0 ?></span>
+                                <span class="text-[10px] font-bold text-gray-400">Live on store</span>
                             </div>
+                        </div>
                         </div>
                     </section>
 
@@ -179,46 +194,48 @@ $pageTitle = "Vendor Dashboard - NaturaWed";
                     </section>
                 </div>
 
-                <div class="w-80 space-y-8">
+                <div class="w-80 flex flex-col gap-8 shrink-0">
+                    
                     <div>
-                        <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-6">Quick Actions</p>
-                        <div class="space-y-4">
-                            <button class="w-full bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5 hover:border-[#2d3e2d]/20 transition-all group text-left">
-                                <div class="w-12 h-12 rounded-xl bg-[#e1f5e1] flex items-center justify-center text-[#2d3e2d] group-hover:scale-110 transition-transform">
-                                    <i data-lucide="edit-3" class="w-5 h-5"></i>
+                        <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-4">Quick Actions</p>
+                        <div class="flex flex-col gap-4">
+                            
+                            <a href="/index.php?action=profile_edit" class="w-full bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5 hover:border-[#2d3e2d]/20 transition-all group text-left cursor-pointer">
+                                <div class="w-12 h-12 rounded-xl bg-[#e1f5e1] flex items-center justify-center text-[#2d3e2d] group-hover:scale-110 transition-transform shrink-0">
+                                    <i data-lucide="edit-3" class="w-5 h-5"></i> </div>
+                                <div>
+                                    <h6 class="font-bold text-sm text-[#1a1a1a]">Edit Profile</h6>
+                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5 line-clamp-1">Studio Details & Branding</p>
                                 </div>
-                                <div href="index.php?action=profile_edit">
-                                    <h6 class="font-bold text-sm">Edit Profile</h6>
-                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Studio Details & Branding</p>
+                            </a>
+
+                            <a href="/index.php?action=portfolio" class="w-full bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5 hover:border-[#2d3e2d]/20 transition-all group text-left cursor-pointer">
+                                <div class="w-12 h-12 rounded-xl bg-[#f8f9fa] flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform shrink-0">
+                                    <i data-lucide="image" class="w-5 h-5"></i> </div>
+                                <div>
+                                    <h6 class="font-bold text-sm text-[#1a1a1a]">Update Portfolio</h6>
+                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5 line-clamp-1">Manage your visual gallery</p>
                                 </div>
-                            </button>
-                            <button class="w-full bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5 hover:border-[#2d3e2d]/20 transition-all group text-left">
-                                <div class="w-12 h-12 rounded-xl bg-[#f8f9fa] flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="image" class="w-5 h-5"></i>
+                            </a>
+
+                            <a href="/index.php?action=vendor_add_package" class="w-full bg-[#2d3e2d] p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:opacity-95 transition-all group text-left cursor-pointer">
+                                <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform shrink-0">
+                                    <i data-lucide="plus-square" class="w-5 h-5"></i> </div>
+                                <div>
+                                    <h6 class="font-bold text-sm text-white">Add Package</h6>
+                                    <p class="text-[10px] text-white/50 uppercase tracking-widest mt-0.5 line-clamp-1">Expand your service list</p>
                                 </div>
-                                <div href="index.php?action=portfolio">
-                                    <h6 class="font-bold text-sm">Update Portfolio</h6>
-                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Manage your visual gallery</p>
-                                </div>
-                            </button>
-                            <button class="w-full bg-[#2d3e2d] p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:opacity-95 transition-all group text-left">
-                                <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                                    <i data-lucide="plus-square" class="w-5 h-5"></i>
-                                </div>
-                                <div href="index.php?action=package_add">
-                                    <h6 class="font-bold text-sm text-white">Add New Package</h6>
-                                    <p class="text-[10px] text-white/50 uppercase tracking-widest mt-0.5">Expand your service list</p>
-                                </div>
-                            </button>
+                            </a>
+
                         </div>
                     </div>
 
-                    <div class="relative rounded-[2.5rem] overflow-hidden aspect-[3/4] group cursor-pointer">
-                        <img 
-                            src="https://picsum.photos/seed/portfolio/600/800" 
-                            alt="Featured" 
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            referrerpolicy="no-referrer"
+                    <div class="relative rounded-[2.5rem] overflow-hidden aspect-[3/4] group cursor-pointer w-full shadow-sm border border-gray-100">
+                       <img 
+                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800" 
+                         alt="Featured" 
+                        class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        referrerpolicy="no-referrer"
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#2d3e2d] via-[#2d3e2d]/40 to-transparent"></div>
                         <div class="absolute inset-0 flex flex-col justify-end p-8">
@@ -235,13 +252,6 @@ $pageTitle = "Vendor Dashboard - NaturaWed";
                             </svg>
                         </div>
                     </div>
+                    
                 </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-      lucide.createIcons();
-    </script>
-</body>
-</html>
+               
