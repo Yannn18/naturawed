@@ -53,5 +53,16 @@ class ArticleModel {
         }
         return $articles;
     }
+    // 4. MENGAMBIL 1 ARTIKEL BERDASARKAN ID
+    public function getArticleById($id) {
+        $idEsc = intval($id);
+        $query = "SELECT * FROM articles WHERE id = $idEsc";
+        $result = mysqli_query($this->conn, $query);
+        
+        if ($result && mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result);
+        }
+        return null;
+    }
 }
 ?>

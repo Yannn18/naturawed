@@ -15,7 +15,7 @@ function getJournalistMenuClass($actionName, $currentAction) {
     
     <div class="p-8 pb-4">
         <h1 class="text-xl font-serif font-semibold text-[#2d3e2d]">
-            <?= htmlspecialchars($_SESSION['user'] ?? 'Verdant Atelier') ?>
+            <?= htmlspecialchars($_SESSION['user'] ?? 'NaturaWed') ?>
         </h1>
         <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mt-1">Journalist Portal</p>
     </div>

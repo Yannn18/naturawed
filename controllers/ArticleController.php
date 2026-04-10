@@ -97,5 +97,30 @@ class ArticleController {
         // Panggil View dan kirimkan datanya
         require_once __DIR__ . '/../views/journalist/dashboard.php';
     }
+    // Menampilkan halaman daftar inspirasi (Public)
+    public function showInspiration() {
+        // Ambil semua artikel (misal 10 terbaru)
+        $articles = $this->articleModel->getAllArticles(10);
+        
+        // Pisahkan artikel pertama sebagai Featured, sisanya untuk list bawah
+        $featuredArticle = !empty($articles) ? $articles[0] : null;
+        $otherArticles = !empty($articles) ? array_slice($articles, 1) : [];
+
+        // Panggil view
+        require_once __DIR__ . '/../views/public/inspiration.php';
+    }
+
+    // Menampilkan halaman detail 1 artikel (Public)
+    public function showDetail() {
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        
+        $article = $this->articleModel->getArticleById($id);
+        
+        if (!$article) {
+            die("Artikel tidak ditemukan."); // Bisa diganti redirect ke halaman 404 nanti
+        }
+
+        require_once __DIR__ . '/../views/public/article_detail.php';
+    }
 }
 ?>
