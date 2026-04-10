@@ -57,8 +57,16 @@ switch ($action) {
         require_once __DIR__ . '/../views/public/vendors.php';
         break;
 
+//new artikel inspiration
     case 'inspiration':
-        require_once __DIR__ . '/../views/public/inspiration.php';
+        $articleCtrl = new ArticleController();
+        $articleCtrl->showInspiration();
+        break;
+        
+    // TAMBAHKAN rute baru ini untuk detail artikel
+    case 'article_detail':
+        $articleCtrl = new ArticleController();
+        $articleCtrl->showDetail();
         break;
         
     case 'package_detail':
@@ -86,7 +94,8 @@ switch ($action) {
         break;
 
     case 'portfolio':
-        require_once __DIR__ . '/../views/vendor/portfolio.php';
+        $vendorController = new VendorController();
+        $vendorController->portfolio();
         break;
 
     case 'profile_edit':
