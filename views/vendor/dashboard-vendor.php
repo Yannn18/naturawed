@@ -27,7 +27,6 @@ $pageTitle = "Vendor Dashboard - NaturaWed";
 <body>
     <div class="min-h-screen flex bg-white font-sans text-[#1a1a1a]">
         <?php require_once __DIR__ . '/../includes/vendor_sidebar.php'; ?>
-       
 
         <main class="flex-1 flex flex-col overflow-y-auto">
             <header class="h-20 px-12 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10">
