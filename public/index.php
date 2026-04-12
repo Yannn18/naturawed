@@ -74,6 +74,21 @@ switch ($action) {
         $packageController->show();
         break;
 
+    case 'edit_package':
+        $packageCtrl = new PackageController();
+        $packageCtrl->edit();
+        break;
+
+    case 'update_package':
+        $packageCtrl = new PackageController();
+        $packageCtrl->update();
+        break;
+
+    case 'delete_package':
+        $packageCtrl = new PackageController();
+        $packageCtrl->delete();
+        break;
+        
     case 'checkout':
         $packageController = new PackageController();
         $packageController->checkout();
