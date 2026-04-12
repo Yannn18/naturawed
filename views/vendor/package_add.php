@@ -2,14 +2,23 @@
 if (!isset($_SESSION['login'])) {
     header("Location: /index.php?action=show_login");
     exit;
-}
+
+    
+    }
+    // Deteksi Mode: Edit atau Add?
+    $isEdit = isset($package) && !empty($package);
+
+    $pageTitle = $isEdit ? "Edit Package - NaturaWed" : "Create New Package - NaturaWed";
+    $formAction = $isEdit ? "/index.php?action=update_package" : "/index.php?action=store_package";
+    $headerText = $isEdit ? "Edit Wedding Package" : "Create New Wedding Package";
+    $buttonText = $isEdit ? "SAVE CHANGES" : "PUBLISH PACKAGE";
 $pageTitle = "Create New Package - NaturaWed";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title><?= $pageTitle ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,8 +36,11 @@ $pageTitle = "Create New Package - NaturaWed";
     <?php require_once __DIR__ . '/../includes/vendor_sidebar.php'; ?>
     <main class="flex-1 p-12 overflow-y-auto bg-[#f8f9fa]">
         
-        <form action="/index.php?action=store_package" method="POST" enctype="multipart/form-data">
-            
+        <form action="<?= $formAction ?>" method="POST" enctype="multipart/form-data">
+        <?php if ($isEdit): ?>
+         <input type="hidden" name="package_id" value="<?= $package['id'] ?>">
+        <?php endif; ?>    
+
             <header class="flex justify-between items-center mb-12">
                 <div>
                     <h2 class="text-4xl font-serif text-[#2d3e2d] mb-2">Create New Wedding Package</h2>
@@ -39,7 +51,7 @@ $pageTitle = "Create New Package - NaturaWed";
                         CANCEL
                     </button>
                     <button type="submit" class="px-8 py-4 bg-[#2a3f24] text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:opacity-90 transition-opacity shadow-lg cursor-pointer">
-                        PUBLISH PACKAGE
+                        <?= $buttonText ?>
                     </button>
                 </div>
             </header>
@@ -57,7 +69,10 @@ $pageTitle = "Create New Package - NaturaWed";
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Package Name</label>
-                                <input type="text" name="package_name" required placeholder="e.g., The Ethereal Conservatory Collection" class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm placeholder-gray-400" />
+                                <input 
+                                type="text" name="package_name" required 
+                                value="<?= $isEdit ? htmlspecialchars($package['package_name']) : '' ?>"
+                                type="text" name="package_name" required placeholder="e.g., The Ethereal Conservatory Collection" class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm placeholder-gray-400" />
                             </div>
                             
                             <div>
@@ -65,14 +80,14 @@ $pageTitle = "Create New Package - NaturaWed";
                                 <div class="relative">
                                     <select name="category_id" required class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm appearance-none cursor-pointer">
                                         <option value="" disabled selected>Pilih Kategori...</option>
-                                        <option value="1">Venue</option>
-                                        <option value="2">Catering</option>
-                                        <option value="3">Photography</option>
-                                        <option value="4">Decoration</option>
-                                        <option value="5">Makeup Artist</option>
-                                        <option value="6">Wedding Organizer</option>
-                                        <option value="7">Music & Entertainment</option>
-                                        <option value="8">Attire & Jewelry</option>
+                                        <option value="1" <?= ($isEdit && $package['category_id'] == 1) ? 'selected' : '' ?>>Venue</option>
+                                        <option value="2" <?= ($isEdit && $package['category_id'] == 2) ? 'selected' : '' ?>>Catering</option>
+                                        <option value="3" <?= ($isEdit && $package['category_id'] == 3) ? 'selected' : '' ?>>Photography</option>
+                                        <option value="4" <?= ($isEdit && $package['category_id'] == 4) ? 'selected' : '' ?>>Decoration</option>
+                                        <option value="5" <?= ($isEdit && $package['category_id'] == 5) ? 'selected' : '' ?>>Makeup Artist</option>
+                                        <option value="6" <?= ($isEdit && $package['category_id'] == 6) ? 'selected' : '' ?>>Wedding Organizer</option>
+                                        <option value="7" <?= ($isEdit && $package['category_id'] == 7) ? 'selected' : '' ?>>Music & Entertainment</option>
+                                        <option value="8" <?= ($isEdit && $package['category_id'] == 8) ? 'selected' : '' ?>>Attire & Jewelry</option>
                                     </select>
                                     <i data-lucide="chevron-down" class="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                                 </div>
@@ -80,7 +95,9 @@ $pageTitle = "Create New Package - NaturaWed";
 
                             <div>
                                 <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Detailed Description</label>
-                                <textarea name="description" required rows="5" placeholder="Describe the sensory experience, the materials used, and the artistic inspiration..." class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none resize-none text-sm placeholder-gray-400"></textarea>
+                                <textarea 
+                               
+                                name="description" required rows="5" placeholder="Describe the sensory experience, the materials used, and the artistic inspiration..." class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none resize-none text-sm placeholder-gray-400"> <?= $isEdit ? htmlspecialchars($package['description']) : '' ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -96,7 +113,9 @@ $pageTitle = "Create New Package - NaturaWed";
                         </div>
                         
                         <div class="p-4 bg-[#f0f2f0] rounded-xl border border-gray-200">
-                            <textarea name="features" rows="6" placeholder="- Bespoke Floral Archway (Fresh Import)&#10;- Ambient Warm LED Uplighting (12 Units)&#10;- 4 Hours Professional Photography" class="w-full bg-transparent border-none focus:ring-0 transition-all outline-none text-sm placeholder-gray-400 resize-none"></textarea>
+                            <textarea name="features" rows="6" placeholder="- Bespoke Floral Archway (Fresh Import)&#10;- Ambient Warm LED Uplighting (12 Units)&#10;- 4 Hours Professional Photography" class="w-full bg-transparent border-none focus:ring-0 transition-all outline-none text-sm placeholder-gray-400 resize-none">
+                                <?= $isEdit ? htmlspecialchars($package['features']) : '' ?>
+                            </textarea>
                             <p class="text-[10px] text-gray-500 mt-2 italic">* Pisahkan setiap fitur dengan baris baru (Enter).</p>
                         </div>
                     </div>
@@ -118,7 +137,10 @@ $pageTitle = "Create New Package - NaturaWed";
                                     <div class="absolute left-6 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
                                         <span class="text-sm font-bold text-white/40">Rp</span>
                                     </div>
-                                    <input type="number" name="price" required placeholder="25000000" class="w-full pl-14 pr-6 py-4 bg-white/10 border-none rounded-xl text-xl font-serif text-[#a5d6a7] focus:ring-1 focus:ring-white/20 transition-all outline-none placeholder-white/30" />
+                                    <input type="number" name="price" required 
+                                        value="<?= $isEdit ? (int)$package['price'] : '' ?>"
+                                        placeholder="25000000" 
+                                        class="w-full pl-14 pr-6 py-4 bg-white/10 border-none rounded-xl text-xl font-serif text-[#a5d6a7] focus:ring-1 focus:ring-white/20 transition-all outline-none placeholder-white/30" />
                                 </div>
                             </div>
                         </div>
@@ -133,7 +155,7 @@ $pageTitle = "Create New Package - NaturaWed";
                         </div>
 
                         <label for="coverUpload" class="block border-2 border-dashed border-gray-200 rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#2d3e2d]/20 hover:bg-gray-50 transition-all group">
-                            <input type="file" id="coverUpload" name="main_image" accept="image/*" required class="hidden">
+                            <input type="file" id="coverUpload" name="main_image" accept="image/*" class="hidden">
                             <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-[#2d3e2d] mb-4 shadow-sm group-hover:scale-110 transition-transform">
                                 <i data-lucide="upload" class="w-5 h-5"></i>
                             </div>
