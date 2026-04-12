@@ -126,5 +126,35 @@ class PackageModel {
         }
         return 0;
     }
+
+    // FUNGSI UPDATE DATA
+    public function updatePackage($id, $category_id, $name, $price, $description, $features, $imagePathDb) {
+        $idEscaped = intval($id);
+        $nameEscaped = mysqli_real_escape_string($this->conn, trim($name));
+        $descEscaped = mysqli_real_escape_string($this->conn, trim($description));
+        $featEscaped = mysqli_real_escape_string($this->conn, trim($features));
+        $price = floatval($price);
+        $category_id = intval($category_id);
+
+        // Kueri dasar (tanpa update gambar)
+        $query = "UPDATE packages 
+                  SET category_id='$category_id', package_name='$nameEscaped', price='$price', description='$descEscaped', features='$featEscaped', updated_at=NOW()";
+        
+        // Jika vendor mengupload gambar baru, tambahkan ke kueri
+        if ($imagePathDb !== null) {
+            $imagePathEscaped = mysqli_real_escape_string($this->conn, $imagePathDb);
+            $query .= ", main_image='$imagePathEscaped'";
+        }
+        
+        $query .= " WHERE id='$idEscaped'";
+        return mysqli_query($this->conn, $query);
+    }
+
+    // FUNGSI HAPUS DATA
+    public function deletePackage($id) {
+        $idEscaped = intval($id);
+        $query = "DELETE FROM packages WHERE id='$idEscaped'";
+        return mysqli_query($this->conn, $query);
+    }   
 }
 ?>

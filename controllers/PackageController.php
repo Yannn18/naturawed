@@ -135,5 +135,67 @@ class PackageController {
         // Tampilkan halaman checkout
         require_once __DIR__ . '/../views/customer/checkout.php';
     }
+
+    // 1. MENAMPILKAN FORM EDIT
+    public function edit() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $id = $_GET['id'] ?? 0;
+        
+        // Tarik data paket yang mau diedit
+        $package = $this->packageModel->getPackageById($id);
+        
+        if (!$package) {
+            die("Paket tidak ditemukan.");
+        }
+        
+        // Gunakan file view yang SAMA dengan Add Package
+        require_once __DIR__ . '/../views/vendor/package_add.php';
+    }
+
+    // 2. MEMPROSES DATA EDIT (Mirip dengan store, tapi beda di pemanggilan Model)
+    public function update() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $packageId = $_POST['package_id']; // Dikirim dari input hidden form
+            $name = $_POST['package_name'] ?? '';
+            $categoryId = $_POST['category_id'] ?? '';
+            $price = $_POST['price'] ?? 0;
+            $description = $_POST['description'] ?? '';
+            $features = $_POST['features'] ?? '';
+
+            $imagePathDb = null;
+
+            // Cek jika ada gambar baru diupload
+            if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['main_image']['tmp_name'];
+                $fileExtension = strtolower(pathinfo($_FILES['main_image']['name'], PATHINFO_EXTENSION));
+                $newFileName = 'pkg-' . time() . '.' . $fileExtension;
+                $destPath = __DIR__ . '/../public/uploads/packages/' . $newFileName;
+
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    $imagePathDb = '/uploads/packages/' . $newFileName;
+                }
+            }
+
+            // Eksekusi Update
+            $this->packageModel->updatePackage($packageId, $categoryId, $name, $price, $description, $features, $imagePathDb);
+            
+            header("Location: /index.php?action=vendor_packages");
+            exit;
+        }
+    }
+
+    // 3. MENGHAPUS PAKET
+    public function delete() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $id = $_GET['id'] ?? 0;
+        
+        $this->packageModel->deletePackage($id);
+        
+        header("Location: /index.php?action=vendor_packages");
+        exit;
+    }   
 }
+
+
 ?>
