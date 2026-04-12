@@ -27,7 +27,7 @@ function getMenuClass($actionName, $currentAction) {
         <a href="index.php?action=dashboard-vendor" class="<?= getMenuClass('dashboard-vendor', $currentAction) ?>">
             <i data-lucide="layout-dashboard" class="w-[18px] h-[18px]"></i>
             Dashboard
-            <?php if($currentAction === 'vendor_dashboard'): ?>
+            <?php if($currentAction === 'dashboard-vendor'): ?>
                 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2d3e2d] rounded-l-full"></div>
             <?php endif; ?>
         </a>

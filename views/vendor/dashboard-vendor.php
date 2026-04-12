@@ -253,4 +253,11 @@ $pageTitle = "Vendor Dashboard - NaturaWed";
                     </div>
                     
                 </div>
+             
+                <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                lucide.createIcons();
+            });
+        </script>    
+</body>
                
