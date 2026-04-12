@@ -97,8 +97,10 @@ $vendorProfile = [
                                     <div class="aspect-[4/3] overflow-hidden relative">
                                         <img src="<?= htmlspecialchars($pkg['main_image'] ?? 'https://via.placeholder.com/600') ?>" alt="Package Image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer">
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                                            <button class="w-full py-3 bg-white/20 backdrop-blur-md text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-[#2d3e2d] transition-colors">
-                                                Edit Package
+                                            <button href="index.php?action=edit_package&id=<?= $pkg['id'] ?>" class="w-full py-3 bg-white/20 backdrop-blur-md text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-[#2d3e2d] transition-colors">
+                                                 <a href="index.php?action=edit_package&id=<?= $pkg['id'] ?>" class="flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-[#2d4a22] transition-colors">
+                                                    <i data-lucide="edit-3" class="w-4 h-4"></i> Edit
+                                                  </a>
                                             </button>
                                         </div>
                                     </div>

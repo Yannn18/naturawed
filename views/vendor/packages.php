@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../models/PackageModel.php';
 $packageModel = new PackageModel($conn);
 
 // Tarik data paket khusus untuk vendor yang sedang login
-$userId = $_SESSION['user_id'];
+$userId = $_SESSION['user_id']; 
 $myPackages = $packageModel->getPackagesByVendor($userId);
 ?>
 <!DOCTYPE html>
@@ -60,9 +60,9 @@ $myPackages = $packageModel->getPackagesByVendor($userId);
         <?php if (!empty($myPackages)): ?>
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 <?php foreach ($myPackages as $pkg): ?>
-                    <div class="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                    <div class="group bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative z-10 hover:z-20">
                         
-                        <div class="relative h-64 overflow-hidden bg-gray-100 shrink-0">
+                       <div class="relative h-64 overflow-hidden rounded-t-[2rem] bg-gray-100 shrink-0">
                             <img src="<?= htmlspecialchars($pkg['main_image'] ?: 'https://picsum.photos/600/400') ?>" 
                                  alt="<?= htmlspecialchars($pkg['package_name']) ?>" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
@@ -83,9 +83,20 @@ $myPackages = $packageModel->getPackagesByVendor($userId);
                                 </p>
                             </div>
                             
-                            <button class="text-gray-400 hover:text-[#2d3e2d] hover:bg-gray-50 p-2 rounded-full transition-colors shrink-0">
-                                <i data-lucide="more-vertical" class="w-5 h-5"></i>
-                            </button>
+                            <div class="relative" onclick="this.querySelector('.dropdown-menu').classList.toggle('hidden')">
+                                <button type="button" class="text-gray-400 hover:text-[#2d3e2d] hover:bg-gray-50 p-2 rounded-full transition-colors shrink-0 focus:outline-none cursor-pointer">
+                                    <i data-lucide="more-vertical" class="w-5 h-5 pointer-events-none"></i>
+                                </button>
+                                
+                                <div class="dropdown-menu hidden absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-xl border border-gray-100 z-50 py-2">
+                                    <a href="index.php?action=edit_package&id=<?= $pkg['id'] ?>" class="flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-[#2d4a22] transition-colors">
+                                        <i data-lucide="edit-3" class="w-4 h-4"></i> Edit
+                                    </a>
+                                    <a href="index.php?action=delete_package&id=<?= $pkg['id'] ?>" onclick="return confirm('Yakin ingin menghapus paket ini secara permanen?')" class="flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 transition-colors">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
