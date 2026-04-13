@@ -12,10 +12,15 @@
     <main class="flex flex-col md:flex-row w-full max-w-[1100px] h-auto min-h-[600px] items-center justify-center p-8 gap-12 md:gap-[50px]">
       
       <div class="flex-1 flex flex-col items-center justify-center text-center mb-5 md:mb-0">
-        <img src="/assets/image/logo.svg" alt="logo" class="w-[200px] mb-5" />
-        <h1 class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]">
-          Naturawed
-        </h1>
+       <a href="index.php?action=home">
+          <img src="/assets/image/logo.svg" alt="logo" class="w-[200px] mb-5" />
+        
+          <h1
+            class="text-[32px] md:text-[42px] font-bold text-[#0b452c] tracking-[1px]"
+          >
+            Naturawed
+          </h1>
+        </a>
       </div>
       
       <div class="flex-1 flex justify-center w-full">
