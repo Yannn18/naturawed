@@ -12,7 +12,8 @@ require_once __DIR__ . '/../controllers/PaymentController.php';
 require_once __DIR__ . '/../controllers/BookingController.php';
 require_once __DIR__ . '/../controllers/ArticleController.php';
 require_once __DIR__ . '/../controllers/VendorController.php';
-
+require_once __DIR__ . '/../middlewares/AuthMiddleware.php';
+AuthMiddleware::autoLogin($conn);
 
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';

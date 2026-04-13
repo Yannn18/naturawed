@@ -3,63 +3,63 @@ document.addEventListener("DOMContentLoaded", function () {
   // 1. LOGIKA SIGN IN
   // ==========================================
   const signinForm = document.getElementById("SignIn");
-if (signinForm) {
-  signinForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    
-    // 1. Ambil status checked (true/false)
-    const rememberChecked = document.getElementById("remember").checked;
+  if (signinForm) {
+    signinForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-    const btn = signinForm.querySelector('button[type="submit"]');
-    if (btn) {
-      btn.disabled = true;
-      btn.innerText = "Processing...";
-    }
+      // 1. Ambil status checked (true/false)
+      const rememberChecked = document.getElementById("remember").checked;
 
-    try {
-      // 2. BUAT PARAMS SECARA DINAMIS
-      const params = new URLSearchParams();
-      params.append("email", email);
-      params.append("password", password);
-
-      // KUNCI UTAMA: Hanya masukkan ke paket data jika DICENTANG
-      if (rememberChecked) {
-        params.append("remember", "on");
+      const btn = signinForm.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Processing...";
       }
 
-      const response = await fetch("index.php?action=login", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params, // Gunakan variabel params yang sudah disusun di atas
-      });
+      try {
+        // 2. BUAT PARAMS SECARA DINAMIS
+        const params = new URLSearchParams();
+        params.append("email", email);
+        params.append("password", password);
 
-      const hasilMentah = await response.text();
-      let hasilJson = JSON.parse(hasilMentah);
-
-      if (hasilJson.status === "success") {
-        alert("Login Berhasil! Selamat datang " + hasilJson.email);
-        
-        if (hasilJson.role === "vendor") {
-          window.location.href = "index.php?action=dashboard-vendor";
-        } else if (hasilJson.role === "journalist") {
-          window.location.href = "index.php?action=journalist_dashboard";
-        } else {
-          window.location.href = "index.php?action=home";
+        // KUNCI UTAMA: Hanya masukkan ke paket data jika DICENTANG
+        if (rememberChecked) {
+          params.append("remember", "on");
         }
-      } else {
-        alert("Gagal: " + hasilJson.message);
+
+        const response = await fetch("index.php?action=login", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: params, // Gunakan variabel params yang sudah disusun di atas
+        });
+
+        const hasilMentah = await response.text();
+        let hasilJson = JSON.parse(hasilMentah);
+
+        if (hasilJson.status === "success") {
+          alert("Login Berhasil! Selamat datang " + hasilJson.email);
+
+          if (hasilJson.role === "vendor") {
+            window.location.href = "index.php?action=dashboard-vendor";
+          } else if (hasilJson.role === "journalist") {
+            window.location.href = "index.php?action=journalist_dashboard";
+          } else {
+            window.location.href = "index.php?action=home";
+          }
+        } else {
+          alert("Gagal: " + hasilJson.message);
+          btn.disabled = false;
+          btn.innerText = "Sign In";
+        }
+      } catch (error) {
+        console.error("Detail Error:", error);
         btn.disabled = false;
         btn.innerText = "Sign In";
       }
-    } catch (error) {
-      console.error("Detail Error:", error);
-      btn.disabled = false;
-      btn.innerText = "Sign In";
-    }
-  });
-}
+    });
+  }
 
   // ==========================================
   // 2. LOGIKA SIGN UP (MODIFIED FOR MULTI-ROLE)
