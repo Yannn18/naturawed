@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
-      const remember = document.getElementById("remember").checked
-        ? "true"
-        : "false";
+
+      // 1. Ambil status checked (true/false)
+      const rememberChecked = document.getElementById("remember").checked;
 
       const btn = signinForm.querySelector('button[type="submit"]');
       if (btn) {
@@ -19,24 +19,35 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       try {
-        // PERHATIKAN: URL Tembakan diubah ke router index.php
+        // 2. BUAT PARAMS SECARA DINAMIS
+        const params = new URLSearchParams();
+        params.append("email", email);
+        params.append("password", password);
+
+        // KUNCI UTAMA: Hanya masukkan ke paket data jika DICENTANG
+        if (rememberChecked) {
+          params.append("remember", "on");
+        }
+
         const response = await fetch("index.php?action=login", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            email: email,
-            password: password,
-            remember: remember,
-          }),
+          body: params, // Gunakan variabel params yang sudah disusun di atas
         });
 
         const hasilMentah = await response.text();
         let hasilJson = JSON.parse(hasilMentah);
 
         if (hasilJson.status === "success") {
-          alert("Login Berhasil! Selamat datang " + hasilJson.username);
-          // PERHATIKAN: Redirect menggunakan router
-          window.location.href = "index.php?action=dashboard";
+          alert("Login Berhasil! Selamat datang " + hasilJson.email);
+
+          if (hasilJson.role === "vendor") {
+            window.location.href = "index.php?action=dashboard-vendor";
+          } else if (hasilJson.role === "journalist") {
+            window.location.href = "index.php?action=journalist_dashboard";
+          } else {
+            window.location.href = "index.php?action=home";
+          }
         } else {
           alert("Gagal: " + hasilJson.message);
           btn.disabled = false;
@@ -51,11 +62,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ==========================================
-  // 2. LOGIKA SIGN UP
+  // 2. LOGIKA SIGN UP (MODIFIED FOR MULTI-ROLE)
   // ==========================================
-  const signUpForm = document.getElementById("SignUp");
+  // Menggunakan querySelector agar bisa menangkap salah satu form yang ada
+  const signUpForm =
+    document.getElementById("SignUp") ||
+    document.getElementById("SignUpVendor");
   if (signUpForm) {
-    // Fungsi validasi diletakkan di dalam scope ini agar rapi
     function validasiNama() {
       let inputNama = document.getElementById("username").value;
       if (!/^[a-zA-Z' ]+$/.test(inputNama)) {
@@ -85,38 +98,72 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.innerText = "Registering...";
       }
 
+      // Ambil data dasar
       const username = document.getElementById("username").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
+      // Deteksi Role dari Input Hidden
+      const roleInput = document.getElementById("role");
+      const role = roleInput ? roleInput.value : "customer";
+
+      // TENTUKAN TARGET ACTION (Sesuai fungsi terpisah di PHP)
+      let actionTarget; // Gunakan 'let' karena nilainya akan diisi di dalam blok if
+
+      if (role === "vendor") {
+        actionTarget = "register_vendor";
+      } else if (role === "journalist") {
+        actionTarget = "register_journalist";
+      } else {
+        actionTarget = "register";
+      }
+
+      // Susun Params secara dinamis
+      const params = new URLSearchParams();
+      params.append("username", username);
+      params.append("email", email);
+      params.append("password", password);
+
+      // Hanya tambahkan address jika dia Vendor
+      if (role === "vendor") {
+        const addressField = document.getElementById("address");
+        if (addressField) {
+          params.append("address", addressField.value.trim());
+        }
+      }
+
       try {
-        // PERHATIKAN: URL Tembakan diubah ke router index.php
-        const response = await fetch("index.php?action=register", {
+        // PERBAIKAN 1: Menggunakan Backtick ( ` ) agar variabel terbaca
+        // PERBAIKAN 2: Menghapus properti duplikat (username, email, dll) di luar body
+        const response = await fetch(`index.php?action=${actionTarget}`, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            username: username,
-            email: email,
-            password: password,
-          }),
+          body: params,
         });
 
-        const hasil = await response.json();
+        // Tambahkan pengecekan apakah responnya benar-benar JSON
+        const textRespon = await response.text();
+        console.log("Respon Mentah Server:", textRespon); // Untuk debug jika gagal lagi
+
+        const hasil = JSON.parse(textRespon);
 
         if (hasil.status === "success") {
-          alert("Pendaftaran Berhasil! Selamat datang, " + hasil.username);
-          // PERBAIKAN LOGIKA: Karena AuthController->register() sudah mengeset $_SESSION['login'] = true,
-          // pengguna tidak perlu disuruh login ulang. Langsung tembak ke dashboard!
+          alert("Pendaftaran Berhasil sebagai " + role + "!");
           window.location.href = "index.php?action=show_login";
         } else {
           alert("Gagal: " + hasil.message);
-          btn.disabled = false;
-          btn.innerText = "Sign Up";
+          if (btn) {
+            btn.disabled = false;
+            btn.innerText = "Sign Up";
+          }
         }
       } catch (error) {
         console.error("Error detail:", error);
-        btn.disabled = false;
-        btn.innerText = "Sign Up";
+        alert("Terjadi kesalahan sistem. Cek konsol browser.");
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = "Sign Up";
+        }
       }
     });
   }

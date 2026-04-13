@@ -36,22 +36,22 @@
         >
           <div class="text-center mb-[30px]">
             <h2 class="text-[28px] font-semibold text-[#1a1a1a]">
-              Create Account
+             Join as Vendor
             </h2>
             <p class="text-sm text-[#7a7a7a] mb-[30px]">
               Let's get started with a new account.
             </p>
           </div>
 
-          <form class="flex flex-col gap-5" id="SignUp" method="post">
-            <input type="hidden" id="role" name="role" value="customer" />
+          <form class="flex flex-col gap-5" id="SignUpVendor" method="post">
+            <input type="hidden" id="role" name="role" value="vendor" />
             <div class="w-full relative">
               <input
                 class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
                 type="text"
                 name="username"
                 id="username"
-                placeholder="User Name"
+                placeholder="Bussiness Name"
                 required
               />
             </div>
@@ -68,6 +68,17 @@
             </div>
 
             <div class="w-full relative">
+              <input
+                class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
+                type="text"
+                name="address"
+                id="address"
+                placeholder="Address"
+                required
+              />
+            </div>
+
+             <div class="w-full relative">
               <input
                 class="w-full px-5 py-4 border border-[#e0e0e0] rounded-xl text-sm text-[#333] outline-none transition-colors duration-300 placeholder:text-[#a0a0a0] placeholder:font-medium focus:border-[#0b452c]"
                 type="password"
@@ -144,14 +155,14 @@
             <p>
               <a
                 class="text-[#0b452c] font-semibold no-underline hover:underline"
-                href="index.php?action=show_registervendor"
-                >Want to be a vendor?</a
+                href="index.php?action=show_registerjournalist"
+                >Want to be a journalist?</a
               >
               <b> OR </b>
               <a
                 class="text-[#0b452c] font-semibold no-underline hover:underline"
-                href="index.php?action=show_registerjournalist"
-                >Want to be a journalist?</a
+                href="index.php?action=show_register"
+                >Are you a couple?</a
               >
             </p>
           </div>
@@ -161,7 +172,7 @@
 
     <script src="assets/js/auth.js" defer></script>
 
-    <script>
+     <script>
   document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const toggleButton = document.getElementById('togglePassword');

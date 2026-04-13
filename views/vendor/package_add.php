@@ -1,0 +1,187 @@
+<?php
+if (!isset($_SESSION['login'])) {
+    header("Location: /index.php?action=show_login");
+    exit;
+
+    
+    }
+    // Deteksi Mode: Edit atau Add?
+    $isEdit = isset($package) && !empty($package);
+
+    $pageTitle = $isEdit ? "Edit Package - NaturaWed" : "Create New Package - NaturaWed";
+    $formAction = $isEdit ? "/index.php?action=update_package" : "/index.php?action=store_package";
+    $headerText = $isEdit ? "Edit Wedding Package" : "Create New Wedding Package";
+    $buttonText = $isEdit ? "SAVE CHANGES" : "PUBLISH PACKAGE";
+$pageTitle = "Create New Package - NaturaWed";
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title><?= $pageTitle ?></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .toggle-checkbox:checked { right: 0; border-color: #4caf50; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #4caf50; }
+    </style>
+</head>
+<body class="flex min-h-screen bg-white font-sans text-[#1a1a1a]">
+
+
+    <?php require_once __DIR__ . '/../includes/vendor_sidebar.php'; ?>
+    <main class="flex-1 p-12 overflow-y-auto bg-[#f8f9fa]">
+        
+        <form action="<?= $formAction ?>" method="POST" enctype="multipart/form-data">
+        <?php if ($isEdit): ?>
+         <input type="hidden" name="package_id" value="<?= $package['id'] ?>">
+        <?php endif; ?>    
+
+            <header class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="text-4xl font-serif text-[#2d3e2d] mb-2">Create New Wedding Package</h2>
+                    <p class="text-gray-500 text-sm max-w-xl">Craft an exquisite experience for our clients. Define the botanical essence, structural elements, and pricing of your new signature offering.</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button type="button" onclick="window.history.back()" class="text-sm font-bold tracking-widest uppercase text-gray-500 hover:text-[#2d3e2d] transition-colors">
+                        CANCEL
+                    </button>
+                    <button type="submit" class="px-8 py-4 bg-[#2a3f24] text-white rounded-xl text-xs font-bold tracking-widest uppercase hover:opacity-90 transition-opacity shadow-lg cursor-pointer">
+                        <?= $buttonText ?>
+                    </button>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <div class="xl:col-span-2 space-y-8">
+                    <div class="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                            </div>
+                            <h3 class="text-2xl font-serif text-gray-900">Basic Information</h3>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Package Name</label>
+                                <input 
+                                type="text" name="package_name" required 
+                                value="<?= $isEdit ? htmlspecialchars($package['package_name']) : '' ?>"
+                                type="text" name="package_name" required placeholder="e.g., The Ethereal Conservatory Collection" class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm placeholder-gray-400" />
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Category</label>
+                                <div class="relative">
+                                    <select name="category_id" required class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none text-sm appearance-none cursor-pointer">
+                                        <option value="" disabled selected>Pilih Kategori...</option>
+                                        <option value="1" <?= ($isEdit && $package['category_id'] == 1) ? 'selected' : '' ?>>Venue</option>
+                                        <option value="2" <?= ($isEdit && $package['category_id'] == 2) ? 'selected' : '' ?>>Catering</option>
+                                        <option value="3" <?= ($isEdit && $package['category_id'] == 3) ? 'selected' : '' ?>>Photography</option>
+                                        <option value="4" <?= ($isEdit && $package['category_id'] == 4) ? 'selected' : '' ?>>Decoration</option>
+                                        <option value="5" <?= ($isEdit && $package['category_id'] == 5) ? 'selected' : '' ?>>Makeup Artist</option>
+                                        <option value="6" <?= ($isEdit && $package['category_id'] == 6) ? 'selected' : '' ?>>Wedding Organizer</option>
+                                        <option value="7" <?= ($isEdit && $package['category_id'] == 7) ? 'selected' : '' ?>>Music & Entertainment</option>
+                                        <option value="8" <?= ($isEdit && $package['category_id'] == 8) ? 'selected' : '' ?>>Attire & Jewelry</option>
+                                    </select>
+                                    <i data-lucide="chevron-down" class="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-3">Detailed Description</label>
+                                <textarea 
+                               
+                                name="description" required rows="5" placeholder="Describe the sensory experience, the materials used, and the artistic inspiration..." class="w-full px-6 py-4 bg-[#f8f9fa] border-none rounded-xl text-gray-900 focus:ring-2 focus:ring-[#2d3e2d]/20 transition-all outline-none resize-none text-sm placeholder-gray-400"> <?= $isEdit ? htmlspecialchars($package['description']) : '' ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
+                                    <i data-lucide="plus-square" class="w-4 h-4"></i>
+                                </div>
+                                <h3 class="text-2xl font-serif text-gray-900">Package Features</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-[#f0f2f0] rounded-xl border border-gray-200">
+                            <textarea name="features" rows="6" placeholder="- Bespoke Floral Archway (Fresh Import)&#10;- Ambient Warm LED Uplighting (12 Units)&#10;- 4 Hours Professional Photography" class="w-full bg-transparent border-none focus:ring-0 transition-all outline-none text-sm placeholder-gray-400 resize-none">
+                                <?= $isEdit ? htmlspecialchars($package['features']) : '' ?>
+                            </textarea>
+                            <p class="text-[10px] text-gray-500 mt-2 italic">* Pisahkan setiap fitur dengan baris baru (Enter).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="bg-[#2a3f24] p-10 rounded-[2.5rem] shadow-xl">
+                        <div class="flex items-center gap-4 mb-8 text-white">
+                            <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+                            </div>
+                            <h3 class="text-2xl font-serif">Pricing</h3>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-[10px] font-bold tracking-widest text-white/50 uppercase mb-3">Base Price (IDR)</label>
+                                <div class="relative">
+                                    <div class="absolute left-6 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+                                        <span class="text-sm font-bold text-white/40">Rp</span>
+                                    </div>
+                                    <input type="number" name="price" required 
+                                        value="<?= $isEdit ? (int)$package['price'] : '' ?>"
+                                        placeholder="25000000" 
+                                        class="w-full pl-14 pr-6 py-4 bg-white/10 border-none rounded-xl text-xl font-serif text-[#a5d6a7] focus:ring-1 focus:ring-white/20 transition-all outline-none placeholder-white/30" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
+                                <i data-lucide="image" class="w-4 h-4"></i>
+                            </div>
+                            <h3 class="text-2xl font-serif text-gray-900">Media Cover</h3>
+                        </div>
+
+                        <label for="coverUpload" class="block border-2 border-dashed border-gray-200 rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-[#2d3e2d]/20 hover:bg-gray-50 transition-all group">
+                            <input type="file" id="coverUpload" name="main_image" accept="image/*" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-[#2d3e2d] mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                                <i data-lucide="upload" class="w-5 h-5"></i>
+                            </div>
+                            <p class="text-sm font-bold text-gray-900 mb-1" id="fileNameDisplay">Upload Image</p>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest leading-relaxed">High-res JPEG or PNG<br/>(Max 10MB)</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        lucide.createIcons();
+        
+        // JS untuk mengganti teks "Upload Image" menjadi nama file yang dipilih
+        const coverUpload = document.getElementById('coverUpload');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        coverUpload.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                fileNameDisplay.textContent = fileName.length > 25 ? fileName.substring(0, 25) + '...' : fileName;
+                fileNameDisplay.classList.add('text-[#2d4a22]');
+            }
+        });
+    </script>
+</body>
+</html>
