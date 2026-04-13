@@ -41,8 +41,8 @@ class AuthController {
 
                 // 2. LOGIKA COOKIE (REMEMBER ME)
                 if ($remember) {
-                    setcookie('id', $userData['id'], time() + (3600 * 24 * 30), "/");
-                    setcookie('key', hash('sha256', $userData['email']), time() + (3600 * 24 * 30), "/");
+                    setcookie('id', $userData['id'], time() + (3600), "/");
+                    setcookie('key', hash('sha256', $userData['email']), time() + (3600), "/");
                 }
         
                 echo json_encode(["status" => "success", "email" => $userData['email'], "role" => $userData['role']]);
