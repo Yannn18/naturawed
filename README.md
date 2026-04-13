@@ -12,11 +12,11 @@
 
 fitur
 
-4. Otentikasi Pengguna dan Personal
-5. Manajemen, Profil, Paket Pernikahan
-6. Alur Pemesanan dan Transaksi (Checkout Flow)
-7. Riwayat booking
-8. Publikasi Konten Literasi dan Inspirasi Pernikahan
+1. Otentikasi Pengguna dan Personal
+2. Manajemen, Profil, Paket Pernikahan
+3. Alur Pemesanan dan Transaksi (Checkout Flow)
+4. Riwayat booking
+5. Publikasi Konten Literasi dan Inspirasi Pernikahan
 
 team
 
@@ -37,3 +37,15 @@ Preview Website
 
 1. Authentication
    ![Authentication](assets/sign.png)
+
+2. Package manage
+   ![Package](assets/wedding.png)
+
+3. Home Page
+   ![home](assets/home.png)
+
+4. Article create
+   ![article](assets/article.png)
+
+5. inspiration page
+   ![inspiration](assets/inspiration.png)
